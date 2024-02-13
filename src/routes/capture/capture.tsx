@@ -14,6 +14,7 @@ export default function Capture() {
                     Stop
                 </Link>
             </nav>
+            <hr />
             <Outlet />
         </div>
     )

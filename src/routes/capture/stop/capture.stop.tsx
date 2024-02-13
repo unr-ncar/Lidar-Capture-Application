@@ -6,7 +6,7 @@ import LidarStopSelection from "../../../components/lidarStopSelection.tsx";
 export default function CaptureStop() {
 
     const [formatType, setFormatType] = useState<DataFormat_t>('pcap')
-    const {isLoading, error, selections, toggleLidarSelection, resetLidarSelections} = useLidarMetadataSelectionList()
+    const {isLoading, error, state, toggleLidarSelection, resetLidarSelections} = useLidarMetadataSelectionList()
 
     const handleFormatType = (event: ChangeEvent<HTMLInputElement>) => {
         // @ts-expect-error Standard event for HTMLInputElements
@@ -33,7 +33,7 @@ export default function CaptureStop() {
             </div>
             <div>
                 {
-                    selections?.map((selection: LidarSelection_t) => {
+                    state?.items.map((selection: LidarSelection_t) => {
                         return <LidarStopSelection key={selection.lidar.lidar_id}
                                                     currentFormatSelection={formatType}
                                                     onChangeHandler={() => toggleLidarSelection(selection.lidar.lidar_id, formatType)} {...selection}/>

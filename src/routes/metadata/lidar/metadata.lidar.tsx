@@ -8,7 +8,7 @@ export default function MetadataLidar() {
     const {lidar_id} = useParams();
 
     const {data, isPending, error} = useQuery({
-        queryKey: ['lidar_metadata'],
+        queryKey: ['lidar_metadata', Number(lidar_id)],
         queryFn: async (): Promise<LidarMetadata_t> => requestLidarMetadata('http://134.197.75.31:31538', Number(lidar_id))
     })
 

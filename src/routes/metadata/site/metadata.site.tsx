@@ -8,7 +8,7 @@ export default function MetadataSite() {
     const {site_id} = useParams();
 
     const {data, isPending, error} = useQuery({
-        queryKey: ['site_metadata'],
+        queryKey: ['site_metadata', Number(site_id)],
         queryFn: async (): Promise<Array<LidarMetadata_t>> => requestSiteMetadata('http://134.197.75.31:31538', Number(site_id))
     })
 

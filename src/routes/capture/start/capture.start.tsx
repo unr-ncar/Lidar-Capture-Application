@@ -2,11 +2,12 @@ import {ChangeEvent, useState} from "react";
 import {DataFormat_t, LidarSelection_t} from "../types.capture.tsx";
 import LidarStartSelection from "../../../components/lidarStartSelection.tsx";
 import useLidarMetadataSelectionList from "../../../hooks/useLidarMetadataSelectionList.tsx";
+import PaginationBar from "../../../components/paginationBar.tsx";
 
 export default function CaptureStart() {
 
     const [formatType, setFormatType] = useState<DataFormat_t>('pcap')
-    const {isLoading, error, selections, toggleLidarSelection, resetLidarSelections} = useLidarMetadataSelectionList()
+    const {isLoading, error, state, toggleLidarSelection, resetLidarSelections, setPage} = useLidarMetadataSelectionList()
 
     const handleFormatType = (event: ChangeEvent<HTMLInputElement>) => {
         // @ts-expect-error Standard event for HTMLInputElements
@@ -33,13 +34,14 @@ export default function CaptureStart() {
             </div>
             <div>
                 {
-                    selections?.map((selection: LidarSelection_t) => {
+                    state?.items.map((selection: LidarSelection_t) => {
                         return <LidarStartSelection key={selection.lidar.lidar_id}
                                                     currentFormatSelection={formatType}
                                                     onChangeHandler={() => toggleLidarSelection(selection.lidar.lidar_id, formatType)} {...selection}/>
                     })
                 }
             </div>
+            { state && <PaginationBar window_size={state?.size} total_items={state?.total} current_page={state?.page} setter={setPage} /> }
         </div>
     )
 }

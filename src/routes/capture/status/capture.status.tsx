@@ -4,7 +4,7 @@ import {LidarSelection_t} from "../types.capture.tsx";
 
 export default function CaptureStatus() {
 
-    const {isLoading, error, selections} = useLidarMetadataSelectionList()
+    const {isLoading, error, state} = useLidarMetadataSelectionList()
 
     if (isLoading) return <p>Loading...</p>
     if (error) return <p>Error Occurred...</p>
@@ -12,7 +12,7 @@ export default function CaptureStatus() {
     return (
         <div className='flex flex-col gap-2'>
             {
-                selections?.map((selection: LidarSelection_t) => {return <LidarItem key={selection.lidar.lidar_id} {...selection.lidar} />})
+                state?.items.map((selection: LidarSelection_t) => {return <LidarItem key={selection.lidar.lidar_id} {...selection.lidar} />})
             }
         </div>
     )
