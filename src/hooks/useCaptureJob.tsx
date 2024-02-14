@@ -9,7 +9,10 @@ import {
 import {PcapService_response_t, RosService_response_t} from "../api/rest.tsx";
 
 interface useCaptureJob_t {
-    successful: boolean | undefined;
+    data: {
+        success: boolean;
+        message: string;
+    } | undefined;
     isPending: boolean;
     error: Error | null;
     execute: () => void;
@@ -17,7 +20,7 @@ interface useCaptureJob_t {
 const useCaptureJob = (lidar_id: number, format: DataFormat_t, operation: 'start' | 'stop'): useCaptureJob_t => {
 
     const createJob = async (): Promise<PcapService_response_t | RosService_response_t> => {
-
+        console.log('HITTING ENDPOINT')
         let result;
 
         if (format === 'pcap' && operation === 'start') {
@@ -38,18 +41,14 @@ const useCaptureJob = (lidar_id: number, format: DataFormat_t, operation: 'start
 
     const {data, isPending, error, mutate} = useMutation({
         mutationKey: ['job', operation , format, lidar_id],
-        mutationFn: async (): Promise<PcapService_response_t | RosService_response_t> => createJob()
+        mutationFn: async (): Promise<PcapService_response_t | RosService_response_t> => createJob(),
     })
 
-    const executeJob = () => {
-        mutate()
-    }
-
     return {
-        successful: data?.success,
         isPending,
         error,
-        execute: executeJob,
+        data,
+        execute: mutate,
     }
 
 
