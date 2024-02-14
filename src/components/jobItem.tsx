@@ -9,16 +9,16 @@ interface JobItem_t {
 }
 const JobItem = ({lidar, format, operation}: JobItem_t ) => {
 
-    const { lidar_id } = lidar;
-    const { isPending, error, data, execute } = useCaptureJob(lidar_id, format, operation)
+    const { lidar_id, ip, site_id, deployment_id } = lidar;
+    const { isPending, error, data, execute } = useCaptureJob(lidar_id, ip, deployment_id,  format, operation)
 
 
     return (
         <div className='flex gap-1 bg-neutral-200 m-2'>
-            {!data && !isPending && <p>lidar_id: {lidar_id} --- Standby</p>}
+            {!data && !isPending && <p>lidar_id: {lidar_id} // site_id: {site_id} --- Standby</p>}
             {!data && isPending && <p>lidar_id: {lidar_id} --- Sending</p>}
-            {data && !isPending && <p>lidar_id: {lidar_id} --- Started</p>}
-            {error && !isPending && <p>lidar_id: {lidar_id} --- ERROR: {error.message}</p>}
+            {data && !isPending && <p>lidar_id: {lidar_id} --- Completed</p>}
+            {error === null && !isPending && <p>lidar_id: {lidar_id} --- ERROR: {error}</p>}
             <button onClick={execute}>
                 Start
             </button>

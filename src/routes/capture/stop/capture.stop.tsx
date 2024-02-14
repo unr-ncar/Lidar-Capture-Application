@@ -45,13 +45,15 @@ export default function CaptureStop() {
                 {
                     state?.items.map((selection: LidarSelection_t) => {
                         return <LidarStopSelection key={selection.lidar.lidar_id}
-                                                    currentFormatSelection={formatType}
-                                                    onChangeHandler={() => toggleLidarSelection(selection.lidar.lidar_id, formatType)} {...selection}/>
+                                                   currentFormatSelection={formatType}
+                                                   onChangeHandler={() => toggleLidarSelection(selection.lidar.lidar_id, formatType)} {...selection}/>
                     })
                 }
             </div>
-            <hr />
-            { state && <PaginationBar window_size={state?.size} total_items={state?.total} current_page={state?.page} setter={setPage} /> }
+            <hr/>
+            <button onClick={handleJobModal}>Stop Job</button>
+            {state && <PaginationBar window_size={state?.size} total_items={state?.total} current_page={state?.page}
+                                     setter={setPage}/>}
             <Modal open={open} onOpenChange={handleJobModal}>
                 <div>
                     <div>

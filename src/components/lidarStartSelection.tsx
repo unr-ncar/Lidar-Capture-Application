@@ -6,7 +6,7 @@ export default function LidarStartSelection({currentFormatSelection, onChangeHan
     onChangeHandler: () => void;
 }) {
 
-    const {lidar_id} = lidar;
+    const {lidar_id, site_id} = lidar;
 
     const {isLoading, error, services } = useStatus(lidar.site_id)
     const { pcapRecordingServiceActive, rosRecordingServiceActive } = services;
@@ -15,7 +15,7 @@ export default function LidarStartSelection({currentFormatSelection, onChangeHan
 
     return (
         <label className='bg-neutral-200 my-2 p-2 rounded'>
-            <p>lidar_id: {lidar_id}</p>
+            <p>lidar_id: {lidar_id} - site_id: {site_id}</p>
             <input type='checkbox' checked={(currentFormatSelection === 'pcap' && pcap_selected) || (currentFormatSelection === 'ros' && ros_selected)} onChange={onChangeHandler}
                    disabled={((currentFormatSelection === 'pcap') && pcapRecordingServiceActive(lidar_id)) || ((currentFormatSelection === 'ros' && rosRecordingServiceActive(lidar_id)))}/>
             <p>

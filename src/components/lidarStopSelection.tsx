@@ -14,7 +14,7 @@ export default function LidarStopSelection({lidar, currentFormatSelection, ros_s
 
     return (
         <label className='bg-neutral-200 my-2 p-2 rounded'>
-            <p>lidar_id: {lidar_id}</p>
+            <p>lidar_id: {lidar_id} - site_id: {site_id}</p>
             <input type='checkbox'
                    checked={(currentFormatSelection === 'pcap' && pcap_selected) || (currentFormatSelection === 'ros' && ros_selected)}
                    onChange={onChangeHandler}
