@@ -3,16 +3,25 @@ import {DataFormat_t, LidarSelection_t} from "../types.capture.tsx";
 import useLidarMetadataSelectionList from "../../../hooks/useLidarMetadataSelectionList.tsx";
 import LidarStopSelection from "../../../components/lidarStopSelection.tsx";
 import PaginationBar from "../../../components/paginationBar.tsx";
+import useJobsList from "../../../hooks/useJobList.tsx";
+import Modal from "../../../components/modal.tsx";
+import JobItem from "../../../components/jobItem.tsx";
 
 export default function CaptureStop() {
 
     const [formatType, setFormatType] = useState<DataFormat_t>('pcap')
     const {isLoading, error, state, toggleLidarSelection, resetLidarSelections, setPage} = useLidarMetadataSelectionList()
+    const [open, setOpen] = useState<boolean>(false)
+    const list: Array<LidarSelection_t> = useJobsList(['lidar_metadata_list', state?.page || 1])
 
     const handleFormatType = (event: ChangeEvent<HTMLInputElement>) => {
         // @ts-expect-error Standard event for HTMLInputElements
         setFormatType(event.target.value)
         resetLidarSelections()
+    }
+
+    const handleJobModal = () => {
+        setOpen(!open)
     }
 
     if (isLoading) return <p>Loading...</p>
@@ -43,6 +52,18 @@ export default function CaptureStop() {
             </div>
             <hr />
             { state && <PaginationBar window_size={state?.size} total_items={state?.total} current_page={state?.page} setter={setPage} /> }
+            <Modal open={open} onOpenChange={handleJobModal}>
+                <div>
+                    <div>
+                        {
+                            list.map((job: LidarSelection_t) => {
+                                return <JobItem key={job.lidar.lidar_id} lidar={job.lidar} format={formatType}
+                                                operation='stop'/>
+                            })
+                        }
+                    </div>
+                </div>
+            </Modal>
         </div>
     )
 }
