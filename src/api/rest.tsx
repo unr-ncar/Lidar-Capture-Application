@@ -1,3 +1,13 @@
+export interface PcapService_response_t {
+    message: string;
+    success: boolean;
+}
+
+export interface RosService_response_t {
+    message: string;
+    success: boolean;
+}
+
 export interface LidarMetadata_response_t {
     items: Array<LidarMetadata_t>;
     total: number;

@@ -1,59 +1,25 @@
-import {useState} from "react";
-import {
-    requestStartPcapService,
-    requestStartRosService,
-    requestStopPcapService,
-    requestStopRosService
-} from "../api/rest.recordingService.tsx"
+import {useQueryClient} from "@tanstack/react-query";
+import {LidarSelection_t} from "../routes/capture/types.capture.tsx";
+export interface captureActionJob_t {
+    jobList: () => Array<LidarSelection_t>
+}
+const useRecordingService = (selections_queryKey: [string, number]): captureActionJob_t => {
 
-export default function useRecordingService(lidar_id: number) {
+    const queryClient = useQueryClient()
 
-    const [error, setError] = useState<Error | null>(null)
 
-    const startPcapService = () => {
-        setError(null)
-        requestStartPcapService('http://134.197.75.31:31538', lidar_id).catch((error) => {
-            if (error.response) {
-                setError(error)
-            }
-        })
-    }
+    const createJobList = (): Array<LidarSelection_t> => {
 
-    const stopPcapService = () => {
-        setError(null)
-        requestStopPcapService('http://134.197.75.31:31538', lidar_id).catch((error) => {
-            if (error.response) {
-                setError(error)
-            }
-        })
-    }
-
-    const startRosService = () => {
-        setError(null)
-        requestStartRosService('http://134.197.75.31:31538', lidar_id).catch((error) => {
-            if (error.response) {
-                setError(error)
-            }
-        })
-    }
-
-    const stopRosService = () => {
-        setError(null)
-        requestStopRosService('http://134.197.75.31:31538', lidar_id).catch((error) => {
-            if (error.response) {
-                setError(error)
-            }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        return queryClient.getQueryData(selections_queryKey).items.filter((selection: LidarSelection_t) => {
+            return selection.pcap_selected || selection.ros_selected
         })
     }
 
     return {
-        startPcapService: startPcapService,
-        stopPcapService: stopPcapService,
-        startRosService: startRosService,
-        stopRosService: stopRosService,
-        error: error
-
+        jobList: createJobList
     }
 
-
 }
+export default useRecordingService

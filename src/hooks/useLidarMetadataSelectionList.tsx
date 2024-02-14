@@ -2,7 +2,7 @@ import {DataFormat_t, LidarSelection_t} from "../routes/capture/types.capture.ts
 import {LidarMetadata_response_t, LidarMetadata_t} from "../api/rest.tsx";
 import requestLidarMetadataList from "../api/rest.lidarMetadataList.tsx";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 
 export interface useLidarMetadataSelectionList_t {
     isLoading: boolean;
@@ -26,10 +26,6 @@ export default function useLidarMetadataSelectionList(): useLidarMetadataSelecti
     const queryClient = useQueryClient();
 
     const [page, set_page] = useState<number>(1)
-
-    useEffect(() => {
-        console.log("Updated to page: " + page)
-    }, [page])
 
     const createLidarSelections = async (): Promise<LidarSelectionsState_t> => {
         const lidar_metadata_list: LidarMetadata_response_t = await requestLidarMetadataList('http://134.197.75.31:31538', page);

@@ -7,7 +7,7 @@ interface pagination_bar_t {
     current_page: number,
     setter: Dispatch<SetStateAction<number>>
 }
-export default function PaginationBar({window_size, total_items, current_page, setter}: pagination_bar_t) {
+const PaginationBar = ({window_size, total_items, current_page, setter}: pagination_bar_t) => {
 
     const page_numbers: Array<number> = []
 
@@ -16,9 +16,11 @@ export default function PaginationBar({window_size, total_items, current_page, s
     }
 
     return (
-        <ul>
+        <ul className='flex gap-2'>
             { page_numbers.map((page: number) => <li key={page} onClick={() => setter(page)} className={`${current_page === page ? 'font-bold text-red-500' : undefined}`} >{page}</li>)}
         </ul>
     )
 
 }
+
+export default PaginationBar;
