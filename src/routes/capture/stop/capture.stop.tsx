@@ -1,6 +1,6 @@
 import {ChangeEvent, useState} from "react";
 import {DataFormat_t, LidarSelection_t} from "../types.capture.tsx";
-import useLidarMetadataSelectionList from "../../../hooks/useLidarMetadataSelectionList.tsx";
+import useLidarMetadataList from "../../../hooks/useLidarMetadataList.tsx";
 import LidarStopSelection from "../../../components/lidarStopSelection.tsx";
 import PaginationBar from "../../../components/paginationBar.tsx";
 import useJobsList from "../../../hooks/useJobList.tsx";
@@ -10,7 +10,7 @@ import JobItem from "../../../components/jobItem.tsx";
 export default function CaptureStop() {
 
     const [formatType, setFormatType] = useState<DataFormat_t>('pcap')
-    const {isLoading, error, state, toggleLidarSelection, resetLidarSelections, setPage} = useLidarMetadataSelectionList()
+    const {isLoading, error, state, toggleLidarSelection, resetLidarSelections, setPage} = useLidarMetadataList()
     const [open, setOpen] = useState<boolean>(false)
     const list: Array<LidarSelection_t> = useJobsList(['lidar_metadata_list', state?.page || 1])
 

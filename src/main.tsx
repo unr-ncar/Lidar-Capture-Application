@@ -18,6 +18,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import Metadata from "./routes/metadata/metadata.tsx";
 import MetadataSite from "./routes/metadata/site/metadata.site.tsx";
 import MetadataLidar from "./routes/metadata/lidar/metadata.lidar.tsx";
+import {ActivationContextProvider} from "./contexts/ActivationContext.tsx";
 
 const queryClient = new QueryClient()
 
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "capture",
-                element: <Capture />,
+                element: <ActivationContextProvider element={<Capture />} /> ,
                 children: [
                     {
                         index: true,

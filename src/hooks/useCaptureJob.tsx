@@ -17,20 +17,20 @@ interface useCaptureJob_t {
     error: Error | null;
     execute: () => void;
 }
-const useCaptureJob = (lidar_id: number, site_ip: string, deployment_id: number, format: DataFormat_t, operation: 'start' | 'stop'): useCaptureJob_t => {
+const useCaptureJob = (lidar_id: number, site_ip: string, format: DataFormat_t, operation: 'start' | 'stop'): useCaptureJob_t => {
 
     const createJob = async (): Promise<PcapService_response_t | RosService_response_t> => {
         console.log('HITTING ENDPOINT')
         let result;
 
         if (format === 'pcap' && operation === 'start') {
-            result = await requestStartPcapService(site_ip, deployment_id);
+            result = await requestStartPcapService(site_ip, lidar_id);
         } else if (format === 'pcap' && operation === 'stop') {
-            result = await requestStopPcapService(site_ip, deployment_id);
+            result = await requestStopPcapService(site_ip, lidar_id);
         } else if (format === 'ros' && operation === 'start') {
-            result = await requestStartRosService(site_ip, deployment_id);
+            result = await requestStartRosService(site_ip, lidar_id);
         } else {
-            result = await requestStopRosService(site_ip, deployment_id);
+            result = await requestStopRosService(site_ip, lidar_id);
         }
 
         if (!result.success) throw new Error(result.message)

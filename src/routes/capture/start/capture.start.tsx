@@ -1,31 +1,26 @@
-import {ChangeEvent, useState} from "react";
-import {DataFormat_t, LidarSelection_t} from "../types.capture.tsx";
-import LidarStartSelection from "../../../components/lidarStartSelection.tsx";
-import useLidarMetadataSelectionList from "../../../hooks/useLidarMetadataSelectionList.tsx";
-import PaginationBar from "../../../components/paginationBar.tsx";
+import {ChangeEvent, useCallback, useEffect, useState} from "react";
+import {DataFormat_t} from "../types.capture.tsx";
 import Modal from "../../../components/modal.tsx";
-import useJobsList from "../../../hooks/useJobList.tsx";
-import JobItem from "../../../components/jobItem.tsx";
+import useLidarMetadataList from "../../../hooks/useLidarMetadataList.tsx";
+import useActivationContext from "../../../hooks/useActivationContext.tsx";
+import {QueryStatus} from "@tanstack/react-query";
 
 export default function CaptureStart() {
 
     const [formatType, setFormatType] = useState<DataFormat_t>('pcap')
-    const {isLoading, error, state, toggleLidarSelection, resetLidarSelections, setPage} = useLidarMetadataSelectionList()
     const [open, setOpen] = useState<boolean>(false)
-    const list: Array<LidarSelection_t> = useJobsList(['lidar_metadata_list', state?.page || 1])
+    const { populateActivations } = useActivationContext()
+    const {state, status} = useLidarMetadataList()
 
     const handleFormatType = (event: ChangeEvent<HTMLInputElement>) => {
         // @ts-expect-error Standard event for HTMLInputElements
         setFormatType(event.target.value)
-        resetLidarSelections()
     }
 
     const handleJobModal = () => {
         setOpen(!open)
     }
 
-    if (isLoading) return <p>Loading...</p>
-    if (error) return <p>Error Occurred...</p>
 
     return (
         <div>
@@ -41,29 +36,12 @@ export default function CaptureStart() {
                            value='ros'/>
                 </label>
             </div>
-            <div>
-                {
-                    state?.items.map((selection: LidarSelection_t) => {
-                        return <LidarStartSelection key={selection.lidar.lidar_id}
-                                                    currentFormatSelection={formatType}
-                                                    onChangeHandler={() => toggleLidarSelection(selection.lidar.lidar_id, formatType)} {...selection}/>
-                    })
-                }
-            </div>
             <hr />
             <button onClick={handleJobModal}>Start Job</button>
-            <PaginationBar window_size={state?.size || 10} total_items={state?.total || 0} current_page={state?.page || 1} setter={setPage} />
             <Modal open={open} onOpenChange={handleJobModal}>
-                <div>
-                    <div>
-                        {
-                            list.map((job: LidarSelection_t) => {
-                                return <JobItem key={job.lidar.lidar_id} lidar={job.lidar} format={formatType}
-                                                operation='start'/>
-                            })
-                        }
-                    </div>
-                </div>
+                <p>
+                    Testing
+                </p>
             </Modal>
         </div>
     )

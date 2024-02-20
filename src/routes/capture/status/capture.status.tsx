@@ -1,18 +1,17 @@
-import LidarItem from "../../../components/lidarItem.tsx";
-import useLidarMetadataSelectionList from "../../../hooks/useLidarMetadataSelectionList.tsx";
-import {LidarSelection_t} from "../types.capture.tsx";
+import useLidarMetadataList from "../../../hooks/useLidarMetadataList.tsx";
+import {LidarMetadata_t} from "../../../api/rest.tsx";
 
 export default function CaptureStatus() {
 
-    const {isLoading, error, state} = useLidarMetadataSelectionList()
+    const {isPending, error, state} = useLidarMetadataList()
 
-    if (isLoading) return <p>Loading...</p>
+    if (isPending) return <p>Loading...</p>
     if (error) return <p>Error Occurred...</p>
 
     return (
         <div className='flex flex-col gap-2'>
             {
-                state?.items.map((selection: LidarSelection_t) => {return <LidarItem key={selection.lidar.lidar_id} {...selection.lidar} />})
+                state?.items.map((selection: LidarMetadata_t) => {return <p>{selection.lidar_id}</p>})
             }
         </div>
     )
