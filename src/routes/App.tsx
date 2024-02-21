@@ -1,9 +1,6 @@
 import {Link, Outlet} from "react-router-dom";
-import useLidarMetadataList from "../hooks/useLidarMetadataList.tsx";
-
 function App() {
 
-    useLidarMetadataList()
 
   return (
       <div>

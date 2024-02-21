@@ -1,24 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './routes/app.tsx'
+import App from './routes/App.tsx'
 import './index.css'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import Capture from "./routes/capture/capture.tsx";
-import CaptureStatus from "./routes/capture/status/capture.status.tsx";
-import CaptureStart from "./routes/capture/start/capture.start.tsx";
-import CaptureStop from "./routes/capture/stop/capture.stop.tsx";
-import Dashboard from "./routes/dashboard/dashboard.tsx";
-import Explorer from "./routes/explorer/explorer.tsx";
+import Capture from "./routes/capture/Capture.tsx";
+import CaptureStatus from "./routes/capture/status/CaptureStatus.tsx";
+import CaptureStart from "./routes/capture/start/CaptureStart.tsx";
+import CaptureStop from "./routes/capture/stop/CaptureStop.tsx";
+import Dashboard from "./routes/dashboard/Dashboard.tsx";
+import Explorer from "./routes/explorer/Explorer.tsx";
 import Settings from "./routes/settings/settings.tsx";
 import SettingsGeneral from "./routes/settings/general/settings.general.tsx";
 import SettingsDashboard from "./routes/settings/dashboard/settings.dashboard.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import Metadata from "./routes/metadata/metadata.tsx";
-import MetadataSite from "./routes/metadata/site/metadata.site.tsx";
-import MetadataLidar from "./routes/metadata/lidar/metadata.lidar.tsx";
-import {ActivationContextProvider} from "./contexts/ActivationContext.tsx";
+import Metadata from "./routes/metadata/Metadata.tsx";
+import MetadataSite from "./routes/metadata/site/MetadataSite.tsx";
+import MetadataLidar from "./routes/metadata/lidar/MetadataLidar.tsx";
 
 const queryClient = new QueryClient()
 
@@ -33,7 +32,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "capture",
-                element: <ActivationContextProvider element={<Capture />} /> ,
+                element: <Capture />,
                 children: [
                     {
                         index: true,
