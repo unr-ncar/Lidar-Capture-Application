@@ -3,10 +3,10 @@ import {useEffect, useState} from "react";
 import LidarSelectionItem from "../../../components/LidarSelectionItem.tsx";
 import { QueryStatus, UseMutateFunction} from "@tanstack/react-query";
 
-type CaptureFormat_t = 'pcap' | 'ros';
+export type Operation_t = 'start' | 'stop';
+export type CaptureFormat_t = 'pcap' | 'ros';
 export interface LidarSelectionItem_t {
     lidar: LidarMetadataItem_t;
-    captureFormat: CaptureFormat_t;
     selected: boolean;
     mutateFunction?: UseMutateFunction;
     status?: {
@@ -37,35 +37,6 @@ export default function CaptureStart() {
         setLidarSelectionItems(selections)
     }, [captureFormat, data?.items, setLidarSelectionItems])
 
-    const handleToggle = (selectedItem: LidarMetadataItem_t) => {
-        setLidarSelectionItems((prevState: Array<LidarSelectionItem_t>) => {
-            return prevState.map((lidarSelectionItem: LidarSelectionItem_t) => {
-                if (lidarSelectionItem.lidar.lidar_id === selectedItem.lidar_id) {
-                    return {
-                        ...lidarSelectionItem,
-                        selected: !lidarSelectionItem.selected
-                    }
-                }
-                return lidarSelectionItem
-            })
-        })
-    }
-
-    const attachMutationFunction = (lidarSelection: LidarMetadataItem_t, mutationFunction: () => void) => {
-        setLidarSelectionItems((prevState: Array<LidarSelectionItem_t>) => {
-            return prevState.map((lidarSelectionItem: LidarSelectionItem_t) => {
-                if (lidarSelectionItem.lidar.lidar_id === lidarSelection.lidar_id) {
-
-                    return {
-                        ...lidarSelectionItem,
-                        mutateFunction: mutationFunction
-                    }
-                }
-                return lidarSelectionItem
-            })
-        })
-    }
-
     if (isPending) return <p>Loading...</p>
     if (error) return <p>Error...</p>
 
@@ -79,7 +50,7 @@ export default function CaptureStart() {
         <div>
             <div>
                 {lidarSelectionItems.map((lidarSelectionItem: LidarSelectionItem_t) => {
-                    return <LidarSelectionItem stateSetter={setLidarSelectionItems}  key={lidarSelectionItem.lidar.lidar_id} selected={lidarSelectionItem.selected} lidar={lidarSelectionItem.lidar} onChangeHandler={() => handleToggle(lidarSelectionItem.lidar)}  />
+                    return <LidarSelectionItem operation='start' format={captureFormat} lidarSelectionItemsState={{state: lidarSelectionItems, setter: setLidarSelectionItems}}  key={lidarSelectionItem.lidar.lidar_id} selectionItem={lidarSelectionItem}  />
                 })}
             </div>
             <button onClick={() => setCurrentPage(1)}>

@@ -60,22 +60,66 @@ const fetchLidarStatus = async (gatewayIp: string, lidarId: number): Promise<Lid
     return request(url, query)
 
 }
-interface useLidarStatus_t {
-    isPending: boolean;
+export interface useStatus_t {
+    isLoading: boolean;
     error: Error | null;
-    data: LidarStatus_t | undefined;
+    storage: StorageInformation_t | undefined;
+    services: {
+        pcapRecordingServiceActive: (lidar_id: number) => boolean | undefined,
+        rosRecordingServiceActive: (lidar_id: number) => boolean | undefined
+    };
 }
-const useLidarStatus = (lidarId: number): useLidarStatus_t => {
+const useLidarStatus = (lidarId: number): useStatus_t => {
 
     const {isPending, error, data} = useQuery({
         queryKey: ['lidar_status', lidarId],
-        queryFn: async () => fetchLidarStatus('http://134.197.75.31:31538/graphql', lidarId)
+        queryFn: async () => fetchLidarStatus('http://134.197.75.31:31538', lidarId)
     })
 
-    return {
-        isPending,
-        error,
-        data
+
+    function serializePCAPService(lidar_id: number): boolean | undefined {
+        // @ts-expect-error If used correctly with isLoading, the status should not be undefined.
+        return data?.getStatus && data?.getStatus[0].pcapService && data?.getStatus[0].pcapService.find((service: pcap_service_t) => service.lidarId === lidar_id).isRecording;
     }
+    function serializeROSService(lidar_id: number): boolean | undefined {
+        // @ts-expect-error If used correctly with isLoading, the status should not be undefined.
+        const status = data?.getStatus && data?.getStatus[0].rosService && data?.getStatus[0].rosService.find((service: ros_service_t) => service.lidarId === lidar_id).isRecording;
+        return status && status;
+    }
+
+    if (isPending) {
+        return {
+            isLoading: isPending,
+            error: null,
+            storage: undefined,
+            services: {
+                pcapRecordingServiceActive: serializePCAPService,
+                rosRecordingServiceActive: serializeROSService
+            }
+        }
+    }
+
+    if (error || data?.getSystemInfo === undefined || data?.getSystemInfo[0] === undefined || data?.getStatus === undefined || data?.getStatus[0] === undefined) {
+        return {
+            isLoading: isPending,
+            error: new Error('Failed to communicate to edge computer.'),
+            storage: undefined,
+            services: {
+                pcapRecordingServiceActive: serializePCAPService,
+                rosRecordingServiceActive: serializeROSService
+            }
+        }
+    }
+
+    return {
+        isLoading: isPending,
+        error: error,
+        storage: data.getSystemInfo[0],
+        services: {
+            pcapRecordingServiceActive: serializePCAPService,
+            rosRecordingServiceActive: serializeROSService
+        }
+    }
+
 }
 export default useLidarStatus;
