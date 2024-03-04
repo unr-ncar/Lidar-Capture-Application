@@ -4,7 +4,7 @@ export default function Capture() {
 
     return (
         <div>
-            <nav className='flex flex-row gap-1.5'>
+            <nav className='flex gap-2'>
                 <Link to='/capture'>
                     Status
                 </Link>
