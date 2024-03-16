@@ -72,3 +72,12 @@ export interface SiteStorageStatusResponse_t {
 
 /* === BULK STATUS - GRAPHQL === */
 export type BulkStatusResponse_t = LidarServicesStatusResponse_t & SiteStorageStatusResponse_t
+
+/* === GATEWAY CONFIGURATION === */
+export interface GatewayConfiguration_t {
+    gatewayPath: string;
+    metadataServicePort: number;
+    graphqlServicePort: number;
+    rosRecordingServicePort: number;
+    pcapRecordingServicePort: number;
+}
