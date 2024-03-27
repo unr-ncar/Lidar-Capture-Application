@@ -1,27 +1,30 @@
 import {gql, request} from "graphql-request";
-import {BulkStatusResponse_t} from "../types.tsx";
-import {useQuery} from "@tanstack/react-query";
+import {ServicesStatusInformation_t, StatusMetadata_t, StatusResponse_t, StorageInformation_t} from "../types.tsx";
+import {useQuery, UseQueryResult} from "@tanstack/react-query";
+import useGatewayConfiguration from "./useGatewayConfiguration.tsx";
 
-const fetchBulkStatus = async (gatewayIp: string, lidarId: number, siteId: number): Promise<BulkStatusResponse_t> => {
-
+const fetchBulkStatus = async (gatewayIp: string, siteIds: Array<number>): Promise<StatusResponse_t> => {
     const url: string = `${gatewayIp}/graphql`
     const query: string = gql`
         query {
-          getStatus(lidarIds: ${lidarId}) {
+          getStatus(siteIds: [${siteIds.join(',')}]) {
+            siteId
             pcapService {
+              up
               lidarId
               start
               elapsed
               isRecording
             }
             rosService {
+              up
               lidarId
               start
               elapsed
               isRecording
             }
           }
-          getSystemInfo(siteIds: ${siteId}) {
+          getSystemInfo(siteIds: [${siteIds.join(',')}]) {
             totalSpace
             usedSpace
             freeSpace
@@ -35,11 +38,26 @@ const fetchBulkStatus = async (gatewayIp: string, lidarId: number, siteId: numbe
 
 };
 
-export default function useBulkStatus(gatewayIp: string, lidarId: number, siteId: number) {
+
+export default function useBulkStatus(siteIds: Array<number>): UseQueryResult<Array<StatusMetadata_t>> {
+
+    const graphqlServiceUrl = useGatewayConfiguration((state) => state.graphqlServiceUrl)
 
     return useQuery({
-        queryKey: ['bulk_status', lidarId],
-        queryFn: async (): Promise<BulkStatusResponse_t> => fetchBulkStatus(gatewayIp, lidarId, siteId)
+        queryKey: ['bulk_status', siteIds],
+        queryFn: async (): Promise<StatusResponse_t> => fetchBulkStatus(graphqlServiceUrl, siteIds),
+        select: (bulkStatus: StatusResponse_t) => {
+            return bulkStatus['getStatus'].map((serviceStatus: ServicesStatusInformation_t) => {
+                const systemStatus = bulkStatus['getSystemInfo'].find((systemStatus: StorageInformation_t) => systemStatus.siteId === serviceStatus.siteId)
+                return {
+                    siteId: serviceStatus.siteId,
+                    pcapServiceStatus: serviceStatus.pcapService,
+                    rosServiceStatus: serviceStatus.rosService,
+                    edgeStorageStatus: systemStatus
+                }
+            }) || []
+        },
+        enabled: (siteIds.length > 0)
     })
 
 }

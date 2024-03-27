@@ -39,20 +39,23 @@ export interface LidarSelection_t {
 
 /* === LIDAR SERVICES STATUS - GRAPHQL === */
 export interface PcapService_t {
+    up: boolean;
     isRecording: boolean;
     start: number;
     elapsed: number;
     lidarId: number;
 }
 export interface RosService_t {
+    up: boolean;
     isRecording: boolean;
     start: number;
     elapsed: number;
     lidarId: number;
 }
 export interface ServicesStatusInformation_t {
-    pcapService: Array<PcapService_t>;
-    rosService: Array<RosService_t>;
+    siteId: number;
+    pcapService: PcapService_t;
+    rosService: RosService_t;
 }
 export interface LidarServicesStatusResponse_t {
     getStatus: Array<ServicesStatusInformation_t>
@@ -70,8 +73,16 @@ export interface SiteStorageStatusResponse_t {
     getSystemInfo: Array<StorageInformation_t>
 }
 
-/* === BULK STATUS - GRAPHQL === */
-export type BulkStatusResponse_t = LidarServicesStatusResponse_t & SiteStorageStatusResponse_t
+/* === STATUS - GRAPHQL === */
+export type StatusResponse_t = LidarServicesStatusResponse_t & SiteStorageStatusResponse_t
+
+/* === STATUS METADATA - GRAPHQL === */
+export interface StatusMetadata_t {
+    siteId: number;
+    pcapServiceStatus: Array<PcapService_t> & PcapService_t;
+    rosServiceStatus: Array<RosService_t> & RosService_t;
+    edgeStorageStatus: StorageInformation_t | undefined;
+}
 
 /* === GATEWAY CONFIGURATION === */
 export interface GatewayConfiguration_t {
