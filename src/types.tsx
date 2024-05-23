@@ -54,8 +54,8 @@ export interface RosService_t {
 }
 export interface ServicesStatusInformation_t {
     siteId: number;
-    pcapService: PcapService_t;
-    rosService: RosService_t;
+    pcapService: PcapService_t & Array<PcapService_t>;
+    rosService: RosService_t & Array<RosService_t>;
 }
 export interface LidarServicesStatusResponse_t {
     getStatus: Array<ServicesStatusInformation_t>
@@ -79,10 +79,18 @@ export type StatusResponse_t = LidarServicesStatusResponse_t & SiteStorageStatus
 /* === STATUS METADATA - GRAPHQL === */
 export interface StatusMetadata_t {
     siteId: number;
-    pcapServiceStatus: Array<PcapService_t> & PcapService_t;
-    rosServiceStatus: Array<RosService_t> & RosService_t;
+    pcapServiceStatus: PcapService_t;
+    rosServiceStatus: RosService_t;
     edgeStorageStatus: StorageInformation_t | undefined;
 }
+
+export interface StatusMetadataComposite_t {
+    siteId: number;
+    pcapServiceStatus: Array<PcapService_t>;
+    rosServiceStatus: Array<RosService_t>;
+    edgeStorageStatus: StorageInformation_t | undefined;
+}
+
 
 /* === GATEWAY CONFIGURATION === */
 export interface GatewayConfiguration_t {
@@ -91,4 +99,10 @@ export interface GatewayConfiguration_t {
     graphqlServicePort: number;
     rosRecordingServicePort: number;
     pcapRecordingServicePort: number;
+}
+
+/* RECORDING SERVICES - REST */
+export interface RecordingServiceResponse_t {
+    message: string;
+    success: boolean;
 }

@@ -1,15 +1,13 @@
 import {LidarMetadata_t, LidarSelection_t, RecordingFormat, RecordingOperation} from "../types.tsx";
-import {UseMutateFunction} from "@tanstack/react-query";
 import {create, StoreApi, UseBoundStore} from "zustand";
 
 interface LidarSelectionsState_t {
     selections: Array<LidarSelection_t>;
     setSelections: (items: Array<LidarMetadata_t>, operation: RecordingOperation, format: RecordingFormat) => void;
     resetToggleSelections: () => void;
-    toggleSelection: (selectionId: number) => void;
+    toggleSelection: (selectionLidarId: number) => void;
     updateOperation: (operation: RecordingOperation) => void;
     updateFormat: (format: RecordingFormat) => void;
-    initializeMutationFunction: (mutation: UseMutateFunction) => void;
 }
 
 const useLidarSelections: UseBoundStore<StoreApi<LidarSelectionsState_t>> = create<LidarSelectionsState_t>()((set) => ({
@@ -28,7 +26,7 @@ const useLidarSelections: UseBoundStore<StoreApi<LidarSelectionsState_t>> = crea
         selections: []
     })),
     toggleSelection: (selectionId: number) => set((state) => ({
-        selections: state.selections.filter((selection: LidarSelection_t) => {
+        selections: state.selections.map((selection: LidarSelection_t) => {
             if (selection.item.lidar_id !== selectionId) return selection
             return {
                 format: selection.format,
@@ -51,14 +49,6 @@ const useLidarSelections: UseBoundStore<StoreApi<LidarSelectionsState_t>> = crea
             return {
                 ...selection,
                 format: format
-            }
-        })
-    })),
-    initializeMutationFunction: (mutation: UseMutateFunction) => set((state: LidarSelectionsState_t) => ({
-        selections: state.selections.map((selection: LidarSelection_t) => {
-            return {
-                ...selection,
-                mutate: mutation
             }
         })
     }))

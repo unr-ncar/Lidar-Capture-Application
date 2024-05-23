@@ -1,6 +1,6 @@
 import {gql, request} from "graphql-request";
-import {ServicesStatusInformation_t, StatusMetadata_t, StatusResponse_t, StorageInformation_t} from "../types.tsx";
-import {useQuery, UseQueryResult} from "@tanstack/react-query";
+import {ServicesStatusInformation_t, StatusResponse_t, StorageInformation_t} from "../types.tsx";
+import {useQuery} from "@tanstack/react-query";
 import useGatewayConfiguration from "./useGatewayConfiguration.tsx";
 
 const fetchBulkStatus = async (gatewayIp: string, siteIds: Array<number>): Promise<StatusResponse_t> => {
@@ -39,7 +39,7 @@ const fetchBulkStatus = async (gatewayIp: string, siteIds: Array<number>): Promi
 };
 
 
-export default function useBulkStatus(siteIds: Array<number>): UseQueryResult<Array<StatusMetadata_t>> {
+export default function useBulkStatus(siteIds: Array<number>) {
 
     const graphqlServiceUrl = useGatewayConfiguration((state) => state.graphqlServiceUrl)
 
@@ -55,7 +55,7 @@ export default function useBulkStatus(siteIds: Array<number>): UseQueryResult<Ar
                     rosServiceStatus: serviceStatus.rosService,
                     edgeStorageStatus: systemStatus
                 }
-            }) || []
+            })
         },
         enabled: (siteIds.length > 0)
     })

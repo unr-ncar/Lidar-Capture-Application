@@ -1,7 +1,8 @@
 export default function Explorer() {
     return (
-        <p>
-            Explorer
-        </p>
+        <div>
+            <div>
+            </div>
+        </div>
     )
 }

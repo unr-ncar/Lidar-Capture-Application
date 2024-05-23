@@ -1,11 +1,19 @@
 import useLidarMetadataList from "../../../hooks/useLidarMetadataList.tsx";
 import useBulkStatus from "../../../hooks/useBulkStatus.tsx";
-import {LidarMetadata_t, LidarSelection_t, PcapService_t, RosService_t, StatusMetadata_t} from "../../../types.tsx";
+import {
+    LidarMetadata_t,
+    LidarSelection_t,
+    PcapService_t,
+    RosService_t,
+    StatusMetadata_t, StatusMetadataComposite_t
+} from "../../../types.tsx";
 import {useEffect, useState} from "react";
 import useLidarSelections from "../../../hooks/useLidarSelections.tsx";
 import LidarSelectionItem from "../../../components/LidarSelectionItem.tsx";
 
 export default function CaptureStart() {
+
+    const [page, setPage] = useState<number>(1)
 
     const getSiteIds = (sites: Array<LidarMetadata_t> | undefined): Array<number> => {
         if (sites === undefined) return []
@@ -15,8 +23,8 @@ export default function CaptureStart() {
         return [...new Set(siteIds)]
     }
 
-    const getLidarStatus = (statuses: Array<StatusMetadata_t>, lidar: LidarMetadata_t): StatusMetadata_t => {
-        const status = statuses.find((statusMetadata: StatusMetadata_t) => statusMetadata.siteId === lidar.site_id)
+    const getLidarStatus = (statuses: Array<StatusMetadataComposite_t>, lidar: LidarMetadata_t): StatusMetadata_t => {
+        const status = statuses.find((statusMetadata: StatusMetadataComposite_t) => statusMetadata.siteId === lidar.site_id)
         return {
             pcapServiceStatus: status?.pcapServiceStatus.find((service: PcapService_t) => service.lidarId === lidar.lidar_id),
             rosServiceStatus: status?.rosServiceStatus.find((service: RosService_t) => service.lidarId === lidar.lidar_id),
@@ -25,7 +33,6 @@ export default function CaptureStart() {
         } as StatusMetadata_t
     }
 
-    const [page, setPage] = useState<number>(1)
     const {
         isPending: isLoadingLidarList,
         error: errorLidarList,
@@ -63,8 +70,14 @@ export default function CaptureStart() {
                 {(isLoadingLidarList || isBulkStatusLoading) && <p>Loading...</p>}
                 {(errorLidarList || errorBulkStatus) && <p>Error...</p>}
                 {!isLoadingLidarList && !isBulkStatusLoading && selections.map((selection: LidarSelection_t) => {
-                    return <LidarSelectionItem key={selection.item.lidar_id} lidarSelection={selection} statusMetadata={getLidarStatus(dataBulkStatus || [], selection.item)} />
+                    return <LidarSelectionItem key={selection.item.lidar_id} lidarSelection={selection}
+                                               statusMetadata={getLidarStatus(dataBulkStatus || [], selection.item)}/>
                 })}
+            </div>
+            <button>
+                Create Capture
+            </button>
+            <div className='flex flex-col gap-2'>
             </div>
         </div>
     )

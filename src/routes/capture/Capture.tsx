@@ -1,22 +1,21 @@
-import {Link, Outlet} from "react-router-dom";
+import ViewShell from "../../components/ViewShell.tsx";
+import {SecondaryNavigation, SecondaryNavigationLink} from "../../components/Navigation.tsx";
+import {ServerIcon, VideoCameraIcon, VideoCameraSlashIcon} from "@heroicons/react/16/solid";
+import {Outlet} from "react-router-dom";
 
 export default function Capture() {
 
+    const captureNavigation = (
+        <SecondaryNavigation>
+            <SecondaryNavigationLink label="Status" icon={<ServerIcon />} to="/capture" />
+            <SecondaryNavigationLink label="Start" icon={<VideoCameraIcon />} to="/capture/start" />
+            <SecondaryNavigationLink label="Stop" icon={<VideoCameraSlashIcon />} to="/capture/stop" />
+        </SecondaryNavigation>
+    )
+
     return (
-        <div>
-            <nav className='flex gap-2'>
-                <Link to='/capture'>
-                    Status
-                </Link>
-                <Link to='/capture/start'>
-                    Start
-                </Link>
-                <Link to='/capture/stop'>
-                    Stop
-                </Link>
-            </nav>
-            <hr />
+        <ViewShell navigation={captureNavigation}>
             <Outlet />
-        </div>
+        </ViewShell>
     )
 }
