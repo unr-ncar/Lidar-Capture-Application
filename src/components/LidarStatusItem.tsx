@@ -31,8 +31,8 @@ export default function LidarStatusItem({lidarItem, statusMetadata}: LidarStatus
                 <Tag className='ml-auto' label="CORNER" value={corner} />
             </div>
             <StorageStatus storageInformation={stausMetadataPending ? statusMetadata.edgeStorageStatus : liveStatusMetadata?.edgeStorageStatus} />
-            <ServiceStatus service="ros" />
-            <ServiceStatus service="pcap" />
+            <ServiceStatus service="ros" rosServiceInformation={stausMetadataPending ? statusMetadata.rosServiceStatus : liveStatusMetadata?.rosServiceStatus } />
+            <ServiceStatus service="pcap" pcapServiceInformation={stausMetadataPending ? statusMetadata.pcapServiceStatus : liveStatusMetadata?.pcapServiceStatus} />
             <p className='text-neutral-400 italic text-sm'>
                 Last updated at {receivedTime}.
             </p>

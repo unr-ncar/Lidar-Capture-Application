@@ -1,5 +1,5 @@
 import {PcapService_t, RecordingFormat, RosService_t} from "../types.tsx";
-import {VideoCameraIcon, ExclamationTriangleIcon, ServerIcon, CheckCircleIcon} from "@heroicons/react/20/solid";
+import {VideoCameraIcon, ExclamationTriangleIcon, CheckCircleIcon} from "@heroicons/react/20/solid";
 
 export interface ServiceStatusProps_t {
     service: RecordingFormat;
