@@ -1,0 +1,18 @@
+from node:latest
+
+# create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY public /usr/src/app/public
+COPY src /usr/src/app/src
+COPY index.html /usr/src/app
+COPY package.json /usr/src/app
+COPY package-lock.json /usr/src/app
+COPY postcss.config.js /usr/src/app
+COPY tailwind.config.js /usr/src/app
+COPY tsconfig.json /usr/src/app
+COPY tsconfig.node.json /usr/src/app/
+RUN npm install
+RUN npm install -g serve
+RUN npm run build 
+CMD serve -s dist -l 8080
