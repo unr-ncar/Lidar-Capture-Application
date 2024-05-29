@@ -1,6 +1,11 @@
 import {gql, request} from "graphql-request";
-import {ServicesStatusInformation_t, StatusResponse_t, StorageInformation_t} from "../types.tsx";
-import {useQuery} from "@tanstack/react-query";
+import {
+    ServicesStatusInformation_t,
+    StatusMetadataComposite_t,
+    StatusResponse_t,
+    StorageInformation_t
+} from "../types.tsx";
+import {useQuery, UseQueryResult} from "@tanstack/react-query";
 import useGatewayConfiguration from "./useGatewayConfiguration.tsx";
 
 const fetchBulkStatus = async (gatewayIp: string, siteIds: Array<number>): Promise<StatusResponse_t> => {
@@ -8,6 +13,8 @@ const fetchBulkStatus = async (gatewayIp: string, siteIds: Array<number>): Promi
     const query: string = gql`
         query {
           getStatus(siteIds: [${siteIds.join(',')}]) {
+            crossStreet
+            street
             siteId
             pcapService {
               up
@@ -39,7 +46,7 @@ const fetchBulkStatus = async (gatewayIp: string, siteIds: Array<number>): Promi
 };
 
 
-export default function useBulkStatus(siteIds: Array<number>) {
+export default function useBulkStatus(siteIds: Array<number>): UseQueryResult<Array<StatusMetadataComposite_t>> {
 
     const graphqlServiceUrl = useGatewayConfiguration((state) => state.graphqlServiceUrl)
 
@@ -47,10 +54,17 @@ export default function useBulkStatus(siteIds: Array<number>) {
         queryKey: ['bulk_status', siteIds],
         queryFn: async (): Promise<StatusResponse_t> => fetchBulkStatus(graphqlServiceUrl, siteIds),
         select: (bulkStatus: StatusResponse_t) => {
-            return bulkStatus['getStatus'].map((serviceStatus: ServicesStatusInformation_t) => {
+
+            // The .filter statement is a temporary fix to a database issue for siteId: 0, there are duplicates in the database.
+            return bulkStatus['getStatus'].filter(serviceStatus => (serviceStatus.street !== ""))
+                .map((serviceStatus: ServicesStatusInformation_t) => {
+
                 const systemStatus = bulkStatus['getSystemInfo'].find((systemStatus: StorageInformation_t) => systemStatus.siteId === serviceStatus.siteId)
+
                 return {
                     siteId: serviceStatus.siteId,
+                    street: serviceStatus.street,
+                    crossStreet: serviceStatus.crossStreet,
                     pcapServiceStatus: serviceStatus.pcapService,
                     rosServiceStatus: serviceStatus.rosService,
                     edgeStorageStatus: systemStatus

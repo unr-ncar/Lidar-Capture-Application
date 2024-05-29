@@ -3,26 +3,6 @@ import {LidarMetadata_t, RecordingFormat, RecordingOperation, RecordingServiceRe
 import {useMutation} from "@tanstack/react-query";
 import useGatewayConfiguration from "./useGatewayConfiguration.tsx";
 
-export async function processPromisesBatch(
-    items: Array<any>,
-    limit: number,
-    fn: (item: any) => Promise<any>,
-): Promise<any> {
-    let results: any[] = [];
-    for (let start = 0; start < items.length; start += limit) {
-        const end = start + limit > items.length ? items.length : start + limit;
-
-        const slicedResults = await Promise.all(items.slice(start, end).map(fn));
-
-        results = [
-            ...results,
-            ...slicedResults,
-        ]
-    }
-
-    return results;
-}
-
 export function processCaptureStartRequest(siteIp: string, servicePort: number, lidarId: number) {
     return new Promise<RecordingServiceResponse_t>((resolve, reject) => {
         return axios.get(`${siteIp}:${servicePort}/start/${lidarId}`).then((response) => {

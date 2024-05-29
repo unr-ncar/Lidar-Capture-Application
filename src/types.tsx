@@ -1,4 +1,3 @@
-import {UseMutateFunction} from "@tanstack/react-query";
 /* === LIDAR METADATA - REST: /metadata === */
 export interface LidarMetadataResponse_t {
     items: Array<LidarMetadata_t>;
@@ -32,7 +31,6 @@ export type RecordingFormat = 'pcap' | 'ros';
 export interface LidarSelection_t {
     format: RecordingFormat;
     item: LidarMetadata_t;
-    mutate?: UseMutateFunction;
     operation: RecordingOperation;
     selected: boolean;
 }
@@ -53,6 +51,8 @@ export interface RosService_t {
     lidarId: number;
 }
 export interface ServicesStatusInformation_t {
+    crossStreet: string;
+    street: string;
     siteId: number;
     pcapService: PcapService_t & Array<PcapService_t>;
     rosService: RosService_t & Array<RosService_t>;
@@ -78,6 +78,8 @@ export type StatusResponse_t = LidarServicesStatusResponse_t & SiteStorageStatus
 
 /* === STATUS METADATA - GRAPHQL === */
 export interface StatusMetadata_t {
+    crossStreet: string;
+    street: string;
     siteId: number;
     pcapServiceStatus: PcapService_t;
     rosServiceStatus: RosService_t;
@@ -85,12 +87,18 @@ export interface StatusMetadata_t {
 }
 
 export interface StatusMetadataComposite_t {
+    crossStreet: string;
+    street: string;
     siteId: number;
     pcapServiceStatus: Array<PcapService_t>;
     rosServiceStatus: Array<RosService_t>;
     edgeStorageStatus: StorageInformation_t | undefined;
 }
 
+/* === GENERALIZED SERVICE STATUS LABELS === */
+export type StorageStatusLabel_t = "stable" | "critical" | "unstable" | "error";
+export type SensorStatusLabel_t = "ready" | "unavailable" | "recording" | "error";
+export type StatusLabel_t = StorageStatusLabel_t | SensorStatusLabel_t;
 
 /* === GATEWAY CONFIGURATION === */
 export interface GatewayConfiguration_t {
@@ -101,7 +109,7 @@ export interface GatewayConfiguration_t {
     pcapRecordingServicePort: number;
 }
 
-/* RECORDING SERVICES - REST */
+/* === RECORDING SERVICES - REST === */
 export interface RecordingServiceResponse_t {
     message: string;
     success: boolean;

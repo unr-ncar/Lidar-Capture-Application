@@ -1,93 +1,62 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './routes/App.tsx'
 import './index.css'
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import Capture from "./routes/capture/Capture.tsx";
-import CaptureStatus from "./routes/capture/status/CaptureStatus.tsx";
-import CaptureStart from "./routes/capture/start/CaptureStart.tsx";
-import CaptureStop from "./routes/capture/stop/CaptureStop.tsx";
-import Dashboard from "./routes/dashboard/Dashboard.tsx";
-import Explorer from "./routes/explorer/Explorer.tsx";
-import Settings from "./routes/settings/settings.tsx";
-import SettingsGeneral from "./routes/settings/general/settings.general.tsx";
-import SettingsDashboard from "./routes/settings/dashboard/settings.dashboard.tsx";
+
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
+import App from "./App.tsx";
+import CaptureRoot from "./views/capture/CaptureRoot.tsx";
+import SiteStatusView from "./views/capture/SiteStatusView.tsx";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import Metadata from "./routes/metadata/Metadata.tsx";
-import MetadataSite from "./routes/metadata/site/MetadataSite.tsx";
-import MetadataLidar from "./routes/metadata/lidar/MetadataLidar.tsx";
-
 const queryClient = new QueryClient()
-
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <App />,
+        element: <App/>,
         children: [
             {
-                index: true,
-                element: <Dashboard />
+                path: "explorer",
+                element: <p>Explorer</p>
             },
             {
                 path: "capture",
-                element: <Capture />,
+                element: <CaptureRoot/>,
                 children: [
                     {
                         index: true,
-                        element: <CaptureStatus />
+                        element: <SiteStatusView/>
                     },
                     {
-                        path: "start",
-                        element: <CaptureStart />
+                        path: "sensor_status",
+                        element: <p>Sensors</p>
                     },
                     {
-                        path: "stop",
-                        element: <CaptureStop />
+                        path: "start_capture",
+                        element: <p>Start Capture</p>
+                    },
+                    {
+                        path: "stop_capture",
+                        element: <p>Stop Capture</p>
                     }
                 ]
-            },
-            {
-                path: "explorer",
-                element: <Explorer />
             },
             {
                 path: "settings",
-                element: <Settings />,
-                children: [
-                    {
-                        index: true,
-                        element: <SettingsGeneral />
-                    },
-                    {
-                        path: "dashboard",
-                        element: <SettingsDashboard />
-                    }
-                ]
-            },
-            {
-                element: <Metadata />,
-                children: [
-                    {
-                        path: "site/:site_id",
-                        element: <MetadataSite />
-                    },
-                    {
-                        path: "lidar/:lidar_id",
-                        element: <MetadataLidar />
-                    }
-                ]
+                element: <p>Settings</p>
             }
         ]
-    }
-])
+    },
+]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-          <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-  </React.StrictMode>,
+    <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router}/>
+            <ReactQueryDevtools initialIsOpen={false}/>
+        </QueryClientProvider>
+    </React.StrictMode>,
 )

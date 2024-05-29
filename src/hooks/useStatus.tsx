@@ -9,6 +9,8 @@ const fetchStatus = async (gatewayIp: string, siteId: number): Promise<StatusRes
         query {
           getStatus(siteIds: ${siteId}) {
             siteId
+            crossStreet
+            street
             pcapService {
               up
               lidarId
@@ -39,7 +41,7 @@ const fetchStatus = async (gatewayIp: string, siteId: number): Promise<StatusRes
 };
 
 
-export default function useStatus(lidarId: number, siteId: number): UseQueryResult<StatusMetadata_t> {
+export function useStatus(lidarId: number, siteId: number): UseQueryResult<StatusMetadata_t> {
 
     const graphqlServiceUrl = useGatewayConfiguration((state) => state.graphqlServiceUrl)
 
@@ -48,7 +50,9 @@ export default function useStatus(lidarId: number, siteId: number): UseQueryResu
         queryFn: async (): Promise<StatusResponse_t> => fetchStatus(graphqlServiceUrl, siteId),
         select: (status: StatusResponse_t): StatusMetadata_t => {
             return {
-                siteId: siteId,
+                siteId: status['getStatus'][0].siteId,
+                street: status['getStatus'][0].street,
+                crossStreet: status['getStatus'][0].crossStreet,
                 pcapServiceStatus: status['getStatus'][0]['pcapService'].filter((pcapServiceStatus: PcapService_t) => pcapServiceStatus.lidarId === lidarId)[0],
                 rosServiceStatus: status['getStatus'][0]['rosService'].filter((rosServiceStatus: RosService_t) => rosServiceStatus.lidarId === lidarId)[0],
                 edgeStorageStatus: status['getSystemInfo'][0]
