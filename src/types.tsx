@@ -25,6 +25,10 @@ export interface LidarMetadata_t {
     corner: string;
     longitude: number;
     latitude: number;
+    intersection_center: {
+        latitude: number;
+        longitude: number;
+    }
 }
 export type RecordingOperation = 'start' | 'stop';
 export type RecordingFormat = 'pcap' | 'ros';

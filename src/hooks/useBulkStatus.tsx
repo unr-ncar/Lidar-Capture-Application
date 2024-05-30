@@ -55,9 +55,7 @@ export default function useBulkStatus(siteIds: Array<number>): UseQueryResult<Ar
         queryFn: async (): Promise<StatusResponse_t> => fetchBulkStatus(graphqlServiceUrl, siteIds),
         select: (bulkStatus: StatusResponse_t) => {
 
-            // The .filter statement is a temporary fix to a database issue for siteId: 0, there are duplicates in the database.
-            return bulkStatus['getStatus'].filter(serviceStatus => (serviceStatus.street !== ""))
-                .map((serviceStatus: ServicesStatusInformation_t) => {
+            return bulkStatus['getStatus'].map((serviceStatus: ServicesStatusInformation_t) => {
 
                 const systemStatus = bulkStatus['getSystemInfo'].find((systemStatus: StorageInformation_t) => systemStatus.siteId === serviceStatus.siteId)
 

@@ -1,14 +1,20 @@
-import { StorageInformation_t, StorageStatusLabel_t} from "../types.tsx";
+import { StorageStatusLabel_t} from "../types.tsx";
 import {useMemo} from "react";
 
-export default function useStorageStatusLabel({totalSpace, usedSpace}: StorageInformation_t): StorageStatusLabel_t {
+export interface useStorageStatusLabelProps_t {
+    totalSpace: number | undefined;
+    usedSpace: number | undefined;
+}
+export default function useStorageStatusLabel(props: useStorageStatusLabelProps_t): StorageStatusLabel_t {
+
+    const {totalSpace, usedSpace} = props;
 
     return useMemo<StorageStatusLabel_t>(
         () => {
 
-            const usagePercentage = ((usedSpace / totalSpace)*100).toFixed(0)
-
             if (totalSpace === undefined || usedSpace === undefined) return "error"
+
+            const usagePercentage = ((usedSpace / totalSpace)*100).toFixed(0)
 
             if (Number(usagePercentage) > 80) {
                 return "unstable"

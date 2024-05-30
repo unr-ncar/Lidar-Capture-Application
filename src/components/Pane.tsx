@@ -32,9 +32,9 @@ export interface PaneProps_t {
 
 export function Pane({children, label, description, stretch}: PaneProps_t) {
     return (
-        <div className={`${stretch ? 'h-full' : null} ${!stretch ? 'md:max-w-[450px]' : null} grow flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>
+        <div className={`${stretch ? 'w-full' : null} ${!stretch ? 'md:max-w-[450px]' : null} grow flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>
             <PaneHeader label={label} description={description} />
-            <div>
+            <div className='grow'>
                 { children }
             </div>
         </div>

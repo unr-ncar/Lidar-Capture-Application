@@ -20,7 +20,7 @@ export function ServiceWidget({
                                   dataValue
                               }: ServiceWidgetProps) {
 
-    function backgroundColor() {
+    const backgroundColor = () => {
         if (status === 'stable' || status === 'ready') {
             return 'bg-green-600'
         } else if (status === 'critical' || status === 'unavailable') {
@@ -31,8 +31,6 @@ export function ServiceWidget({
             return 'bg-neutral-400'
         }
     }
-
-    console.log(serviceLabel, status)
 
     return (
         <div
