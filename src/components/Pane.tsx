@@ -25,18 +25,22 @@ export function PaneHeader({label, description}: PaneHeaderProps_t) {
 
 export interface PaneProps_t {
     children: ReactElement | Array<ReactElement>;
+    footer?: ReactElement;
     label?: string;
     description?: string;
     stretch?: boolean;
+    minimalWidth?: boolean;
 }
 
-export function Pane({children, label, description, stretch}: PaneProps_t) {
+export function Pane({children, footer, label, description, stretch, minimalWidth}: PaneProps_t) {
     return (
-        <div className={`${stretch ? 'w-full' : null} ${!stretch ? 'md:max-w-[450px]' : null} grow flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>
-            <PaneHeader label={label} description={description} />
+        <div
+            className={`${stretch ? 'grow' : null} ${!stretch ? 'md:max-w-[450px]' : null} ${minimalWidth ? 'md:min-w-[350px]' : null} flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>
+            <PaneHeader label={label} description={description}/>
             <div className='grow'>
-                { children }
+                {children}
             </div>
+            {footer && footer}
         </div>
     )
 }

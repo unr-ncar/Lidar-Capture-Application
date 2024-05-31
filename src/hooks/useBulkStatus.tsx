@@ -55,7 +55,7 @@ export default function useBulkStatus(siteIds: Array<number>): UseQueryResult<Ar
         queryFn: async (): Promise<StatusResponse_t> => fetchBulkStatus(graphqlServiceUrl, siteIds),
         select: (bulkStatus: StatusResponse_t) => {
 
-            return bulkStatus['getStatus'].map((serviceStatus: ServicesStatusInformation_t) => {
+            return bulkStatus['getStatus'].filter((serviceStatus: ServicesStatusInformation_t) => serviceStatus.street !== "").map((serviceStatus: ServicesStatusInformation_t) => {
 
                 const systemStatus = bulkStatus['getSystemInfo'].find((systemStatus: StorageInformation_t) => systemStatus.siteId === serviceStatus.siteId)
 

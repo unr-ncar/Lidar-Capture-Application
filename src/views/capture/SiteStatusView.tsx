@@ -9,14 +9,18 @@ import {LidarMetadata_t, StatusMetadataComposite_t} from "../../types.tsx";
 import {SiteStatusItem} from "../../components/SiteStatusItem.tsx";
 import {Map} from "../../components/map/Map.tsx";
 import {SiteStatusMarker} from "../../components/map/SiteStatusMarker.tsx";
+import {Pagination} from "../../components/Pagination.tsx";
+import {useState} from "react";
 
 export default function SiteStatusView() {
+
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
     const {
         isPending: lidarMetadataListPending,
         error: lidarMetadataListError,
         data: lidarMetadataList
-    } = useLidarMetadataList(1)
+    } = useLidarMetadataList(currentPage)
 
     const {
         isPending: bulkStatusPending,
@@ -60,10 +64,11 @@ export default function SiteStatusView() {
     return (
         <>
             <Pane label="Deployment Edge Operational Status"
-                  description="View information related deployments storage and service information.">
-                <div className='flex flex-col gap-4'>
-                    {siteStatusItems}
-                </div>
+                  description="View information related deployments storage and service information."
+                  footer={<Pagination currentPage={currentPage} setPage={setCurrentPage} pageSize={lidarMetadataList.size} totalItemCount={lidarMetadataList.total} />}>
+                    <div className='flex flex-col gap-4'>
+                        {siteStatusItems}
+                    </div>
             </Pane>
             <MobileDisableWrapper>
                 <Pane stretch>
