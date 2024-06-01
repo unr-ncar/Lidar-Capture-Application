@@ -6,6 +6,7 @@ import {Outlet} from "react-router-dom";
 
 export default function CaptureRoot() {
 
+
     function CaptureSecondaryNavigation() {
         return (
             <SecondaryNavigation>

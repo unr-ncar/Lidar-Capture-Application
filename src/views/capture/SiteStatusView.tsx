@@ -36,11 +36,11 @@ export default function SiteStatusView() {
         return <SiteStatusItem key={siteItem.siteId} {...siteItem} />
     })
 
-    const siteStatusMarkers = () => {
+    const generateStatusMarkers = () => {
 
         const siteIds = getSiteIds(lidarMetadataList!.items)
 
-        const statusMarkers = siteIds.map((siteId: number) => {
+        return siteIds.map((siteId: number) => {
             const intersectionCenter = lidarMetadataList?.items.find((item: LidarMetadata_t) => item.site_id === siteId)?.intersection_center;
             const status = bulkStatus?.find((item: StatusMetadataComposite_t) => item.siteId === siteId)?.edgeStorageStatus;
             if (intersectionCenter === undefined) {
@@ -55,11 +55,11 @@ export default function SiteStatusView() {
             };
         }).filter(item => item !== null);
 
-        return statusMarkers.map((marker) => {
-            return <SiteStatusMarker key={marker!.siteId} longitude={marker!.longitude} latitude={marker!.latitude} siteStatus={marker?.siteStatus} />
-        })
     }
 
+    const siteStatusMarkers = generateStatusMarkers().map((marker) => {
+        return <SiteStatusMarker key={marker!.siteId} longitude={marker!.longitude} latitude={marker!.latitude} siteStatus={marker?.siteStatus} />
+    })
 
     return (
         <>
@@ -72,8 +72,8 @@ export default function SiteStatusView() {
             </Pane>
             <MobileDisableWrapper>
                 <Pane stretch>
-                    <Map className='w-full h-full rounded-lg shadow-lg'>
-                        {siteStatusMarkers()}
+                    <Map>
+                        {siteStatusMarkers}
                     </Map>
                 </Pane>
             </MobileDisableWrapper>
