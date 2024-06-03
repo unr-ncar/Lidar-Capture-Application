@@ -30,12 +30,14 @@ export interface PaneProps_t {
     description?: string;
     stretch?: boolean;
     minimalWidth?: boolean;
+    mobileDetach?: boolean;
 }
 
 export function Pane({children, footer, label, description, stretch, minimalWidth}: PaneProps_t) {
+
     return (
         <div
-            className={`${stretch ? 'grow' : null} ${!stretch ? 'md:max-w-[450px]' : null} ${minimalWidth ? 'md:min-w-[350px]' : null} flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>
+            className={`${stretch ? 'grow' : null} ${!stretch ? 'md:max-w-[450px]' : null} ${minimalWidth ? 'md:min-w-[350px] lg:min-w-[450px]' : null} flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>
             <PaneHeader label={label} description={description}/>
             <div className='grow'>
                 {children}
