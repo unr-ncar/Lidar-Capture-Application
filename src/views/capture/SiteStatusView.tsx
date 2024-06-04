@@ -11,6 +11,7 @@ import {Map} from "../../components/map/Map.tsx";
 import {SiteStatusMarker} from "../../components/map/SiteStatusMarker.tsx";
 import {Pagination} from "../../components/Pagination.tsx";
 import {useState} from "react";
+import ItemList from "../../components/ItemList.tsx";
 
 export default function SiteStatusView() {
 
@@ -65,10 +66,10 @@ export default function SiteStatusView() {
         <>
             <Pane label="Deployment Edge Operational Status"
                   description="View information related deployments storage and service information."
-                  footer={<Pagination currentPage={currentPage} setPage={setCurrentPage} pageSize={lidarMetadataList.size} totalItemCount={lidarMetadataList.total} />}>
-                    <div className='flex flex-col gap-4'>
+                  footerComponent={<Pagination currentPage={currentPage} setPage={setCurrentPage} pageSize={lidarMetadataList.size} totalItemCount={lidarMetadataList.total} />}>
+                    <ItemList>
                         {siteStatusItems}
-                    </div>
+                    </ItemList>
             </Pane>
             <MobileDisableWrapper>
                 <Pane stretch>
