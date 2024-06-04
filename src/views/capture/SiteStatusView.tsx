@@ -15,13 +15,13 @@ import ItemList from "../../components/ItemList.tsx";
 
 export default function SiteStatusView() {
 
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [page, setPage] = useState<number>(1);
 
     const {
         isPending: lidarMetadataListPending,
         error: lidarMetadataListError,
         data: lidarMetadataList
-    } = useLidarMetadataList(currentPage)
+    } = useLidarMetadataList(page)
 
     const {
         isPending: bulkStatusPending,
@@ -64,12 +64,13 @@ export default function SiteStatusView() {
 
     return (
         <>
-            <Pane label="Deployment Edge Operational Status"
-                  description="View information related deployments storage and service information."
-                  footerComponent={<Pagination currentPage={currentPage} setPage={setCurrentPage} pageSize={lidarMetadataList.size} totalItemCount={lidarMetadataList.total} />}>
+            <Pane label="Deployment Edge Operational Status" description="View information related deployments storage and service information.">
+                <div className='flex flex-col gap-4'>
                     <ItemList>
                         {siteStatusItems}
                     </ItemList>
+                    <Pagination currentPage={page} setPage={setPage} pageSize={lidarMetadataList.size} totalItemCount={lidarMetadataList.total}/>
+                </div>
             </Pane>
             <MobileDisableWrapper>
                 <Pane stretch>

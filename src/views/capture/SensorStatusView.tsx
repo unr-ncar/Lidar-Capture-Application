@@ -22,12 +22,12 @@ interface StatusMarkerFilterOptionsProps_t {
 function StatusMarkerFilterOptions({currentMarkerFormat, setCurrentMarkerFormat}: StatusMarkerFilterOptionsProps_t) {
 
     return (
-        <>
+        <div>
             <RadioForm formLabel="Service Selection" selected={currentMarkerFormat} setSelection={setCurrentMarkerFormat}>
                 <RadioFormItem label="PCAP" value="pcap" />
                 <RadioFormItem label="ROS" value="ros" />
             </RadioForm>
-        </>
+        </div>
     )
 }
 
@@ -75,18 +75,24 @@ export default function SensorStatusView() {
 
     return (
         <>
-            <Pane label="Sensors Operational Status"
-                  description="View information related sensors respective services and status information."
-                  footerComponent={<Pagination currentPage={page} setPage={setPage} pageSize={lidarMetadataList.size} totalItemCount={lidarMetadataList.total} />}>
-                <ItemList>
-                    {sensorStatusItems}
-                </ItemList>
+            <Pane label="Sensors Operational Status" description="View information related sensors respective services and status information.">
+                <div className='flex flex-col gap-4'>
+                    <ItemList>
+                        {sensorStatusItems}
+                    </ItemList>
+                    <Pagination currentPage={page} setPage={setPage} pageSize={lidarMetadataList.size} totalItemCount={lidarMetadataList.total} />
+                </div>
             </Pane>
             <MobileDisableWrapper>
-                <Pane stretch headingComponent={<StatusMarkerFilterOptions currentMarkerFormat={markerFormat} setCurrentMarkerFormat={setMarkerFormat} />}>
+                <Pane stretch>
                     <Map>
                         {statusMarkers}
                     </Map>
+                </Pane>
+            </MobileDisableWrapper>
+            <MobileDisableWrapper>
+                <Pane minimalWidth label="Data Filtering" description="Filter sensor and sensor status information for itemized list and map markers.">
+                    <StatusMarkerFilterOptions currentMarkerFormat={markerFormat} setCurrentMarkerFormat={setMarkerFormat} />
                 </Pane>
             </MobileDisableWrapper>
         </>

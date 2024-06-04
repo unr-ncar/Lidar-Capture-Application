@@ -24,9 +24,7 @@ export function PaneHeader({label, description}: PaneHeaderProps_t) {
 }
 
 export interface PaneProps_t {
-    children: ReactElement | Array<ReactElement>;
-    headingComponent?: ReactElement;
-    footerComponent?: ReactElement;
+    children: ReactElement | undefined | Array<ReactElement | undefined>;
     label?: string;
     description?: string;
     stretch?: boolean;
@@ -34,25 +32,15 @@ export interface PaneProps_t {
     mobileDetach?: boolean;
 }
 
-export function Pane({children, headingComponent, footerComponent, label, description, stretch, minimalWidth}: PaneProps_t) {
+export function Pane({children, label, description, stretch, minimalWidth}: PaneProps_t) {
 
     return (
         <div
-            className={`${stretch ? 'grow' : null} ${!stretch ? 'md:max-w-[450px]' : null} ${minimalWidth ? 'md:min-w-[350px] lg:min-w-[450px]' : null} flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>
+            className={`${stretch ? 'grow' : null} ${!stretch ? 'md:max-w-[450px]' : null} ${minimalWidth ? 'md:min-w-[350px]' : null} flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>
             <PaneHeader label={label} description={description}/>
-            {headingComponent && (
-                <div className='bg-neutral-100 p-4 rounded-md'>
-                    {headingComponent && headingComponent}
-                </div>
-            )}
             <div className='grow'>
                 {children}
             </div>
-            {footerComponent && (
-                <div className='bg-neutral-100 p-4 rounded-md'>
-                    {footerComponent && footerComponent}
-                </div>
-            )}
         </div>
     )
 }
