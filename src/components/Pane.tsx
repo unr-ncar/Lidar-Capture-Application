@@ -1,44 +1,19 @@
 import {ReactElement} from "react";
-
-interface PaneHeaderProps_t {
-    label?: string;
-    description?: string;
-}
-
-export function PaneHeader({label, description}: PaneHeaderProps_t) {
-
-    if (!label) return null
-
-    return (
-        <div>
-            <p className='font-bold text-xl mb-0.5'>
-                {label}
-            </p>
-            {description && (
-                <p className='italic text-neutral-400'>
-                    {description}
-                </p>
-            )}
-        </div>
-    )
-}
+import {PaneSectionProps_t} from "./PaneSection.tsx";
 
 export interface PaneProps_t {
-    children: ReactElement | undefined | Array<ReactElement | undefined>;
-    label?: string;
-    description?: string;
+    children: ReactElement<PaneSectionProps_t> | Array<ReactElement<PaneSectionProps_t>> | undefined;
     stretch?: boolean;
     minimalWidth?: boolean;
     mobileDetach?: boolean;
 }
 
-export function Pane({children, label, description, stretch, minimalWidth}: PaneProps_t) {
+export function Pane({children, stretch, minimalWidth}: PaneProps_t) {
 
     return (
         <div
             className={`${stretch ? 'grow' : null} ${!stretch ? 'md:max-w-[450px]' : null} ${minimalWidth ? 'md:min-w-[350px]' : null} flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>
-            <PaneHeader label={label} description={description}/>
-            <div className='grow'>
+            <div className='grow flex flex-col gap-6 [&>*:last-child]:border-0 [&>*]:border-b-2 [&>*]:border-neutral-100 [&>*]:pb-6 [&>*:last-child]:pb-0'>
                 {children}
             </div>
         </div>

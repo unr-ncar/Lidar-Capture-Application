@@ -12,8 +12,9 @@ import getLidarStatus from "../../functions/getLidarStatus.tsx";
 import {Pagination} from "../../components/Pagination.tsx";
 import {MobileDisableWrapper} from "../../components/utilities/MobileDisableWrapper.tsx";
 import ItemList from "../../components/ItemList.tsx";
-import {RadioForm, RadioFormItem} from "../../components/forms/RadioForm.tsx";
 import {SensorStatusMarker} from "../../components/map/SensorStatusMarker.tsx";
+import {PaneSection} from "../../components/PaneSection.tsx";
+import {SelectForm, SelectOption} from "../../components/forms/SelectForm.tsx";
 
 interface StatusMarkerFilterOptionsProps_t {
     currentMarkerFormat: RecordingFormat;
@@ -23,10 +24,10 @@ function StatusMarkerFilterOptions({currentMarkerFormat, setCurrentMarkerFormat}
 
     return (
         <div>
-            <RadioForm formLabel="Service Selection" selected={currentMarkerFormat} setSelection={setCurrentMarkerFormat}>
-                <RadioFormItem label="PCAP" value="pcap" />
-                <RadioFormItem label="ROS" value="ros" />
-            </RadioForm>
+            <SelectForm formLabel="Service Selection" formDescription="Select which service status to view for displayed intersections." selected={currentMarkerFormat} setSelection={setCurrentMarkerFormat}>
+                <SelectOption label="PCAP" value="pcap" />
+                <SelectOption label="ROS" value="ros" />
+            </SelectForm>
         </div>
     )
 }
@@ -52,9 +53,7 @@ export default function SensorStatusView() {
         () => {
             if (lidarMetadataListPending || bulkStatusPending) return undefined;
             return lidarMetadataList?.items.map((metadataItem: LidarMetadata_t) => {
-
                 const lidarStatus = getLidarStatus(bulkStatus!, metadataItem)
-
                 if (markerFormat === 'pcap') {
                     return <SensorStatusMarker key={metadataItem.lidar_id} longitude={metadataItem.longitude} latitude={metadataItem.latitude} sensorStatus={lidarStatus.pcapServiceStatus} />
                 } else {
@@ -75,24 +74,27 @@ export default function SensorStatusView() {
 
     return (
         <>
-            <Pane label="Sensors Operational Status" description="View information related sensors respective services and status information.">
-                <div className='flex flex-col gap-4'>
-                    <ItemList>
-                        {sensorStatusItems}
-                    </ItemList>
-                    <Pagination currentPage={page} setPage={setPage} pageSize={lidarMetadataList.size} totalItemCount={lidarMetadataList.total} />
-                </div>
+            <Pane>
+                <MobileDisableWrapper>
+                    <PaneSection label="Map Filtering" description="Filter sensor markers using the following ">
+                        <StatusMarkerFilterOptions currentMarkerFormat={markerFormat} setCurrentMarkerFormat={setMarkerFormat} />
+                    </PaneSection>
+                </MobileDisableWrapper>
+                <PaneSection label="Sensors Operational Status" description="View information related sensors respective services and status information.">
+                    <div className='flex flex-col gap-4'>
+                        <ItemList>
+                            {sensorStatusItems}
+                        </ItemList>
+                        <Pagination currentPage={page} setPage={setPage} pageSize={lidarMetadataList.size}
+                                    totalItemCount={lidarMetadataList.total}/>
+                    </div>
+                </PaneSection>
             </Pane>
             <MobileDisableWrapper>
                 <Pane stretch>
                     <Map>
                         {statusMarkers}
                     </Map>
-                </Pane>
-            </MobileDisableWrapper>
-            <MobileDisableWrapper>
-                <Pane minimalWidth label="Data Filtering" description="Filter sensor and sensor status information for itemized list and map markers.">
-                    <StatusMarkerFilterOptions currentMarkerFormat={markerFormat} setCurrentMarkerFormat={setMarkerFormat} />
                 </Pane>
             </MobileDisableWrapper>
         </>

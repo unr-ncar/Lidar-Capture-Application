@@ -2,14 +2,13 @@
 import {Dispatch, ReactElement, SetStateAction} from "react";
 import {Field, Label, Radio, RadioGroup} from "@headlessui/react";
 
-export interface RadioFormItemProps_t {
+export interface RadioItemProps_t {
     label: string;
     value: string;
 }
-
-export function RadioFormItem({label, value}: RadioFormItemProps_t) {
+export function RadioItem({label, value}: RadioItemProps_t) {
     return (
-        <Field className="">
+        <Field>
             <Radio value={value} className="group data-[checked]:bg-black data-[checked]:text-white hover:bg-black hover:text-white transition-colors px-2 py-1 rounded-md bg-neutral-200 text-neutral-400 font-medium text-sm">
                 <Label className="">{label}</Label>
             </Radio>
@@ -18,7 +17,7 @@ export function RadioFormItem({label, value}: RadioFormItemProps_t) {
 }
 
 export interface RadioFormProps_t {
-    children: Array<ReactElement<RadioFormItemProps_t>>;
+    children: Array<ReactElement<RadioItemProps_t>>;
     formLabel: string;
     selected: any;
     setSelection: Dispatch<SetStateAction<any>>;
@@ -26,11 +25,11 @@ export interface RadioFormProps_t {
 
 export function RadioForm({formLabel, children, selected, setSelection}: RadioFormProps_t) {
     return (
-        <div className='flex flex-col gap-2 w-fit'>
+        <div className='flex flex-col gap-2 w-full'>
             <p className='font-medium uppercase text-xs text-neutral-400'>
                 {formLabel}
             </p>
-            <RadioGroup className='flex flex-row gap-2' value={selected} onChange={setSelection} aria-label={formLabel}>
+            <RadioGroup className='flex flex-row gap-2 flex-wrap' value={selected} onChange={setSelection} aria-label={formLabel}>
                 {children}
             </RadioGroup>
         </div>
