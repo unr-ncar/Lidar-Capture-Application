@@ -1,4 +1,4 @@
-import {Dispatch, ReactElement, SetStateAction, useMemo, useState} from "react";
+import {Dispatch, ReactElement, SetStateAction, useEffect, useMemo, useState} from "react";
 import useLidarMetadataList from "../../hooks/useLidarMetadataList.tsx";
 import useBulkStatus from "../../hooks/useBulkStatus.tsx";
 import getSiteIds from "../../functions/getSiteIds.tsx";
@@ -64,6 +64,10 @@ export default function SensorStatusView() {
         [bulkStatus, bulkStatusPending, lidarMetadataList?.items, lidarMetadataListPending, markerFormat]
     )
 
+    useEffect(() => {
+        console.log(markerFormat)
+    }, [markerFormat])
+
     if (lidarMetadataListError) return <ErrorMessage error={lidarMetadataListError}/>
     if (bulkStatusError) return <ErrorMessage error={bulkStatusError}/>
     if (lidarMetadataListPending || bulkStatusPending) return <LoadingSpinner/>
@@ -92,9 +96,11 @@ export default function SensorStatusView() {
             </Pane>
             <MobileDisableWrapper>
                 <Pane stretch>
-                    <Map>
-                        {statusMarkers}
-                    </Map>
+                    <PaneSection>
+                        <Map>
+                            {statusMarkers}
+                        </Map>
+                    </PaneSection>
                 </Pane>
             </MobileDisableWrapper>
         </>

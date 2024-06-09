@@ -18,7 +18,7 @@ export function SelectOption({label, value}: SelectOptionProps_t) {
 export interface SelectFormProps_t extends SelectProps {
     children: Array<ReactElement<SelectOptionProps_t>>;
     formLabel: string;
-    formDescription: string;
+    formDescription?: string;
     selected: any;
     setSelection: Dispatch<SetStateAction<any>>;
 }
@@ -34,7 +34,7 @@ export function SelectForm(props: SelectFormProps_t) {
                     <Description className="leading-snug">{formDescription}</Description>
                 )}
             </div>
-            <div className='flex flex-row items-center gap-1 bg-neutral-200 text-neutral-400 px-2 py-0.5 rounded-md'>
+            <div className='flex flex-row items-center bg-neutral-200 text-neutral-400 px-2 py-0.5 rounded-md text-sm'>
                 <Select {...rest} value={selected} onChange={event => setSelection(event.target.value)} name={formLabel} className="appearance-none bg-transparent">
                     {children}
                 </Select>

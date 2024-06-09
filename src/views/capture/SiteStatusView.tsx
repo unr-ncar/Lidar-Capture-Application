@@ -12,6 +12,7 @@ import {SiteStatusMarker} from "../../components/map/SiteStatusMarker.tsx";
 import {Pagination} from "../../components/Pagination.tsx";
 import {useState} from "react";
 import ItemList from "../../components/ItemList.tsx";
+import {PaneSection} from "../../components/PaneSection.tsx";
 
 export default function SiteStatusView() {
 
@@ -64,20 +65,25 @@ export default function SiteStatusView() {
 
     return (
         <>
-            <Pane label="Deployment Edge Operational Status" description="View information related deployments storage and service information.">
-                <div className='flex flex-col gap-4'>
-                    <ItemList>
-                        {siteStatusItems}
-                    </ItemList>
-                    <Pagination currentPage={page} setPage={setPage} pageSize={lidarMetadataList.size} totalItemCount={lidarMetadataList.total}/>
-                </div>
+            <Pane>
+                <PaneSection label="Deployment Edge Operational Status" description="View information related deployments storage and service information.">
+                    <div className='flex flex-col gap-4'>
+                        <ItemList>
+                            {siteStatusItems}
+                        </ItemList>
+                        <Pagination currentPage={page} setPage={setPage} pageSize={lidarMetadataList.size}
+                                    totalItemCount={lidarMetadataList.total}/>
+                    </div>
+                </PaneSection>
             </Pane>
             <MobileDisableWrapper>
-                <Pane stretch>
-                    <Map>
-                        {siteStatusMarkers}
-                    </Map>
-                </Pane>
+                <PaneSection>
+                    <Pane stretch>
+                        <Map>
+                            {siteStatusMarkers}
+                        </Map>
+                    </Pane>
+                </PaneSection>
             </MobileDisableWrapper>
         </>
     )
