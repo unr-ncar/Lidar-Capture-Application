@@ -10,6 +10,8 @@ export interface PaneProps_t {
 
 export function Pane({children, stretch, minimalWidth}: PaneProps_t) {
 
+    
+
     return (
         <div
             className={`${stretch ? 'grow' : null} ${!stretch ? 'md:max-w-[450px]' : null} ${minimalWidth ? 'md:min-w-[350px]' : null} flex flex-col gap-6 p-6 md:overflow-y-auto md:h-full`}>

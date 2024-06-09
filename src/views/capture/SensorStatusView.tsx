@@ -1,4 +1,4 @@
-import {Dispatch, ReactElement, SetStateAction, useEffect, useMemo, useState} from "react";
+import {ReactElement, useEffect, useMemo, useState} from "react";
 import useLidarMetadataList from "../../hooks/useLidarMetadataList.tsx";
 import useBulkStatus from "../../hooks/useBulkStatus.tsx";
 import getSiteIds from "../../functions/getSiteIds.tsx";
@@ -15,22 +15,7 @@ import ItemList from "../../components/ItemList.tsx";
 import {SensorStatusMarker} from "../../components/map/SensorStatusMarker.tsx";
 import {PaneSection} from "../../components/PaneSection.tsx";
 import {SelectForm, SelectOption} from "../../components/forms/SelectForm.tsx";
-
-interface StatusMarkerFilterOptionsProps_t {
-    currentMarkerFormat: RecordingFormat;
-    setCurrentMarkerFormat: Dispatch<SetStateAction<RecordingFormat>>;
-}
-function StatusMarkerFilterOptions({currentMarkerFormat, setCurrentMarkerFormat}: StatusMarkerFilterOptionsProps_t) {
-
-    return (
-        <div>
-            <SelectForm formLabel="Service Selection" formDescription="Select which service status to view for displayed intersections." selected={currentMarkerFormat} setSelection={setCurrentMarkerFormat}>
-                <SelectOption label="PCAP" value="pcap" />
-                <SelectOption label="ROS" value="ros" />
-            </SelectForm>
-        </div>
-    )
-}
+import {FormGroup} from "../../components/forms/FormGroup.tsx";
 
 export default function SensorStatusView() {
 
@@ -80,8 +65,13 @@ export default function SensorStatusView() {
         <>
             <Pane>
                 <MobileDisableWrapper>
-                    <PaneSection label="Map Filtering" description="Filter sensor markers using the following ">
-                        <StatusMarkerFilterOptions currentMarkerFormat={markerFormat} setCurrentMarkerFormat={setMarkerFormat} />
+                    <PaneSection>
+                        <FormGroup label="Map Filtering">
+                            <SelectForm label="Service Selection" description="Select which service status to view for displayed intersections." selected={markerFormat} setSelection={setMarkerFormat}>
+                                <SelectOption label="PCAP" value="pcap" />
+                                <SelectOption label="ROS" value="ros" />
+                            </SelectForm>
+                        </FormGroup>
                     </PaneSection>
                 </MobileDisableWrapper>
                 <PaneSection label="Sensors Operational Status" description="View information related sensors respective services and status information.">
