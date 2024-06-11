@@ -18,18 +18,18 @@ export function RadioItem({label, value}: RadioItemProps_t) {
 
 export interface RadioFormProps_t {
     children: Array<ReactElement<RadioItemProps_t>>;
-    formLabel: string;
+    label: string;
     selected: any;
     setSelection: Dispatch<SetStateAction<any>>;
 }
 
-export function RadioForm({formLabel, children, selected, setSelection}: RadioFormProps_t) {
+export function RadioForm({label, children, selected, setSelection}: RadioFormProps_t) {
     return (
         <div className='flex flex-col gap-2 w-full'>
             <p className='font-medium uppercase text-xs text-neutral-400'>
-                {formLabel}
+                {label}
             </p>
-            <RadioGroup className='flex flex-row gap-2 flex-wrap' value={selected} onChange={setSelection} aria-label={formLabel}>
+            <RadioGroup className='flex flex-row gap-2 flex-wrap' value={selected} onChange={setSelection} aria-label={label}>
                 {children}
             </RadioGroup>
         </div>

@@ -29,9 +29,9 @@ export interface PaneSectionProps_t {
 }
 export function PaneSection({label, description, children}: PaneSectionProps_t) {
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 w-full h-full">
             <PaneHeader label={label} description={description}/>
-            <div>
+            <div className='grow'>
                 {children}
             </div>
         </div>

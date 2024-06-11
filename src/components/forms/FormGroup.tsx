@@ -11,8 +11,8 @@ export function FormGroup(props: FormGroupProps_t) {
     const { label, children, ...rest } = props;
 
     return (
-        <Fieldset {...rest}>
-            <Legend>
+        <Fieldset {...rest} className='flex flex-col gap-3'>
+            <Legend className='uppercase text-neutral-400 font-semibold text-sm'>
                 { label }
             </Legend>
             <div>
