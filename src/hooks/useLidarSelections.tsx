@@ -31,7 +31,6 @@ const useLidarSelections: UseBoundStore<StoreApi<LidarSelectionsState_t>> = crea
             return {
                 format: selection.format,
                 item: selection.item,
-                operation: selection.operation,
                 selected: !selection.selected
             }
         })

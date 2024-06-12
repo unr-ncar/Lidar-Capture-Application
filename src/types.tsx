@@ -34,7 +34,6 @@ export type RecordingOperation = 'start' | 'stop';
 export type RecordingFormat = 'pcap' | 'ros';
 export interface LidarSelection_t {
     format: RecordingFormat;
-    operation: RecordingOperation;
     item: LidarMetadata_t;
     selected: boolean;
 }
