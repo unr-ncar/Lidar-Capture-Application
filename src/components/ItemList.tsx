@@ -1,5 +1,5 @@
 import {ReactElement} from "react";
-import {ListBulletIcon, ChevronDownIcon} from "@heroicons/react/24/solid";
+import { ChevronDownIcon, ChevronUpIcon} from "@heroicons/react/16/solid";
 import {Disclosure, DisclosureButton, DisclosurePanel} from "@headlessui/react";
 
 interface ItemListHeaderProps_t {
@@ -11,19 +11,19 @@ function ItemListHeader({label, accordion}: ItemListHeaderProps_t) {
 
     if (!label) return null
 
-    const containerStyles = `bg`
+    const containerStyles = `group flex flex-row gap-2 justify-between items-center w-full ${accordion ? 'bg-neutral-200 text-neutral-400 px-3 py-1 rounded-md' : 'text-neutral-400 border-b-2 border-neutral-200 pb-1'} ${accordion ? 'hover:bg-black hover:text-white transition-colors' : null}`
+    const textStyling = 'font-semibold text-sm uppercase'
 
     if (accordion) {
         return (
-            <DisclosureButton className='flex flex-row justify-between items-center w-full bg-neutral-100 text-neutral-400 px-3 py-1 rounded-md'>
-                <div className='flex flex-row items-center gap-1'>
-                    <p className='font-semibold text-sm uppercase'>
-                        {label}
-                    </p>
-                </div>
+            <DisclosureButton className={containerStyles}>
+                <p className={textStyling}>
+                    {label}
+                </p>
                 {accordion && (
-                    <span>
-                        <ChevronDownIcon className='size-4' />
+                    <span className='[&>*]:size-4'>
+                        <ChevronDownIcon className='block group-data-[open]:hidden'/>
+                        <ChevronUpIcon className='hidden group-data-[open]:block'/>
                     </span>
                 )}
             </DisclosureButton>
@@ -31,15 +31,10 @@ function ItemListHeader({label, accordion}: ItemListHeaderProps_t) {
     }
 
     return (
-        <div>
-            <div>
-                <span>
-                    <ListBulletIcon/>
-                </span>
-                <p>
-                    {label}
-                </p>
-            </div>
+        <div className={containerStyles}>
+            <p className={textStyling}>
+                {label}
+            </p>
         </div>
     )
 
@@ -54,13 +49,15 @@ export interface ItemListProps_t {
 
 export default function ItemList({className, children, label, accordion}: ItemListProps_t) {
 
+    const containerStyles = 'flex flex-col gap-4'
+
     if (accordion) {
         return (
             <Disclosure>
-                <div className='flex flex-col gap-2'>
-                    <ItemListHeader accordion label={label} />
-                    <DisclosurePanel>
-                        { children }
+                <div className={containerStyles}>
+                    <ItemListHeader accordion label={label}/>
+                    <DisclosurePanel className={`${className} flex flex-col gap-4`}>
+                        {children}
                     </DisclosurePanel>
                 </div>
             </Disclosure>
@@ -68,8 +65,8 @@ export default function ItemList({className, children, label, accordion}: ItemLi
     }
 
     return (
-        <div>
-            <ItemListHeader />
+        <div className={containerStyles}>
+            <ItemListHeader label={label} />
             <div className={`${className} flex flex-col gap-4`}>
                 {children}
             </div>

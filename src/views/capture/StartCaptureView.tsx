@@ -40,14 +40,6 @@ export default function StartCaptureView() {
         <>
             <Pane minimalWidth>
                 <PaneSection>
-                    <ItemList accordion label='ROS SELECTIONS'>
-                        <p>
-                            Hello
-                        </p>
-                        <p>
-                            World
-                        </p>
-                    </ItemList>
                     <Pagination currentPage={lidarMetadataList.page} setPage={setPage} totalItemCount={lidarMetadataList.total} pageSize={lidarMetadataList.size} />
                 </PaneSection>
             </Pane>
