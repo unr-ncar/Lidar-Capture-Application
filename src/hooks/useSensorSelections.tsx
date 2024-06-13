@@ -1,38 +1,54 @@
-import {LidarMetadata_t, LidarSelection_t} from "../types.tsx";
+import {LidarMetadata_t, LidarSelection_t, RecordingFormat} from "../types.tsx";
 import {create, StoreApi, UseBoundStore} from "zustand";
 
 interface useSensorSelectionsState_t {
-    pcapSelections: Array<LidarSelection_t>;
-    rosSelections: Array<LidarSelection_t>;
+    selections: Array<LidarSelection_t>;
     createSelections: (items: Array<LidarMetadata_t>) => void;
-    resetSelections: () => void;
     clearSelections: () => void;
-    //toggleSelection: (selection: LidarSelection_t, format: RecordingFormat) => void;
+    toggleSelection: (toggledSelection: LidarSelection_t, format: RecordingFormat) => void;
 }
 
 const useSensorSelections: UseBoundStore<StoreApi<useSensorSelectionsState_t>> = create<useSensorSelectionsState_t>()((set) => ({
-    sensors: [],
-    pcapSelections: [],
-    rosSelections: [],
+    selections: [],
     createSelections: (items: Array<LidarMetadata_t>) => set((state) => ({
-        pcapSelections: items.map((item: LidarMetadata_t) => {
-            const existingItem = state.pcapSelections.find((existingItem: LidarSelection_t) => existingItem.item.lidar_id === item.lidar_id)
-
-            if (existingItem) return existingItem
-
-            return {
-                item: item,
-                format: 'pcap',
-                selected: false
-            } as LidarSelection_t
-        })
+        selections: [
+            ...items
+                .filter(item => !state.selections.some(existingItem => existingItem.item.lidar_id === item.lidar_id))
+                .map((newItem: LidarMetadata_t) => ({
+                    item: newItem,
+                    selectedFormats: [],
+                } as LidarSelection_t)),
+            ...state.selections
+        ],
     })),
-    resetSelections: (() => set(() => ({
-
+    clearSelections: (() => set((state) => ({
+        selections: [
+            ...state.selections.map((selection) => {
+                return {
+                    ...selection,
+                    selectedFormats: []
+                }
+            })
+        ]
     }))),
-    clearSelections: (() => set(() => ({
-
-    }))),
+    toggleSelection: ((toggledSelection: LidarSelection_t, format: RecordingFormat) => set((state) => ({
+        selections: [...state.selections.map((selection) => {
+            if (toggledSelection.item.lidar_id === selection.item.lidar_id) {
+                if (toggledSelection.selectedFormats.some(selectionFormat => selectionFormat === format)) {
+                    return {
+                        ...selection,
+                        selectedFormats: [...selection.selectedFormats, format]
+                    }
+                } else {
+                    return {
+                        ...selection,
+                        selectedFormats: [...selection.selectedFormats.filter(format => format !== format)]
+                    }
+                }
+            }
+            return selection
+        })],
+    })))
 
 }))
 export default useSensorSelections;

@@ -19,9 +19,7 @@ export default function StartCaptureView() {
         isSuccess
     } = useLidarMetadataList(page)
 
-    const sensors = useSensorSelections((state) => state.sensors)
-    const pcapSelections = useSensorSelections(state => state.pcapSelections)
-    const rosSelections = useSensorSelections(state => state.rosSelections)
+    const selections = useSensorSelections(state => state.selections)
     const createSelections = useSensorSelections((state) => state.createSelections)
 
     useEffect(() => {
@@ -31,8 +29,8 @@ export default function StartCaptureView() {
     }, [isSuccess, createSelections, lidarMetadataList, lidarMetadataListPending]);
 
     useEffect(() => {
-        console.log(pcapSelections)
-    }, [pcapSelections]);
+        console.log(selections)
+    }, [selections]);
 
     if (lidarMetadataListPending) return <LoadingSpinner />
     if (lidarMetadataListError) return <ErrorMessage error={lidarMetadataListError} />
