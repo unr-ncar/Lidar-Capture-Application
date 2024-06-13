@@ -7,6 +7,7 @@ import useSensorSelections from "../../hooks/useSensorSelections.tsx";
 import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
 import LoadingSpinner from "../../components/utilities/LoadingSpinner/LoadingSpinner.tsx";
 import {Pagination} from "../../components/Pagination.tsx";
+import ItemList from "../../components/ItemList.tsx";
 
 export default function StartCaptureView() {
 
@@ -39,9 +40,14 @@ export default function StartCaptureView() {
         <>
             <Pane minimalWidth>
                 <PaneSection>
-                    <p>
-                        StartCaptureView
-                    </p>
+                    <ItemList accordion label='ROS SELECTIONS'>
+                        <p>
+                            Hello
+                        </p>
+                        <p>
+                            World
+                        </p>
+                    </ItemList>
                     <Pagination currentPage={lidarMetadataList.page} setPage={setPage} totalItemCount={lidarMetadataList.total} pageSize={lidarMetadataList.size} />
                 </PaneSection>
             </Pane>
