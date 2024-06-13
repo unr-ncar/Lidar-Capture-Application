@@ -86,7 +86,7 @@ export default function SensorStatusView() {
             </Pane>
             <MobileDisableWrapper>
                 <Pane stretch>
-                    <PaneSection>
+                    <PaneSection fillHeight>
                         <Map>
                             {statusMarkers}
                         </Map>

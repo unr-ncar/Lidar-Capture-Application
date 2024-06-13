@@ -25,11 +25,12 @@ export function PaneHeader({label, description}: PaneHeaderProps_t) {
 export interface PaneSectionProps_t {
     label?: string;
     description?: string;
+    fillHeight?: boolean;
     children: ReactElement | Array<ReactElement> | undefined;
 }
-export function PaneSection({label, description, children}: PaneSectionProps_t) {
+export function PaneSection({label, description, fillHeight, children}: PaneSectionProps_t) {
     return (
-        <div className="flex flex-col gap-6 w-full h-full">
+        <div className={`${fillHeight ? 'h-full' : 'h-min'} flex flex-col gap-6 w-full`}>
             <PaneHeader label={label} description={description}/>
             <div className='grow'>
                 {children}

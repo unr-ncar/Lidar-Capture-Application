@@ -77,13 +77,13 @@ export default function SiteStatusView() {
                 </PaneSection>
             </Pane>
             <MobileDisableWrapper>
-                <PaneSection>
-                    <Pane stretch>
+                <Pane stretch>
+                    <PaneSection fillHeight>
                         <Map>
                             {siteStatusMarkers}
                         </Map>
-                    </Pane>
-                </PaneSection>
+                    </PaneSection>
+                </Pane>
             </MobileDisableWrapper>
         </>
     )
