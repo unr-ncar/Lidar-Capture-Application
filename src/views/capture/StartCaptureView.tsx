@@ -1,6 +1,5 @@
 import {PaneSection} from "../../components/PaneSection.tsx";
 import {Pane} from "../../components/Pane.tsx";
-import {Map} from "../../components/map/Map.tsx";
 import {useEffect, useState} from "react";
 import useLidarMetadataList from "../../hooks/useLidarMetadataList.tsx";
 import useSensorSelections from "../../hooks/useSensorSelections.tsx";
@@ -48,8 +47,8 @@ export default function StartCaptureView() {
     return (
         <>
             <Pane minimalWidth>
-                <PaneSection>
-                    <div className='md:w-[300px]'>
+                <PaneSection label="Sensor Selections for Capture" description="Select which sensors and their respective capture services for a new capture job.">
+                    <div>
                         <ItemList>
                             <ItemList label="ros selections" accordion>
                                 {rosSensorSelections}
@@ -62,11 +61,10 @@ export default function StartCaptureView() {
                     </div>
                 </PaneSection>
             </Pane>
-            <Pane>
-                <PaneSection>
-                    <Map>
-
-                    </Map>
+            <Pane stretch>
+                <PaneSection label="Capture Action Summary" description="View a summary of sensor selections and respective outputs for a new capture job submission.">
+                    <div>
+                    </div>
                 </PaneSection>
             </Pane>
         </>

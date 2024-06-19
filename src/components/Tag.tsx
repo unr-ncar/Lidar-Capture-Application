@@ -16,7 +16,7 @@ export function Tag(props: TagProps_t) {
         return (
             <button {...rest} className={containerStyling}>
                 <p className={textStyling}>
-                    { label && <span className='font-semibold '>{label}:{' '}</span> }{value}
+                    { label && <span className='font-semibold'>{label}:{' '}</span> }{value}
                 </p>
             </button>
         )
