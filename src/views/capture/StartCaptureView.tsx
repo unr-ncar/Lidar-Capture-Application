@@ -13,24 +13,29 @@ import {SensorSelectionItem} from "../../components/SensorSelectionItem.tsx";
 export default function StartCaptureView() {
 
     const [page, setPage] = useState<number>(1);
+    const selections = useSensorSelections((state) => state.selections)
     const createSelections = useSensorSelections((state) => state.createSelections)
     const isSelected = useSensorSelections((state) => state.isSelected)
     const toggleSelection = useSensorSelections((state) => state.toggleSelection)
 
     const {
-        isPending: lidarMetadataListPending,
+        isPlaceholderData: isPlaceholderLidarMetadataList,
         error: lidarMetadataListError,
         data: lidarMetadataList,
     } = useLidarMetadataList(page)
 
     useEffect(() => {
-        if (!lidarMetadataListPending) {
+        if (!isPlaceholderLidarMetadataList) {
             createSelections(lidarMetadataList!.items)
         }
-    }, [createSelections, lidarMetadataList, lidarMetadataListPending]);
+    }, [createSelections, lidarMetadataList, isPlaceholderLidarMetadataList]);
+
+    useEffect(() => {
+        console.log(selections)
+    }, [selections]);
 
     if (lidarMetadataListError) return <ErrorMessage error={lidarMetadataListError}/>
-    if (lidarMetadataListPending) return <LoadingSpinner/>
+    if (isPlaceholderLidarMetadataList) return <LoadingSpinner/>
 
     const rosSensorSelections = lidarMetadataList!.items.map((selectionItem) => {
         return <SensorSelectionItem key={selectionItem.lidar_id} selected={() => isSelected(selectionItem.lidar_id, "ros")} toggleFunction={() => toggleSelection(selectionItem.lidar_id, "ros")} format="ros" lidarMetadata={selectionItem} />
@@ -52,7 +57,7 @@ export default function StartCaptureView() {
                             <ItemList label="pcap selections" accordion>
                                 {pcapSensorSelections}
                             </ItemList>
-                            <Pagination currentPage={lidarMetadataList.page} setPage={setPage} totalItemCount={lidarMetadataList.total} pageSize={lidarMetadataList.size} />
+                            <Pagination currentPage={lidarMetadataList!.page} setPage={setPage} totalItemCount={lidarMetadataList!.total} pageSize={lidarMetadataList!.size} />
                         </ItemList>
                     </div>
                 </PaneSection>

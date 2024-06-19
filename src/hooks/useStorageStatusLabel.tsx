@@ -6,7 +6,7 @@ export default function useStorageStatusLabel(props: StorageInformation_t | unde
     return useMemo<StorageStatusLabel_t>(
         () => {
 
-            if (props?.totalSpace === undefined || props?.usedSpace === undefined) return "error"
+            if (props === undefined) return "error"
 
             const usagePercentage = ((props.usedSpace / props.totalSpace)*100).toFixed(0)
 

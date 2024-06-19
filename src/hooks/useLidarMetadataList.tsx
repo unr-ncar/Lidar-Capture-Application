@@ -15,7 +15,7 @@ export default function useLidarMetadataList(page: number): UseQueryResult<Lidar
     return useQuery({
         queryKey: ['lidar_metadata', page],
         queryFn: async (): Promise<LidarMetadataResponse_t> => fetchLidarMetadata(metadataServiceUrl, page),
-        initialData: () => {return {
+        placeholderData: () => {return {
             items: [],
             total: 0,
             page: 0,

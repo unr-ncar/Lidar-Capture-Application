@@ -15,9 +15,11 @@ export function SensorSelectionItem({selected, toggleFunction, format, lidarMeta
 
     const { lidar_id, site_id, street, cross_street, corner} = lidarMetadata;
     const {isPending: statusPending, error: statusError, data: status} = useStatus(lidar_id, site_id)
+    const sensorStatus = useSensorStatusLabel(statusPending ? undefined : format === "ros" ? status?.rosServiceStatus : status!.pcapServiceStatus)
+    const storageStatus = useStorageStatusLabel(statusPending ? undefined : status?.edgeStorageStatus)
 
     return (
-        <Checkbox disabled={statusPending} className='group flex flex-col gap-4 bg-neutral-100 rounded p-4' checked={selected()} onChange={toggleFunction}>
+        <Checkbox disabled={statusPending} className='group flex flex-col gap-4 bg-neutral-100 rounded p-4 data-[disabled]:bg-red-100' checked={selected()} onChange={toggleFunction}>
             <div className='flex flex-row items-center justify-between'>
                 <p className='font-medium line-clamp-2'>
                     {street} &#x2022; {cross_street}
