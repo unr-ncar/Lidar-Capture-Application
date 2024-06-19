@@ -8,46 +8,36 @@ import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
 import LoadingSpinner from "../../components/utilities/LoadingSpinner/LoadingSpinner.tsx";
 import {Pagination} from "../../components/Pagination.tsx";
 import ItemList from "../../components/ItemList.tsx";
-import useBulkStatus from "../../hooks/useBulkStatus.tsx";
-import getSiteIds from "../../functions/getSiteIds.tsx";
 import {SensorSelectionItem} from "../../components/SensorSelectionItem.tsx";
-import getLidarStatus from "../../functions/getLidarStatus.tsx";
 
 export default function StartCaptureView() {
 
     const [page, setPage] = useState<number>(1);
-    const selections = useSensorSelections(state => state.selections)
     const createSelections = useSensorSelections((state) => state.createSelections)
     const isSelected = useSensorSelections((state) => state.isSelected)
     const toggleSelection = useSensorSelections((state) => state.toggleSelection)
-
 
     const {
         isPending: lidarMetadataListPending,
         error: lidarMetadataListError,
         data: lidarMetadataList,
-        isSuccess
     } = useLidarMetadataList(page)
 
     useEffect(() => {
         if (!lidarMetadataListPending) {
             createSelections(lidarMetadataList!.items)
         }
-    }, [isSuccess, createSelections, lidarMetadataList, lidarMetadataListPending]);
-
-    useEffect(() => {
-        console.log(selections)
-    }, [selections]);
+    }, [createSelections, lidarMetadataList, lidarMetadataListPending]);
 
     if (lidarMetadataListError) return <ErrorMessage error={lidarMetadataListError}/>
     if (lidarMetadataListPending) return <LoadingSpinner/>
 
-    const rosSensorSelections = selections.map((selectionItem) => {
-        return <SensorSelectionItem key={selectionItem.item.lidar_id} selected={isSelected(selectionItem, "ros")} toggleFunction={() => toggleSelection(selectionItem, "ros")} format="ros" lidarSelection={selectionItem} />
+    const rosSensorSelections = lidarMetadataList!.items.map((selectionItem) => {
+        return <SensorSelectionItem key={selectionItem.lidar_id} selected={() => isSelected(selectionItem.lidar_id, "ros")} toggleFunction={() => toggleSelection(selectionItem.lidar_id, "ros")} format="ros" lidarMetadata={selectionItem} />
     })
 
-    const pcapSensorSelections = selections.map((selectionItem) => {
-        return <SensorSelectionItem key={selectionItem.item.lidar_id} selected={isSelected(selectionItem, "pcap")} toggleFunction={() => toggleSelection(selectionItem, "pcap")} format="pcap" lidarSelection={selectionItem} />
+    const pcapSensorSelections = lidarMetadataList!.items.map((selectionItem) => {
+        return <SensorSelectionItem key={selectionItem.lidar_id} selected={() => isSelected(selectionItem.lidar_id, "pcap")} toggleFunction={() => toggleSelection(selectionItem.lidar_id, "pcap")} format="pcap" lidarMetadata={selectionItem} />
     })
 
     return (

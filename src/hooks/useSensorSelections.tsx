@@ -5,8 +5,8 @@ interface useSensorSelectionsState_t {
     selections: Array<LidarSelection_t>;
     createSelections: (items: Array<LidarMetadata_t>) => void;
     clearSelections: () => void;
-    toggleSelection: (toggledSelection: LidarSelection_t, format: RecordingFormat) => void;
-    isSelected: (selection: LidarSelection_t, format: RecordingFormat) => boolean;
+    toggleSelection: (selectionLidarId: number, format: RecordingFormat) => void;
+    isSelected: (selectionLidarId: number, format: RecordingFormat) => boolean;
 }
 
 const useSensorSelections: UseBoundStore<StoreApi<useSensorSelectionsState_t>> = create<useSensorSelectionsState_t>()((set, get) => ({
@@ -32,9 +32,9 @@ const useSensorSelections: UseBoundStore<StoreApi<useSensorSelectionsState_t>> =
             })
         ]
     }))),
-    toggleSelection: ((toggledSelection: LidarSelection_t, format: RecordingFormat) => set((state) => ({
+    toggleSelection: ((selectionLidarId: number, format: RecordingFormat) => set((state) => ({
         selections: [...state.selections.map((selection) => {
-            if (toggledSelection.item.lidar_id === selection.item.lidar_id) {
+            if (selectionLidarId === selection.item.lidar_id) {
                 if (!selection.selectedFormats.some(selectionFormat => selectionFormat === format)) {
                     return {
                         ...selection,
@@ -50,6 +50,6 @@ const useSensorSelections: UseBoundStore<StoreApi<useSensorSelectionsState_t>> =
             return selection
         })],
     }))),
-    isSelected: (selection, format) => get().selections.find((selectionItem: LidarSelection_t) => selectionItem.item.lidar_id === selection.item.lidar_id)!.selectedFormats.some(selectionFormat => selectionFormat === format),
+    isSelected: (selectionLidarId, format) => get().selections.find((selectionItem: LidarSelection_t) => selectionItem.item.lidar_id === selectionLidarId)!.selectedFormats.some(selectionFormat => selectionFormat === format),
 }))
 export default useSensorSelections;
