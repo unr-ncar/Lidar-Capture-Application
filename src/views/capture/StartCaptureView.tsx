@@ -41,25 +41,21 @@ export default function StartCaptureView() {
         }
     }, [isPlaceholderLidarMetadataList, lidarMetadataList, selections]);
 
-    useEffect(() => {
-        console.log(selections)
-    }, [selections]);
-
     if (lidarMetadataListError) return <ErrorMessage error={lidarMetadataListError}/>
     if (isPlaceholderLidarMetadataList) return <LoadingSpinner/>
 
     const rosSensorSelections = displayedSelections.map((selectionItem) => {
-        return <SensorSelectionItem key={selectionItem.item.lidar_id} selected={() => isSelected(selectionItem.item.lidar_id, "ros")} toggleFunction={() => toggleSelection(selectionItem.item.lidar_id, "ros")} format="ros" lidarMetadata={selectionItem.item} />
+        return <SensorSelectionItem key={selectionItem.item.lidar_id} operation='start' selected={() => isSelected(selectionItem.item.lidar_id, "ros")} toggleFunction={() => toggleSelection(selectionItem.item.lidar_id, "ros")} format="ros" lidarMetadata={selectionItem.item} />
     })
 
     const pcapSensorSelections = displayedSelections.map((selectionItem) => {
-        return <SensorSelectionItem key={selectionItem.item.lidar_id} selected={() => isSelected(selectionItem.item.lidar_id, "pcap")} toggleFunction={() => toggleSelection(selectionItem.item.lidar_id, "pcap")} format="pcap" lidarMetadata={selectionItem.item} />
+        return <SensorSelectionItem key={selectionItem.item.lidar_id} operation='start' selected={() => isSelected(selectionItem.item.lidar_id, "pcap")} toggleFunction={() => toggleSelection(selectionItem.item.lidar_id, "pcap")} format="pcap" lidarMetadata={selectionItem.item} />
     })
 
     return (
         <>
             <Pane minimalWidth>
-                <PaneSection label="Sensor Selections for Capture" description="Select which sensors and their respective capture services for a new capture job.">
+                <PaneSection label="Sensor Selections for New Capture Job" description="Select which sensors and their respective capture services for a new capture job.">
                     <div>
                         <ItemList>
                             <ItemList label="ros selections">

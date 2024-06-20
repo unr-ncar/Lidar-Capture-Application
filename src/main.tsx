@@ -13,6 +13,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import SensorStatusView from "./views/capture/SensorStatusView.tsx";
 import StartCaptureView from "./views/capture/StartCaptureView.tsx";
+import StopCaptureView from "./views/capture/StopCaptureView.tsx";
 
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "stop_capture",
-                        element: <p>Stop Capture</p>
+                        element: <StopCaptureView />
                     }
                 ],
             },
