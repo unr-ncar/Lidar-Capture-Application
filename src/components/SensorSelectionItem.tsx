@@ -18,8 +18,8 @@ export function SensorSelectionItem({selected, toggleFunction, format, lidarMeta
 
     const {lidar_id, site_id, street, cross_street, corner} = lidarMetadata;
     const {isPending: statusPending, data: status} = useStatus(lidar_id, site_id)
-    const sensorStatus = useSensorStatusLabel(format === "ros" ? status!.rosServiceStatus : status!.pcapServiceStatus)
-    const storageStatus = useStorageStatusLabel(status?.edgeStorageStatus)
+    const sensorStatus = useSensorStatusLabel(statusPending ? undefined : format === "ros" ? status!.rosServiceStatus : status!.pcapServiceStatus)
+    const storageStatus = useStorageStatusLabel(statusPending ? undefined : status!.edgeStorageStatus)
 
     const selectionDisabled = () => {
         return !((sensorStatus === 'ready') && (storageStatus === 'stable' || storageStatus === 'critical'));
