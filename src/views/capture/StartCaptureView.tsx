@@ -1,13 +1,13 @@
 import {PaneSection} from "../../components/PaneSection.tsx";
 import {Pane} from "../../components/Pane.tsx";
-import {ReactElement, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import useLidarMetadataList from "../../hooks/useLidarMetadataList.tsx";
 import useSensorSelections from "../../hooks/useSensorSelections.tsx";
 import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
 import LoadingSpinner from "../../components/utilities/LoadingSpinner/LoadingSpinner.tsx";
 import {Pagination} from "../../components/Pagination.tsx";
 import ItemList from "../../components/ItemList.tsx";
-import {SensorSelectionItem, SensorSelectionItemProps_t} from "../../components/SensorSelectionItem.tsx";
+import {SensorSelectionItem} from "../../components/SensorSelectionItem.tsx";
 import {LidarMetadata_t, LidarSelection_t} from "../../types.tsx";
 
 export default function StartCaptureView() {
@@ -53,7 +53,7 @@ export default function StartCaptureView() {
     })
 
     const pcapSensorSelections = displayedSelections.map((selectionItem) => {
-        return <SensorSelectionItem key={selectionItem.item.lidar_id} selected={() => isSelected(selectionItem.item.lidar_id, "pcap")} toggleFunction={() => toggleSelection(selectionItem.item.lidar_id, "ros")} format="ros" lidarMetadata={selectionItem.item} />
+        return <SensorSelectionItem key={selectionItem.item.lidar_id} selected={() => isSelected(selectionItem.item.lidar_id, "pcap")} toggleFunction={() => toggleSelection(selectionItem.item.lidar_id, "pcap")} format="ros" lidarMetadata={selectionItem.item} />
     })
 
     return (

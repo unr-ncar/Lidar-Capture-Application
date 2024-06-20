@@ -4,54 +4,8 @@ import {useStatus} from "../hooks/useStatus.tsx";
 import {Tag} from "./Tag.tsx";
 import useSensorStatusLabel from "../hooks/useSensorStatusLabel.tsx";
 import useStorageStatusLabel from "../hooks/useStorageStatusLabel.tsx";
-import {ExclamationTriangleIcon} from "@heroicons/react/16/solid";
-
-interface SelectionTagProps_t {
-    loading: boolean;
-    selected: boolean;
-    disabled?: boolean;
-    reason: string | null;
-}
-
-function SelectionTag({loading, selected, disabled, reason}: SelectionTagProps_t) {
-
-    if (loading) {
-        return (
-            <div className='w-fit px-2 py-1 rounded-md flex flex-row items-center bg-slate-600'>
-                <p className='text-xs font-medium text-white'>
-                    LOADING
-                </p>
-            </div>
-        )
-    }
-
-    if (disabled) {
-        return (
-            <div className='w-fit px-2 py-1 rounded-md flex flex-row items-center gap-1 bg-red-400 text-white'>
-                <span>
-                    <ExclamationTriangleIcon className='size-4'/>
-                </span>
-                <p className='text-xs'>
-                    <span className='font-medium'>
-                        DISABLED
-                    </span>
-                    {' '}
-                    <span className='uppercase'>
-                        {reason !== null ? reason : null}
-                    </span>
-                </p>
-            </div>
-        )
-    }
-
-    return (
-        <div className={`${selected ? 'bg-green-500 text-white' : 'bg-neutral-400 text-neutral-200'} w-fit px-2 py-1 rounded-md flex flex-row items-center gap-1`}>
-            <p className='text-xs font-medium'>
-                {selected ? "SELECTED" : "UNSELECTED"}
-            </p>
-        </div>
-    )
-}
+import {MinusIcon, PlusIcon, VideoCameraIcon, ExclamationTriangleIcon} from "@heroicons/react/20/solid";
+import Loading from "react-loading";
 
 export interface SensorSelectionItemProps_t {
     selected: () => boolean;
@@ -71,35 +25,54 @@ export function SensorSelectionItem({selected, toggleFunction, format, lidarMeta
         return !((sensorStatus === 'ready') && (storageStatus === 'stable' || storageStatus === 'critical'));
     }
 
-    const selectionDisabledReason = () => {
+    const selectionFlag = () => {
 
-        if (sensorStatus !== 'ready') {
-            return sensorStatus;
+        let backgroundColor = null;
+        let textColor = null;
+        let flagIcon = null;
+
+        if (statusPending) {
+            textColor = 'text-white'
+            backgroundColor = 'bg-slate-600'
+            flagIcon = <Loading type='spin' width={15} height={15} />;
+        } else if (sensorStatus === 'recording') {
+            textColor = 'text-white'
+            backgroundColor = 'bg-red-400'
+            flagIcon = <VideoCameraIcon className='size-4' />
+        } else if (!((sensorStatus === 'ready') && (storageStatus === 'stable' || storageStatus === 'critical'))) {
+            textColor = 'text-white'
+            backgroundColor = 'bg-red-400'
+            flagIcon = <ExclamationTriangleIcon className='size-4' />
+        } else if (selected()) {
+            textColor = 'text-white'
+            backgroundColor = 'bg-green-600'
+            flagIcon = <MinusIcon className='size-4' />
+        } else {
+            textColor = 'text-neutral-500'
+            backgroundColor = 'bg-neutral-300'
+            flagIcon = <PlusIcon className='size-4' />
         }
 
-        if (storageStatus !== 'stable') {
-            return storageStatus;
-        }
-
-        return null
+        const containerStyling = `${backgroundColor} ${textColor} transition-colors flex justify-center items-center size-7 rounded-md`
+        return (
+            <span className={containerStyling}>
+                {flagIcon}
+            </span>
+        )
 
     }
 
     return (
         <Checkbox disabled={statusPending || selectionDisabled()}
-                  className={` group flex flex-col gap-2 bg-neutral-100 rounded p-4`}
+                  className={`group flex flex-row items-center gap-3 bg-neutral-100 rounded p-4`}
                   checked={selected()} onChange={toggleFunction}>
-            <div className='flex flex-row items-center justify-between'>
+            {selectionFlag()}
+            <div className='flex flex-row gap-4 justify-between items-center w-full'>
                 <p className='font-medium line-clamp-2'>
-                    {street} &#x2022; {cross_street}
+                    {street} &#x2022; {cross_street} ({corner})
                 </p>
-                <div className='flex flex-row gap-2'>
-                    <Tag value={corner}/>
-                    <Tag label="LIDAR ID" value={String(lidar_id)}/>
-                </div>
+                <Tag label="LIDAR ID" value={String(lidar_id)} />
             </div>
-            <SelectionTag loading={statusPending} selected={selected()} disabled={selectionDisabled()}
-                          reason={selectionDisabledReason()}/>
         </Checkbox>
     )
 }
