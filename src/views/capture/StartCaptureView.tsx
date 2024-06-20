@@ -53,7 +53,7 @@ export default function StartCaptureView() {
     })
 
     const pcapSensorSelections = displayedSelections.map((selectionItem) => {
-        return <SensorSelectionItem key={selectionItem.item.lidar_id} selected={() => isSelected(selectionItem.item.lidar_id, "pcap")} toggleFunction={() => toggleSelection(selectionItem.item.lidar_id, "pcap")} format="ros" lidarMetadata={selectionItem.item} />
+        return <SensorSelectionItem key={selectionItem.item.lidar_id} selected={() => isSelected(selectionItem.item.lidar_id, "pcap")} toggleFunction={() => toggleSelection(selectionItem.item.lidar_id, "pcap")} format="pcap" lidarMetadata={selectionItem.item} />
     })
 
     return (

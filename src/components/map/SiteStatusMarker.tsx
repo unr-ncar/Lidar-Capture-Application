@@ -9,7 +9,7 @@ export interface SiteStatusMarkerProps_t {
 }
 export function SiteStatusMarker({longitude, latitude, siteStatus}: SiteStatusMarkerProps_t) {
 
-    const status = useStorageStatusLabel({totalSpace: siteStatus?.totalSpace, usedSpace: siteStatus?.usedSpace});
+    const status = useStorageStatusLabel(siteStatus);
     return <StatusMarker status={status} longitude={longitude} latitude={latitude} />
 
 }

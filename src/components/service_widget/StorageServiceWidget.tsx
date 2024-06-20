@@ -8,7 +8,6 @@ export function StorageServiceWidget(props: StorageInformation_t) {
     const status = useStorageStatusLabel(props);
 
     const { usedSpace, totalSpace} = props;
-
     const usagePercentage = ((usedSpace / totalSpace)*100).toFixed(0)
 
     if (status === "error") {

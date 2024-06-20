@@ -1,24 +1,21 @@
 import {StorageInformation_t, StorageStatusLabel_t} from "../types.tsx";
-import {useMemo} from "react";
+import {useCallback} from "react";
 
 export default function useStorageStatusLabel(props: StorageInformation_t | undefined): StorageStatusLabel_t {
 
-    return useMemo<StorageStatusLabel_t>(
-        () => {
+    const getStatusLabel = useCallback(() => {
+        if (props?.usedSpace === undefined || props?.totalSpace === undefined) return "error";
 
-            if (props === undefined) return "error"
+        const usagePercentage = ((props.usedSpace / props.totalSpace) * 100).toFixed(0);
 
-            const usagePercentage = ((props.usedSpace / props.totalSpace)*100).toFixed(0)
+        if (Number(usagePercentage) > 80) {
+            return "unstable";
+        } else if (Number(usagePercentage) > 60) {
+            return "critical";
+        } else {
+            return "stable";
+        }
+    }, [props]);
 
-            if (Number(usagePercentage) > 80) {
-                return "unstable"
-            } else if (Number(usagePercentage) > 60) {
-                return "critical"
-            } else {
-                return "stable"
-            }
-        },
-        [props?.totalSpace, props?.usedSpace]
-    );
-
+    return getStatusLabel();
 }

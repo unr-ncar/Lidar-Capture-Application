@@ -18,12 +18,14 @@ export function SensorSelectionItem({selected, toggleFunction, format, lidarMeta
 
     const {lidar_id, site_id, street, cross_street, corner} = lidarMetadata;
     const {isPending: statusPending, data: status} = useStatus(lidar_id, site_id)
-    const sensorStatus = useSensorStatusLabel(statusPending ? undefined : format === "ros" ? status?.rosServiceStatus : status!.pcapServiceStatus)
-    const storageStatus = useStorageStatusLabel(statusPending ? undefined : status?.edgeStorageStatus)
+    const sensorStatus = useSensorStatusLabel(format === "ros" ? status!.rosServiceStatus : status!.pcapServiceStatus)
+    const storageStatus = useStorageStatusLabel(status?.edgeStorageStatus)
 
     const selectionDisabled = () => {
         return !((sensorStatus === 'ready') && (storageStatus === 'stable' || storageStatus === 'critical'));
     }
+
+    //console.log(lidar_id, site_id, corner, sensorStatus, storageStatus, status)
 
     const selectionFlag = () => {
 
@@ -39,9 +41,10 @@ export function SensorSelectionItem({selected, toggleFunction, format, lidarMeta
             textColor = 'text-white'
             backgroundColor = 'bg-red-400'
             flagIcon = <VideoCameraIcon className='size-4' />
-        } else if (!((sensorStatus === 'ready') && (storageStatus === 'stable' || storageStatus === 'critical'))) {
+            console.log('SENSOR RECORDING', lidar_id)
+        } else if ((sensorStatus === 'unavailable') || (sensorStatus === 'error') || (storageStatus === 'error') || (storageStatus === 'unstable')) {
             textColor = 'text-white'
-            backgroundColor = 'bg-red-400'
+            backgroundColor = 'bg-yellow-500'
             flagIcon = <ExclamationTriangleIcon className='size-4' />
         } else if (selected()) {
             textColor = 'text-white'
@@ -53,18 +56,18 @@ export function SensorSelectionItem({selected, toggleFunction, format, lidarMeta
             flagIcon = <PlusIcon className='size-4' />
         }
 
-        const containerStyling = `${backgroundColor} ${textColor} transition-colors flex justify-center items-center size-7 rounded-md`
+        const containerStyling = `${backgroundColor} ${textColor} transition-colors flex justify-center items-center min-h-[30px] max-h-[30px] min-w-[30px] max-w-[30px] rounded-md`
         return (
-            <span className={containerStyling}>
+            <div className={containerStyling}>
                 {flagIcon}
-            </span>
+            </div>
         )
 
     }
 
     return (
         <Checkbox disabled={statusPending || selectionDisabled()}
-                  className={`group flex flex-row items-center gap-3 bg-neutral-100 rounded p-4`}
+                  className={`group ${statusPending ? 'hover:data-[disabled]:cursor-wait' : 'hover:data-[disabled]:cursor-not-allowed'} flex flex-row items-center gap-3 bg-neutral-100 rounded p-4`}
                   checked={selected()} onChange={toggleFunction}>
             {selectionFlag()}
             <div className='flex flex-row gap-4 justify-between items-center w-full'>
