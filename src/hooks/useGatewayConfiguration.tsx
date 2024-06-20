@@ -10,6 +10,8 @@ export interface GatewayConfigurationState_t {
     setGraphqlServicePort: (statusServicePort: number) => void;
     setRosRecordingServicePort: (rosRecordingServicePort: number) => void;
     setPcapRecordingServicePort: (pcapRecordingServicePort: number) => void;
+    setFileServicePort: (fileServicePort: number) => void;
+    setClusterWebServerPort: (clusterWebServerPort: number) => void;
 }
 
 const useGatewayConfiguration: UseBoundStore<StoreApi<GatewayConfigurationState_t>> = create<GatewayConfigurationState_t>()((set) => ({
@@ -18,7 +20,9 @@ const useGatewayConfiguration: UseBoundStore<StoreApi<GatewayConfigurationState_
         metadataServicePort: Number(import.meta.env.VITE_METADATA_SERVICE_PORT),
         graphqlServicePort: Number(import.meta.env.VITE_GRAPHQL_SERVICE_PORT),
         rosRecordingServicePort: Number(import.meta.env.VITE_ROS_RECORDING_SERVICE_PORT),
-        pcapRecordingServicePort: Number(import.meta.env.VITE_PCAP_RECORDING_SERVICE_PORT)
+        pcapRecordingServicePort: Number(import.meta.env.VITE_PCAP_RECORDING_SERVICE_PORT),
+        fileServicePort: Number(import.meta.env.VITE_FILE_SERVICE_PORT),
+        clusterWebServerPort: Number(import.meta.env.VITE_CLUSTER_WEB_SERVER_PORT)
     },
     metadataServiceUrl: `${import.meta.env.VITE_GATEWAY_PATH}:${Number(import.meta.env.VITE_METADATA_SERVICE_PORT)}`,
     graphqlServiceUrl: `${import.meta.env.VITE_GATEWAY_PATH}:${Number(import.meta.env.VITE_GRAPHQL_SERVICE_PORT)}`,
@@ -60,7 +64,21 @@ const useGatewayConfiguration: UseBoundStore<StoreApi<GatewayConfigurationState_
             ...state.configuration,
             pcapRecordingServicePort: port
         }
-    }))
+    })),
+    setFileServicePort: (port: number) => set((state) => ({
+        ...state,
+        configuration: {
+            ...state.configuration,
+            fileServicePort: port
+        }
+    })),
+    setClusterWebServerPort: (port: number) => set((state) => ({
+        ...state,
+        configuration: {
+            ...state.configuration,
+            clusterWebServerPort: port
+        }
+    })),
 }))
 
 export default useGatewayConfiguration;

@@ -109,6 +109,8 @@ export interface GatewayConfiguration_t {
     graphqlServicePort: number;
     rosRecordingServicePort: number;
     pcapRecordingServicePort: number;
+    fileServicePort: number;
+    clusterWebServerPort: number;
 }
 
 /* === RECORDING SERVICES - REST === */
