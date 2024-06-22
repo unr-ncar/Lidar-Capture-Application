@@ -136,7 +136,7 @@ export interface FileServiceRequest_t {
     datetime: string;
 }
 
-export interface FileMetadata_t {
+export interface DatabaseMetadata_t {
     lidar_id: string;
     site_id: string;
     deployment_id: string;
@@ -154,8 +154,8 @@ export interface FileMetadata_t {
     datetime: number;
 }
 
-export interface FileMetadataResponse_t {
-    items: Array<FileMetadata_t>;
+export interface DatabaseMetadataResponse_t {
+    items: Array<DatabaseMetadata_t>;
     total: number;
     page: number;
     size: number;

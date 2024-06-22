@@ -88,9 +88,6 @@ export function Pagination({
         </PaginationButton>
     ))
 
-    console.log("pageCount", pageCount)
-    console.log("selectionWindowSize", selectionWindowSize)
-
     if (totalItemCount === 0) return null
 
     return (
@@ -101,18 +98,18 @@ export function Pagination({
                 </PaginationButton>
             )}
             {!(pageCount <= selectionWindowSize) && (
-                <PaginationButton navigation onClick={() => setPage(prev => Math.max(currentPage, prev - 1))} disabled={currentPage === 1}>
+                <PaginationButton navigation onClick={() => setPage(prev => Math.min(currentPage, prev - 1))} disabled={currentPage === 1}>
                     <ChevronLeftIcon />
                 </PaginationButton>
             )}
             {displayedPages}
             {!(pageCount <= selectionWindowSize) && (
-                    <PaginationButton navigation onClick={() => setPage(prev => Math.max(1, prev + 1))} disabled={currentPage === (totalItemCount/pageSize) }>
+                    <PaginationButton navigation onClick={() => setPage(prev => Math.max(1, prev + 1))} disabled={currentPage === (Math.ceil(totalItemCount/pageSize)) }>
                         <ChevronRightIcon />
                     </PaginationButton>
             )}
             {!(pageCount <= selectionWindowSize) && (
-                <PaginationButton navigation onClick={() => setPage(totalItemCount/pageSize)} disabled={currentPage === (totalItemCount / pageSize)}>
+                <PaginationButton navigation onClick={() => setPage(Math.ceil(totalItemCount/pageSize))} disabled={currentPage === (Math.ceil(totalItemCount / pageSize))}>
                     <ChevronDoubleRightIcon />
                 </PaginationButton>
             )}
