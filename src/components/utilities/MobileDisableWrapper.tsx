@@ -4,18 +4,21 @@ import { useWindowSize } from "@uidotdev/usehooks";
 export interface UseMobileDisableProps_t {
     children: ReactElement;
     enableWidthThreshold?: number;
+    invert?: boolean;
 }
-export function MobileDisableWrapper({children, enableWidthThreshold}: UseMobileDisableProps_t) {
+export function MobileDisableWrapper({children, enableWidthThreshold, invert}: UseMobileDisableProps_t) {
 
     const windowSize = useWindowSize();
     const widthThreshold = (enableWidthThreshold === undefined ? 768 : enableWidthThreshold)
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    if (windowSize.width >= widthThreshold) {
-        return children
+    const shouldRender = invert ? windowSize.width < widthThreshold : windowSize.width >= widthThreshold;
+
+    if (shouldRender) {
+        return children;
     } else {
-        return null
+        return null;
     }
 
 }
