@@ -14,6 +14,7 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import SensorStatusView from "./views/capture/SensorStatusView.tsx";
 import StartCaptureView from "./views/capture/StartCaptureView.tsx";
 import StopCaptureView from "./views/capture/StopCaptureView.tsx";
+import ExplorerRoot from "./views/explorer/ExplorerRoot.tsx";
 
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "explorer",
-                element: <p>Explorer</p>
+                element: <ExplorerRoot />
             },
             {
                 path: "capture",

@@ -118,3 +118,46 @@ export interface RecordingServiceResponse_t {
     message: string;
     success: boolean;
 }
+
+/* === FILE SERVICE - REST */
+export interface FileServiceRequest_t {
+    lidar_id: number;
+    site_id?: number;
+    deployment_id?: number;
+    state?: string;
+    city?: string;
+    street?: string;
+    cross_street?: string;
+    type?: string;
+    corner?: string;
+    file_size?: number;
+    time?: string;
+    date?: string;
+    datetime: string;
+}
+
+export interface FileMetadata_t {
+    lidar_id: string;
+    site_id: string;
+    deployment_id: string;
+    state: string;
+    city: string;
+    street: string;
+    crossstreet: string;
+    type: string;
+    corner: string;
+    file_size: string;
+    filename: string;
+    path: string;
+    time: string;
+    date: string;
+    datetime: number;
+}
+
+export interface FileMetadataResponse_t {
+    items: Array<FileMetadata_t>;
+    total: number;
+    page: number;
+    size: number;
+    pages: number;
+}

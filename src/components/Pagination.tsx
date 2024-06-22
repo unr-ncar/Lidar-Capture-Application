@@ -1,5 +1,10 @@
 import {ButtonHTMLAttributes, Dispatch, ReactElement, SetStateAction, useEffect, useState} from "react";
-import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/16/solid";
+import {
+    ChevronDoubleLeftIcon,
+    ChevronDoubleRightIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon
+} from "@heroicons/react/16/solid";
 
 interface PaginationButtonProps_t extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactElement | number;
@@ -13,7 +18,7 @@ function PaginationButton(props: PaginationButtonProps_t) {
 
     return (
         <button {...rest}
-                className={`${active ? 'bg-black' : 'bg-neutral-200'} ${active ? 'text-white' : 'text-neutral-400'} disabled:hidden hover:bg-black hover:text-white transition-colors flex items-center justify-center w-6 h-6 rounded`}>
+                className={`${active ? 'bg-black' : 'bg-neutral-200'} ${active ? 'text-white' : 'text-neutral-400'} disabled:bg-neutral-100 disabled:text-neutral-200 hover:disabled:bg-neutral-100 hover:disabled:text-neutral-200  hover:bg-black hover:text-white flex items-center justify-center min-w-6 px-2 h-6 rounded`}>
             {navigation && (
                 <span className='[&>*]:size-4'>
                     {children}
@@ -32,6 +37,8 @@ function PaginationButton(props: PaginationButtonProps_t) {
 
 export interface PaginationProps_t {
     currentPage: number;
+    firstPageIndex?: number;
+    lastPageIndex?: number;
     setPage: Dispatch<SetStateAction<number>>;
     totalItemCount: number;
     pageSize: number;
@@ -81,19 +88,34 @@ export function Pagination({
         </PaginationButton>
     ))
 
+    console.log("pageCount", pageCount)
+    console.log("selectionWindowSize", selectionWindowSize)
+
     if (totalItemCount === 0) return null
 
     return (
         <div className="flex flex-row items-center gap-2">
-            {!(pageCount <= selectionWindowSize) &&
-                <PaginationButton navigation onClick={() => setPage(prev => Math.max(1, prev - 1))} disabled={currentPage === 1}>
+            {!(pageCount <= selectionWindowSize) && (
+                <PaginationButton navigation onClick={() => setPage(1)} disabled={currentPage === 1}>
+                    <ChevronDoubleLeftIcon />
+                </PaginationButton>
+            )}
+            {!(pageCount <= selectionWindowSize) && (
+                <PaginationButton navigation onClick={() => setPage(prev => Math.max(currentPage, prev - 1))} disabled={currentPage === 1}>
                     <ChevronLeftIcon />
-                </PaginationButton>}
+                </PaginationButton>
+            )}
             {displayedPages}
-            {!(pageCount <= selectionWindowSize) &&
-                <PaginationButton navigation onClick={() => setPage(prev => Math.min(pageCount, prev + 1))} disabled={currentPage === pageCount}>
-                    <ChevronRightIcon />
-                </PaginationButton>}
+            {!(pageCount <= selectionWindowSize) && (
+                    <PaginationButton navigation onClick={() => setPage(prev => Math.max(1, prev + 1))} disabled={currentPage === (totalItemCount/pageSize) }>
+                        <ChevronRightIcon />
+                    </PaginationButton>
+            )}
+            {!(pageCount <= selectionWindowSize) && (
+                <PaginationButton navigation onClick={() => setPage(totalItemCount/pageSize)} disabled={currentPage === (totalItemCount / pageSize)}>
+                    <ChevronDoubleRightIcon />
+                </PaginationButton>
+            )}
         </div>
     );
 }
