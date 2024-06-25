@@ -137,6 +137,7 @@ export interface FileServiceRequest_t {
 }
 
 export interface DatabaseMetadata_t {
+    _id: string;
     lidar_id: string;
     site_id: string;
     deployment_id: string;
@@ -160,4 +161,9 @@ export interface DatabaseMetadataResponse_t {
     page: number;
     size: number;
     pages: number;
+}
+
+export interface DatabaseSelection_t {
+    item: DatabaseMetadata_t;
+    selected: boolean;
 }
