@@ -8,9 +8,10 @@ export interface useDatabaseSelections_t {
     removeSelection: (databaseItemId: string) => boolean;
     toggleSelection: (selectionLidarId: string) => void;
     isSelected: (databaseItemId: string) => boolean;
+    isSaved: (databaseItemId: string) => boolean;
 }
 
-export function useDatabaseSelections_t(): useDatabaseSelections_t {
+export function useDatabaseSelections(): useDatabaseSelections_t {
     const [selections, setSelections] = useState<Array<DatabaseSelection_t>>([])
 
     const clearSelections = () => {
@@ -63,13 +64,18 @@ export function useDatabaseSelections_t(): useDatabaseSelections_t {
         return selections.find((selectionItem: DatabaseSelection_t) => selectionItem.item._id === databaseItemId)!.selected
     }
 
+    const isSaved = (databaseItemId: string) => {
+        return selections.some((selectionItem: DatabaseSelection_t) => selectionItem.item._id === databaseItemId)
+    }
+
     return {
         databaseSelections: selections,
         clearSelections: clearSelections,
         saveSelection: saveSelection,
         removeSelection: removeSelection,
         toggleSelection: toggleSelection,
-        isSelected: isSelected
+        isSelected: isSelected,
+        isSaved: isSaved
     }
 
 }

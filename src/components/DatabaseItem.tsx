@@ -9,11 +9,18 @@ import {
 } from "@heroicons/react/20/solid";
 
 export interface DatabaseItemProps_t {
+    item: DatabaseMetadata_t;
+    isSelected: () => boolean;
+    isSaved: () => boolean;
+    toggleSelectionFunction: () => void;
+    removeSelectionFunction: () => boolean;
+    saveSelectionFunction: () => void;
 }
 
-export function DatabaseItem(props: DatabaseMetadata_t) {
+export function DatabaseItem(props: DatabaseItemProps_t) {
 
-    const {lidar_id, site_id, filename, file_size,} = props;
+    const {lidar_id, site_id, filename, file_size} = props.item;
+    const {isSelected, isSaved, toggleSelectionFunction, removeSelectionFunction, saveSelectionFunction} = props;
 
     return (
         <div className='bg-neutral-100 px-4 py-3 flex flex-row items-center gap-2 rounded-md'>
@@ -28,8 +35,7 @@ export function DatabaseItem(props: DatabaseMetadata_t) {
                 </div>
             </div>
             <DropdownMenu label="OPTIONS">
-                <DropdownMenuItem icon={<MinusIcon/>} label="UNSELECT"/>
-                <DropdownMenuItem icon={<PlusIcon/>} label="SELECT"/>
+                {isSaved() ? <DropdownMenuItem icon={<MinusIcon/>} onClick={removeSelectionFunction} label="Remove"/> : <DropdownMenuItem onClick={saveSelectionFunction} icon={<PlusIcon/>} label="SAVE"/>}
                 <DropdownMenuItem icon={<ArrowDownTrayIcon/>} label="DOWNLOAD"/>
                 <DropdownMenuItem icon={<InformationCircleIcon/>} label="VIEW MORE"/>
             </DropdownMenu>

@@ -9,24 +9,32 @@ import LoadingSpinner from "../../components/utilities/LoadingSpinner/LoadingSpi
 import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
 import {DatabaseMetadata_t} from "../../types.tsx";
 import {DatabaseItem} from "../../components/DatabaseItem.tsx";
-import {MobileDisableWrapper} from "../../components/utilities/MobileDisableWrapper.tsx";
 import ItemList from "../../components/ItemList.tsx";
+import {useDatabaseSelections} from "../../hooks/useDatabaseSelections.tsx";
 
 export default function ExplorerRoot() {
 
     const [page, setPage] = useState<number>(3);
+    const {databaseSelections, saveSelection, removeSelection, isSelected, isSaved, toggleSelection, clearSelections} = useDatabaseSelections()
     const {
         isPending: databaseMetadataListPending,
         error: databaseMetadataListError,
         data: databaseMetadataList
-    } = useDatabaseMetadataList(page)
+    } = useDatabaseMetadataList(page, 20)
 
     if (databaseMetadataListPending) return <LoadingSpinner/>
     if (databaseMetadataListError) return <ErrorMessage error={databaseMetadataListError}/>
 
     const databaseMetadataItems = databaseMetadataList!.items.map((databaseMetadataItem: DatabaseMetadata_t) => {
         return <DatabaseItem
-            key={`${databaseMetadataItem.lidar_id}:${databaseMetadataItem.filename}:${databaseMetadataItem.file_size}`} {...databaseMetadataItem} />
+            key = {databaseMetadataItem._id}
+            isSelected={() => isSelected(databaseMetadataItem._id)}
+            isSaved={() => isSaved(databaseMetadataItem._id)}
+            toggleSelectionFunction={() => toggleSelection(databaseMetadataItem._id)}
+            removeSelectionFunction={() => removeSelection(databaseMetadataItem._id)}
+            saveSelectionFunction={() => saveSelection(databaseMetadataItem)}
+            item={databaseMetadataItem}
+        />
     })
 
     return (
@@ -37,6 +45,12 @@ export default function ExplorerRoot() {
                                  description="Query previosuly captured recordings through a set of filters.">
                         <div>
                             Testing
+                        </div>
+                    </PaneSection>
+                    <PaneSection label="Download Selected Capture Recordings"
+                                 description="Save selected capture recordings to be downloaded as one zip package.">
+                        <div>
+
                         </div>
                     </PaneSection>
                 </Pane>
@@ -53,25 +67,13 @@ export default function ExplorerRoot() {
                                             pageSize={databaseMetadataList!.size}/>
                         </div>
                     </PaneSection>
-                    <MobileDisableWrapper invert>
                         <PaneSection label="Download Selected Capture Recordings"
                                      description="Save selected capture recordings to be downloaded as one zip package.">
                             <div>
 
                             </div>
                         </PaneSection>
-                    </MobileDisableWrapper>
                 </Pane>
-                <MobileDisableWrapper>
-                    <Pane>
-                        <PaneSection label="Download Selected Capture Recordings"
-                                     description="Save selected capture recordings to be downloaded as one zip package.">
-                            <div>
-
-                            </div>
-                        </PaneSection>
-                    </Pane>
-                </MobileDisableWrapper>
             </PaneGroup>
         </ViewShell>
     )
