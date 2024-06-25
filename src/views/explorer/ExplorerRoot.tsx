@@ -42,18 +42,16 @@ export default function ExplorerRoot() {
                 </Pane>
                 <Pane stretch>
                     <PaneSection fillHeight>
-                        <ItemList>
-                            <div className='grow flex flex-col gap-4'>
+                        <div className='flex flex-col gap-4 md:justify-between md:h-full'>
+                            <ItemList>
                                 {databaseMetadataItems}
-                            </div>
-                            <div>
+                            </ItemList>
                                 <Pagination selectionWindowSize={3} currentPage={page} setPage={setPage}
                                             firstPageIndex={1}
                                             lastPageIndex={databaseMetadataList!.pages}
                                             totalItemCount={databaseMetadataList!.total}
                                             pageSize={databaseMetadataList!.size}/>
-                            </div>
-                        </ItemList>
+                        </div>
                     </PaneSection>
                     <MobileDisableWrapper invert>
                         <PaneSection label="Download Selected Capture Recordings"
