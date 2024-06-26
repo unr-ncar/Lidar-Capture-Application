@@ -3,14 +3,15 @@ import {PaneGroup} from "../../components/PaneGroup.tsx";
 import {PaneSection} from "../../components/PaneSection.tsx";
 import {Pane} from "../../components/Pane.tsx";
 import useDatabaseMetadataList from "../../hooks/useDatabaseMetadataList.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Pagination} from "../../components/Pagination.tsx";
 import LoadingSpinner from "../../components/utilities/LoadingSpinner/LoadingSpinner.tsx";
 import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
-import {DatabaseMetadata_t} from "../../types.tsx";
+import {DatabaseMetadata_t, DatabaseSelection_t} from "../../types.tsx";
 import {DatabaseItem} from "../../components/DatabaseItem.tsx";
 import ItemList from "../../components/ItemList.tsx";
 import {useDatabaseSelections} from "../../hooks/useDatabaseSelections.tsx";
+import {DownloadItem} from "../../components/DownloadItem.tsx";
 
 export default function ExplorerRoot() {
 
@@ -21,6 +22,10 @@ export default function ExplorerRoot() {
         error: databaseMetadataListError,
         data: databaseMetadataList
     } = useDatabaseMetadataList(page, 20)
+
+    useEffect(() => {
+        console.log(databaseSelections)
+    }, [databaseSelections]);
 
     if (databaseMetadataListPending) return <LoadingSpinner/>
     if (databaseMetadataListError) return <ErrorMessage error={databaseMetadataListError}/>
@@ -37,6 +42,16 @@ export default function ExplorerRoot() {
         />
     })
 
+    const downloadItems = databaseSelections.map((databaseSelection: DatabaseSelection_t) => {
+        return <DownloadItem
+            key={databaseSelection.item._id}
+            item={databaseSelection}
+            isSelected={() => isSelected(databaseSelection.item._id)}
+            isSaved={() => isSaved(databaseSelection.item._id)}
+            toggleSelectionFunction={() => toggleSelection(databaseSelection.item._id)}
+            removeSelectionFunction={() => removeSelection(databaseSelection.item._id)} />
+    })
+
     return (
         <ViewShell>
             <PaneGroup>
@@ -47,10 +62,12 @@ export default function ExplorerRoot() {
                             Testing
                         </div>
                     </PaneSection>
-                    <PaneSection label="Download Selected Capture Recordings"
-                                 description="Save selected capture recordings to be downloaded as one zip package.">
+                    <PaneSection label="Download Saved Capture Recordings"
+                                 description="Download saved capture recordings into one downloadable zip package.">
                         <div>
-
+                            <ItemList>
+                                {downloadItems}
+                            </ItemList>
                         </div>
                     </PaneSection>
                 </Pane>
@@ -67,12 +84,6 @@ export default function ExplorerRoot() {
                                             pageSize={databaseMetadataList!.size}/>
                         </div>
                     </PaneSection>
-                        <PaneSection label="Download Selected Capture Recordings"
-                                     description="Save selected capture recordings to be downloaded as one zip package.">
-                            <div>
-
-                            </div>
-                        </PaneSection>
                 </Pane>
             </PaneGroup>
         </ViewShell>
