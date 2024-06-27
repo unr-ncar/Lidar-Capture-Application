@@ -1,6 +1,12 @@
-import {DatabaseMetadata_t, DatabaseSelection_t} from "../types.tsx";
-import {useState} from "react";
+//import {DatabaseMetadata_t, DatabaseSelection_t} from "../types.tsx";
+//import {useState} from "react";
 
+/* June 27th, 2024: Removed usage of this component due to browser restrictions of contacting self-signed
+                    certificates and downloading programmatically. Possibly can be reimplemented in a future
+                    version of this application by reimplementing as a Node process using Electron.
+ */
+
+/*
 export interface useDatabaseSelections_t {
     databaseSelections: Array<DatabaseSelection_t>;
     clearSelections: () => void;
@@ -79,3 +85,4 @@ export function useDatabaseSelections(): useDatabaseSelections_t {
     }
 
 }
+*/

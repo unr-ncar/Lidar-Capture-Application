@@ -6,6 +6,7 @@ export interface GatewayConfigurationState_t {
     metadataServiceUrl: string;
     graphqlServiceUrl: string;
     fileServiceUrl: string;
+    clusterWebServerUrl: string;
     setGatewayPath: (gatewayPath: string) => void;
     setMetadataServicePort: (metadataServicePort: number) => void;
     setGraphqlServicePort: (statusServicePort: number) => void;
@@ -25,6 +26,7 @@ const useGatewayConfiguration: UseBoundStore<StoreApi<GatewayConfigurationState_
         fileServicePort: Number(import.meta.env.VITE_FILE_SERVICE_PORT),
         clusterWebServerPort: Number(import.meta.env.VITE_CLUSTER_WEB_SERVER_PORT)
     },
+    clusterWebServerUrl: `${import.meta.env.VITE_GATEWAY_PATH}:${Number(import.meta.env.VITE_CLUSTER_WEB_SERVER_PORT)}`,
     metadataServiceUrl: `${import.meta.env.VITE_GATEWAY_PATH}:${Number(import.meta.env.VITE_METADATA_SERVICE_PORT)}`,
     graphqlServiceUrl: `${import.meta.env.VITE_GATEWAY_PATH}:${Number(import.meta.env.VITE_GRAPHQL_SERVICE_PORT)}`,
     fileServiceUrl: `${import.meta.env.VITE_GATEWAY_PATH}:${Number(import.meta.env.VITE_FILE_SERVICE_PORT)}`,
@@ -34,9 +36,11 @@ const useGatewayConfiguration: UseBoundStore<StoreApi<GatewayConfigurationState_
             ...state.configuration,
             gatewayPath: path
         },
+
         metadataServiceUrl: `${path}:${state.configuration.metadataServicePort}`,
         graphqlServiceUrl: `${path}:${state.configuration.graphqlServicePort}`,
-        fileServiceUrl: `${path}:${state.configuration.fileServicePort}`
+        fileServiceUrl: `${path}:${state.configuration.fileServicePort}`,
+        clusterWebServerUrl: `${path}:${state.configuration.clusterWebServerPort}`
     })),
     setMetadataServicePort: (port: number) => set((state) => ({
         ...state,

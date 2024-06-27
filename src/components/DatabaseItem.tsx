@@ -4,23 +4,13 @@ import {DropdownMenu, DropdownMenuItem} from "./DropdownMenu.tsx";
 import {
     ArrowDownTrayIcon,
     InformationCircleIcon,
-    MinusIcon,
-    PlusIcon
 } from "@heroicons/react/20/solid";
+import useGatewayConfiguration from "../hooks/useGatewayConfiguration.tsx";
 
-export interface DatabaseItemProps_t {
-    item: DatabaseMetadata_t;
-    isSelected: () => boolean;
-    isSaved: () => boolean;
-    toggleSelectionFunction: () => void;
-    removeSelectionFunction: () => boolean;
-    saveSelectionFunction: () => void;
-}
+export function DatabaseItem({path, lidar_id, site_id, filename, file_size}: DatabaseMetadata_t) {
 
-export function DatabaseItem(props: DatabaseItemProps_t) {
-
-    const {lidar_id, site_id, filename, file_size} = props.item;
-    const {isSelected, isSaved, toggleSelectionFunction, removeSelectionFunction, saveSelectionFunction} = props;
+    const clusterWebServerUrl = useGatewayConfiguration((state) => state.clusterWebServerUrl)
+    const downloadUrl = `${clusterWebServerUrl}/${path}${filename}`
 
     return (
         <div className='bg-neutral-100 px-4 py-3 flex flex-row items-center gap-2 rounded-md'>
@@ -33,10 +23,12 @@ export function DatabaseItem(props: DatabaseItemProps_t) {
                     <Tag label="LIDAR ID" value={site_id}/>
                     <Tag label="FILE SIZE" value={file_size}/>
                 </div>
+                <a href={downloadUrl}>
+                    download
+                </a>
             </div>
             <DropdownMenu label="OPTIONS">
-                {isSaved() ? <DropdownMenuItem icon={<MinusIcon/>} onClick={removeSelectionFunction} label="Remove"/> : <DropdownMenuItem onClick={saveSelectionFunction} icon={<PlusIcon/>} label="SAVE"/>}
-                <DropdownMenuItem icon={<ArrowDownTrayIcon/>} label="DOWNLOAD"/>
+                <DropdownMenuItem icon={<ArrowDownTrayIcon/>} label="DOWNLOAD"></DropdownMenuItem>
                 <DropdownMenuItem icon={<InformationCircleIcon/>} label="VIEW MORE"/>
             </DropdownMenu>
         </div>
