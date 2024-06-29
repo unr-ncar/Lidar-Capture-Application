@@ -7,12 +7,27 @@ import {useState} from "react";
 import {Pagination} from "../../components/Pagination.tsx";
 import LoadingSpinner from "../../components/utilities/LoadingSpinner/LoadingSpinner.tsx";
 import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
-import {DatabaseMetadata_t} from "../../types.tsx";
+import {DatabaseMetadata_t, RecordingFormat} from "../../types.tsx";
 import {DatabaseItem} from "../../components/DatabaseItem.tsx";
 import {FormGroup} from "../../components/forms/FormGroup.tsx";
 import {DatePickerForm} from "../../components/forms/DatePickerForm.tsx";
+import {TimePickerForm} from "../../components/forms/TimePickerForm.tsx";
 
+interface DatabaseItemQueryState_t {
+    date: Date;
+    time: Date;
+    lidar_id: number;
+    site_id: number;
+    city: string;
+    state: string;
+    street: string;
+    cross_street: string;
+    corner: string;
+    type: RecordingFormat;
+}
 export default function ExplorerRoot() {
+
+    const [query, setQuery] = useState<DatabaseItemQueryState_t>();
 
     const [page, setPage] = useState<number>(3);
     const {
@@ -38,7 +53,8 @@ export default function ExplorerRoot() {
                     <PaneSection label="Query Captured Recordings"
                                  description="Query previosuly captured recordings through a set of filters.">
                         <FormGroup label="Query Paramters">
-                            <DatePickerForm />
+                            <DatePickerForm label='Capture Date' />
+                            <TimePickerForm label='Capture Time' />
                         </FormGroup>
                     </PaneSection>
                 </Pane>
