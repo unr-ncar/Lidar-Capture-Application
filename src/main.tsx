@@ -15,6 +15,10 @@ import SensorStatusView from "./views/capture/SensorStatusView.tsx";
 import StartCaptureView from "./views/capture/StartCaptureView.tsx";
 import StopCaptureView from "./views/capture/StopCaptureView.tsx";
 import ExplorerRoot from "./views/explorer/ExplorerRoot.tsx";
+import MetadataRoot from "./views/metadata/MetadataRoot.tsx";
+import FileMetadataView from "./views/metadata/FileMetadataView.tsx";
+import SensorMetadataView from "./views/metadata/SensorMetadataView.tsx";
+import SiteMetadataView from "./views/metadata/SiteMetadataView.tsx";
 
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
@@ -51,6 +55,24 @@ const router = createBrowserRouter([
             {
                 path: "settings",
                 element: <p>Settings</p>
+            },
+            {
+                path: "metadata",
+                element: <MetadataRoot />,
+                children: [
+                    {
+                        element: <FileMetadataView />,
+                        path: "file/:lidar_id/:site_id/:file_name/:file_size/:datetime"
+                    },
+                    {
+                        element: <SensorMetadataView />,
+                        path: "sensor/:lidar_id"
+                    },
+                    {
+                        element: <SiteMetadataView />,
+                        path: "site/:site_id"
+                    }
+                ]
             }
         ]
     },
