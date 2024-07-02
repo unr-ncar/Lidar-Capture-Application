@@ -6,9 +6,11 @@ import {
 } from "@heroicons/react/16/solid";
 import useGatewayConfiguration from "../hooks/useGatewayConfiguration.tsx";
 import {useMemo} from "react";
+import {useNavigate} from "react-router-dom";
 
 export function DatabaseItem({path, lidar_id, site_id, filename, file_size, datetime}: DatabaseMetadata_t) {
 
+    const navigate = useNavigate();
     const clusterWebServerUrl = useGatewayConfiguration((state) => state.clusterWebServerUrl)
     const downloadUrl = `${clusterWebServerUrl}/${path}${filename}`
 
@@ -22,6 +24,10 @@ export function DatabaseItem({path, lidar_id, site_id, filename, file_size, date
         const datetimeObject = new Date(datetime * 1000).toLocaleString()
         return `${datetimeObject}`
     }, [datetime])
+
+    const gotoMetadata = () => {
+        navigate(`/metadata/file/${filename}`)
+    }
 
     return (
         <div className='bg-neutral-100 px-4 py-3 flex flex-col gap-4 rounded-md md:flex-row md:justify-between md:items-center'>
@@ -39,7 +45,7 @@ export function DatabaseItem({path, lidar_id, site_id, filename, file_size, date
             </div>
             <DropdownMenu label="OPTIONS" anchor='bottom end'>
                 <DropdownMenuItem icon={<ArrowDownTrayIcon/>} label="DOWNLOAD" href={downloadUrl}/>
-                <DropdownMenuItem icon={<InformationCircleIcon/>} label="VIEW MORE"/>
+                <DropdownMenuItem icon={<InformationCircleIcon/>} label="VIEW MORE" onClick={gotoMetadata} />
             </DropdownMenu>
         </div>
     )

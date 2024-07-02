@@ -62,7 +62,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         element: <FileMetadataView />,
-                        path: "file/:lidar_id/:site_id/:file_name/:file_size/:datetime"
+                        path: "file/:fileName"
                     },
                     {
                         element: <SensorMetadataView />,
