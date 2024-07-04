@@ -14,16 +14,16 @@ import {DatePickerForm} from "../../components/forms/DatePickerForm.tsx";
 import {TimePickerForm} from "../../components/forms/TimePickerForm.tsx";
 
 interface DatabaseItemQueryState_t {
-    date: Date;
-    time: Date;
-    lidar_id: number;
-    site_id: number;
-    city: string;
-    state: string;
-    street: string;
-    cross_street: string;
-    corner: string;
-    type: RecordingFormat;
+    date: Date; // Input - Date - P
+    time: Date; // Input - Time - P
+    lidar_id: number; // Input - Number - NP
+    site_id: number; // Input - Number - NP
+    deployment_id: number; // Input - Number - NP
+    city: string; // Combobox - String - NP
+    state: string; // Combobox - String - NP
+    street: string; // Combobox - String - NP
+    cross_street: string; // Combobox - String - NP
+    corner: string; // Select - String - NP
 }
 export default function ExplorerRoot() {
 

@@ -15,7 +15,7 @@ export function FormGroup(props: FormGroupProps_t) {
             <Legend className='uppercase text-neutral-400 font-semibold text-sm'>
                 { label }
             </Legend>
-            <div>
+            <div className='flex flex-col gap-3'>
                 {children}
             </div>
         </Fieldset>

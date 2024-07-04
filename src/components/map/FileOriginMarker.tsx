@@ -1,7 +1,7 @@
-import {CircleMarker, CircleMarkerProps} from "react-leaflet";
-import {PathOptions} from "leaflet";
+import {CircleMarker} from "react-leaflet";
+import {LatLngTuple, PathOptions} from "leaflet";
 
-export function FileOriginMarker(props: CircleMarkerProps) {
+export function FileOriginMarker(props: {center: LatLngTuple}) {
 
     const bluePath: PathOptions = {
         stroke: true,
@@ -11,5 +11,5 @@ export function FileOriginMarker(props: CircleMarkerProps) {
         fillOpacity: 0.75
     }
 
-    return <CircleMarker radius={7} pathOptions={bluePath} {...props} />
+    return <CircleMarker radius={7} pathOptions={bluePath} center={props.center} />
 }
