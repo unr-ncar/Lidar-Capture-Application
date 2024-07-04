@@ -13,7 +13,7 @@ export default function useLidarMetadataList(page: number): UseQueryResult<Lidar
     const metadataServiceUrl= useGatewayConfiguration((state) => state.metadataServiceUrl)
 
     return useQuery({
-        queryKey: ['lidar_metadata', page],
+        queryKey: ['lidar_metadata_list', page],
         queryFn: async (): Promise<LidarMetadataResponse_t> => fetchLidarMetadata(metadataServiceUrl, page),
         placeholderData: () => {return {
             items: [],

@@ -26,7 +26,7 @@ export function DatabaseItem({path, lidar_id, site_id, filename, file_size, date
     }, [datetime])
 
     const gotoMetadata = () => {
-        navigate(`/metadata/file/${filename}`)
+        navigate(`/metadata/file/${lidar_id}/${filename}`)
     }
 
     return (
