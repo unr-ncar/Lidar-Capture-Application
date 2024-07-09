@@ -1,6 +1,6 @@
 import {Pane} from "../../components/Pane.tsx";
 import {PaneSection} from "../../components/PaneSection.tsx";
-import {useFileQuery} from "../../hooks/useFileQuery.tsx";
+import {useFileMetadata} from "../../hooks/useFileMetadata.tsx";
 import {useParams} from "react-router-dom";
 import {Descriptor} from "../../components/Descriptor.tsx";
 import LoadingSpinner from "../../components/utilities/LoadingSpinner/LoadingSpinner.tsx";
@@ -17,7 +17,7 @@ export default function FileMetadataView() {
     const clusterWebServerUrl = useGatewayConfiguration((state) => state.clusterWebServerUrl)
     const { fileName, lidarId} = useParams();
     const {isPending: lidarMetadataPending, error: lidarMetadataError, data: lidarMetadata} = useLidarMetadata(Number(lidarId))
-    const {isPending: fileQueryPending, error: fileQueryError, data: fileQuery} = useFileQuery(String(fileName))
+    const {isPending: fileQueryPending, error: fileQueryError, data: fileQuery} = useFileMetadata(String(fileName))
 
     const humanReadableValues = useMemo(() => {
 

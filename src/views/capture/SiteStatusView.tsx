@@ -67,11 +67,13 @@ export default function SiteStatusView() {
         <>
             <Pane>
                 <PaneSection label="Deployment Edge Operational Status" description="View information related deployments storage and service information.">
+                    <div className='flex flex-col gap-4'>
                         <ItemList>
                             {siteStatusItems}
                         </ItemList>
                         <Pagination currentPage={page} setPage={setPage} pageSize={lidarMetadataList.size}
                                     totalItemCount={lidarMetadataList.total}/>
+                    </div>
                 </PaneSection>
             </Pane>
             <MobileDisableWrapper>

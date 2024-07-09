@@ -131,6 +131,7 @@ export interface FileServiceRequest_t {
     type?: string;
     corner?: string;
     file_size?: number;
+    filename?: string;
     time?: string;
     date?: string;
     datetime: string;
@@ -161,9 +162,4 @@ export interface DatabaseMetadataResponse_t {
     page: number;
     size: number;
     pages: number;
-}
-
-export interface DatabaseSelection_t {
-    item: DatabaseMetadata_t;
-    selected: boolean;
 }

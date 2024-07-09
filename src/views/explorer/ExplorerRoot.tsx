@@ -7,11 +7,13 @@ import {useState} from "react";
 import {Pagination} from "../../components/Pagination.tsx";
 import LoadingSpinner from "../../components/utilities/LoadingSpinner/LoadingSpinner.tsx";
 import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
-import {DatabaseMetadata_t, RecordingFormat} from "../../types.tsx";
+import {DatabaseMetadata_t} from "../../types.tsx";
 import {DatabaseItem} from "../../components/DatabaseItem.tsx";
 import {FormGroup} from "../../components/forms/FormGroup.tsx";
 import {DatePickerForm} from "../../components/forms/DatePickerForm.tsx";
 import {TimePickerForm} from "../../components/forms/TimePickerForm.tsx";
+import {Button} from "../../components/Button.tsx";
+import {useDatabaseMetadataQuery} from "../../hooks/useDatabaseMetadataQuery.tsx";
 
 interface DatabaseItemQueryState_t {
     date: Date; // Input - Date - P
@@ -28,8 +30,12 @@ interface DatabaseItemQueryState_t {
 export default function ExplorerRoot() {
 
     const [query, setQuery] = useState<DatabaseItemQueryState_t>();
-
     const [page, setPage] = useState<number>(3);
+    const {
+        isPending: databaseMetadataQueryListPending,
+        error: databaseMetadataQueryListError,
+        data: databaseMetadataQueryList
+    } = useDatabaseMetadataQuery(null, page, 20)
     const {
         isPending: databaseMetadataListPending,
         error: databaseMetadataListError,
