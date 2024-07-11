@@ -130,7 +130,7 @@ export interface FileServiceRequest_t {
     cross_street?: string;
     type?: string;
     corner?: string;
-    file_size?: number;
+    file_size?: string;
     filename?: string;
     time?: string;
     date?: string;

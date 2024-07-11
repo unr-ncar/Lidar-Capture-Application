@@ -1,4 +1,4 @@
-import {DatabaseMetadata_t, DatabaseMetadataResponse_t} from "../types.tsx";
+import {DatabaseMetadata_t, DatabaseMetadataResponse_t, FileServiceRequest_t} from "../types.tsx";
 import {useQuery} from "@tanstack/react-query";
 import useGatewayConfiguration from "./useGatewayConfiguration.tsx";
 import axios from "axios";
@@ -16,7 +16,7 @@ const fetchDatabaseMetadata = async (gatewayIp: string, page: number, size: numb
     return response
 }
 
-export default function useDatabaseMetadataList(page: number, size: number = 10) {
+export default function useDatabaseMetadataList(query: FileServiceRequest_t | null, page: number, size: number = 10) {
 
     const fileServiceUrl = useGatewayConfiguration((state) => state.fileServiceUrl)
 

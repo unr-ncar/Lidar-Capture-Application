@@ -36,7 +36,7 @@ export interface SelectFormProps_t extends ListboxProps {
 }
 export function SelectForm(props: SelectFormProps_t) {
 
-    const {children, label, description, selected, setSelection, ...rest} = props;
+    const {children, label, description, selected, setSelection, defaultValue, ...rest} = props;
 
     return (
         <Field className='flex flex-row items-center justify-between'>
@@ -53,7 +53,7 @@ export function SelectForm(props: SelectFormProps_t) {
             <Listbox {...rest} value={selected} onChange={setSelection}>
                 <ListboxButton className='group min-w-[100px] h-min px-2 py-1 flex flex-row justify-between items-center gap-1 bg-black text-white rounded-md data-[open]:rounded-b-none'>
                     <p className='uppercase font-medium'>
-                        {selected}
+                        {selected ? selected : defaultValue}
                     </p>
                     <ChevronDownIcon className='block size-4 group-data-[open]:hidden' />
                     <ChevronUpIcon className='hidden size-4 group-data-[open]:block' />
