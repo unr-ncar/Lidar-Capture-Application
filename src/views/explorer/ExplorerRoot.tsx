@@ -18,6 +18,7 @@ import {ComboboxForm} from "../../components/forms/ComboboxForm.tsx";
 import useLidarMetadataList from "../../hooks/useLidarMetadataList.tsx";
 import Button from "../../components/Button.tsx";
 import {FunnelIcon, XMarkIcon} from "@heroicons/react/20/solid";
+import {useSearchParams} from "react-router-dom";
 
 interface DatabaseItemQueryState_t {
     date: string; // Input - Date - P - D
@@ -34,6 +35,7 @@ interface DatabaseItemQueryState_t {
 
 export default function ExplorerRoot() {
 
+    const [queryParams, setQueryParams] = useSearchParams();
     const [query, setQuery] = useState<DatabaseItemQueryState_t>({
         date: '',
         time: '',
@@ -93,10 +95,6 @@ export default function ExplorerRoot() {
         data: databaseMetadataList
     } = useDatabaseMetadataList(null, page, 20)
 
-    useEffect(() => {
-        console.log(geographicSelections)
-    }, [geographicSelections]);
-
     const handleTextForm = (value: string, key: keyof DatabaseItemQueryState_t) => {
         setQuery((prevState) => {
             return {
@@ -132,9 +130,18 @@ export default function ExplorerRoot() {
         })
     }
 
+    const createQueryRequest = () => {
+
+        const processedKeys = Object.entries(query).filter(([key, value]) => {
+            if (value !== '' && value !== null) return [key, value]
+        })
+
+        setQueryParams(processedKeys)
+    }
+
     useEffect(() => {
-        console.log(query)
-    }, [query]);
+        console.log(queryParams.values())
+    }, [queryParams]);
 
     const databaseMetadataItems = databaseMetadataList?.items.map((databaseMetadataItem: DatabaseMetadata_t) => {
         return <DatabaseItem
@@ -203,10 +210,9 @@ export default function ExplorerRoot() {
                                                           setter={(value) => setQuery((prevState) => {
                                                               return {...prevState, corner: value}
                                                           })} />
-
                         </FormGroup>
                         <div className='flex flex-row gap-4 mt-4'>
-                            <Button label="Query" icon={<FunnelIcon />} />
+                            <Button label="Query" icon={<FunnelIcon />} onClick={() => createQueryRequest()}/>
                             <Button label="Clear Query" icon={<XMarkIcon />} onClick={() => clearQuery()} />
                         </div>
                     </PaneSection>
