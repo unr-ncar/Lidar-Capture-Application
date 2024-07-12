@@ -4,7 +4,7 @@ import {Field, Input, Label} from "@headlessui/react";
 export interface DatePickerFormProps_t {
     label: string;
     setter: (event: ChangeEvent<HTMLInputElement>) => void
-    value: string;
+    value: string | undefined;
 }
 export function DatePickerForm({label, setter, value}: DatePickerFormProps_t) {
     return (

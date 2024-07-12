@@ -1,7 +1,5 @@
 import {Combobox, ComboboxInput, ComboboxOption, ComboboxOptions, Field, Label} from "@headlessui/react";
-import {ReactElement, useEffect, useState} from "react";
-import {useQuery} from "@tanstack/react-query";
-import useLidarMetadataList from "../../hooks/useLidarMetadataList.tsx";
+import {ChangeEvent, useState} from "react";
 
 export interface ComboboxOptionProps_t {
     label: string;
@@ -9,22 +7,29 @@ export interface ComboboxOptionProps_t {
 
 export interface ComboboxFormProps_t {
     label: string;
-    data: Array<unknown>;
-    filterFunction: () => Array<unknown>;
+    dataSetter: (value: string) => void;
+    currentValue: string | null;
+    options: Array<string>;
+    optionsFilterFunction: (queryState: string) => Array<string>;
 }
-export function ComboboxForm({label, data, filterFunction}: ComboboxFormProps_t) {
+export function ComboboxForm({label, options, dataSetter, currentValue, optionsFilterFunction}: ComboboxFormProps_t) {
+
+    const [query, setQuery] = useState<string>('')
+    const selections = query === '' ? options : optionsFilterFunction(query);
 
     return (
         <Field>
             <Label>
                 {label}
             </Label>
-            <Combobox>
-                <ComboboxInput />
+            <Combobox value={currentValue} onClose={() => setQuery('')} onChange={(value: string) => dataSetter(value)}>
+                <ComboboxInput onChange={(event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)} />
                 <ComboboxOptions anchor='bottom'>
-                    <ComboboxOption value="8th" />
-                    <ComboboxOption value="9th" />
-                    <ComboboxOption value="10th" />
+                    {selections.map((selection) => {
+                        return <ComboboxOption key={selection} value={selection}>
+                            {selection}
+                        </ComboboxOption>
+                    })}
                 </ComboboxOptions>
             </Combobox>
         </Field>

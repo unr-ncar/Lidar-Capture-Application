@@ -18,31 +18,31 @@ import {ComboboxForm} from "../../components/forms/ComboboxForm.tsx";
 import useLidarMetadataList from "../../hooks/useLidarMetadataList.tsx";
 
 interface DatabaseItemQueryState_t {
-    date: string; // Input - Date - P - D
-    time: string; // Input - Time - P - D
-    lidar_id: string; // Input - Number - NP - D
-    site_id: string; // Input - Number - NP - D
-    deployment_id: string; // Input - Number - NP - D
-    city: string; // Combobox - String - NP
-    state: string; // Combobox - String - NP
-    street: string; // Combobox - String - NP
-    cross_street: string; // Combobox - String - NP
-    corner: string; // Select - String - NP - D
+    date: string | undefined; // Input - Date - P - D
+    time: string | undefined; // Input - Time - P - D
+    lidar_id: string | undefined; // Input - Number - NP - D
+    site_id: string | undefined; // Input - Number - NP - D
+    deployment_id: string | undefined; // Input - Number - NP - D
+    city: string | null; // Combobox - String - NP
+    state: string | null; // Combobox - String - NP
+    street: string | null; // Combobox - String - NP
+    cross_street: string | null; // Combobox - String - NP
+    corner: string | undefined; // Select - String - NP - D
 }
 
 export default function ExplorerRoot() {
 
     const [query, setQuery] = useState<DatabaseItemQueryState_t>({
-        date: '',
-        time: '',
-        lidar_id: '',
-        site_id: '',
-        deployment_id: '',
-        state: '',
-        city: '',
-        street: '',
-        cross_street: '',
-        corner: ''
+        date: undefined,
+        time: undefined,
+        lidar_id: undefined,
+        site_id: undefined,
+        deployment_id: undefined,
+        state: null,
+        city: null,
+        street: null,
+        cross_street: null,
+        corner: undefined
     });
     const [page, setPage] = useState<number>(3);
     const {
@@ -64,10 +64,10 @@ export default function ExplorerRoot() {
             cross_streets: []
         }
 
-        let cities: Array<string> = []
-        let states: Array<string> = []
-        let streets: Array<string> = []
-        let cross_streets: Array<string> = []
+        const cities: Array<string> = []
+        const states: Array<string> = []
+        const streets: Array<string> = []
+        const cross_streets: Array<string> = []
 
         lidarMetadataList.items.map((metadata: LidarMetadata_t) => {
             cities.push(metadata.city)
@@ -105,29 +105,29 @@ export default function ExplorerRoot() {
         })
     }
 
-    const filteredGeographicLocations = (listKey: keyof {
+    const filteredGeographicLocations = (queryState: string, searchKey: keyof {
         cities: Array<string>,
         states: Array<string>,
         streets: Array<string>,
         cross_streets: Array<string>
-    }, searchKey: keyof DatabaseItemQueryState_t) => {
-        return geographicSelections[listKey].filter((item: string) => {
-            return item.toLowerCase().includes(query[searchKey].toLowerCase())
+    }) => {
+        return geographicSelections[searchKey].filter((item: string) => {
+            return item.toLowerCase().includes(queryState.toLowerCase())
         })
     }
 
     const clearQuery = () => {
         setQuery({
-            date: '',
-            time: '',
-            lidar_id: '',
-            site_id: '',
-            deployment_id: '',
-            state: '',
-            city: '',
-            street: '',
-            cross_street: '',
-            corner: ''
+            date: undefined,
+            time: undefined,
+            lidar_id: undefined,
+            site_id: undefined,
+            deployment_id: undefined,
+            state: null,
+            city: null,
+            street: null,
+            cross_street: null,
+            corner: undefined
         })
     }
 
@@ -166,6 +166,42 @@ export default function ExplorerRoot() {
                                                           setter={(value) => setQuery((prevState) => {
                                                               return {...prevState, corner: value}
                                                           })}/>
+                            <ComboboxForm label="State"
+                                          options={geographicSelections.states}
+                                          dataSetter={(value) => setQuery((prevState) => {
+                                              return {...prevState, state: value}
+                                          })}
+                                          currentValue={query.state}
+                                          optionsFilterFunction={(queryState) => filteredGeographicLocations(queryState,"states")}
+
+                            />
+                            <ComboboxForm label="City"
+                                          options={geographicSelections.cities}
+                                          dataSetter={(value) => setQuery((prevState) => {
+                                              return {...prevState, city: value}
+                                          })}
+                                          currentValue={query.city}
+                                          optionsFilterFunction={(queryState) => filteredGeographicLocations(queryState,"cities")}
+
+                            />
+                            <ComboboxForm label="Street"
+                                          options={geographicSelections.streets}
+                                          dataSetter={(value) => setQuery((prevState) => {
+                                              return {...prevState, street: value}
+                                          })}
+                                          currentValue={query.street}
+                                          optionsFilterFunction={(queryState) => filteredGeographicLocations(queryState,"streets")}
+
+                            />
+                            <ComboboxForm label="Cross Street"
+                                          options={geographicSelections.cross_streets}
+                                          dataSetter={(value) => setQuery((prevState) => {
+                                              return {...prevState, cross_street: value}
+                                          })}
+                                          currentValue={query.cross_street}
+                                          optionsFilterFunction={(queryState) => filteredGeographicLocations(queryState,"cross_streets")}
+
+                            />
                         </FormGroup>
                     </PaneSection>
                 </Pane>

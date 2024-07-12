@@ -1,9 +1,8 @@
-import {ChangeEvent, useEffect, useState} from "react";
 import {SelectForm, SelectOption} from "./SelectForm.tsx";
 
 export interface CardinalDirectionsSelectForm_t {
     setter: (value: string) => void
-    value: string;
+    value: string | undefined;
 }
 export function CardinalDirectionsSelectForm({value, setter}: CardinalDirectionsSelectForm_t) {
 

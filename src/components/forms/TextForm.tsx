@@ -4,7 +4,7 @@ import {Field, Input, Label} from "@headlessui/react";
 export interface TextFormProps_t {
     label: string;
     setter: (event: ChangeEvent<HTMLInputElement>) => void
-    value: string;
+    value: string | undefined;
     type: 'number' | 'email' | 'password';
 }
 export function TextForm({label, type, setter, value}: TextFormProps_t) {
