@@ -31,7 +31,7 @@ export interface LidarMetadata_t {
     }
 }
 export type RecordingOperation = 'start' | 'stop';
-export type RecordingFormat = 'pcap' | 'ros';
+export type RecordingFormat = 'pcap' | 'ros' | string;
 export interface LidarSelection_t {
     selectedFormats: Array<RecordingFormat>
     item: LidarMetadata_t;

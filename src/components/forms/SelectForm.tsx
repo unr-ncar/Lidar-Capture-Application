@@ -9,7 +9,7 @@ import {
     ListboxOptions,
     ListboxProps
 } from '@headlessui/react'
-import {Dispatch, ReactElement, SetStateAction} from "react";
+import { ReactElement} from "react";
 import {CheckIcon, ChevronDownIcon, ChevronUpIcon} from "@heroicons/react/16/solid";
 
 export interface SelectOptionProps_t extends ListboxOptionProps{
@@ -58,7 +58,7 @@ export function SelectForm(props: SelectFormProps_t) {
                     <ChevronDownIcon className='block size-4 group-data-[open]:hidden' />
                     <ChevronUpIcon className='hidden size-4 group-data-[open]:block' />
                 </ListboxButton>
-                <ListboxOptions anchor='bottom' className='min-w-[100px] flex flex-col bg-white rounded-b-md shadow-lg [&>*]:min-w-[100px] [&>*:last-child]:border-0 [&>*]:border-b-2 [&>*]:border-neutral-100'>
+                <ListboxOptions anchor='bottom' className='min-w-[100px] flex flex-col bg-neutral-50 rounded-b-md shadow-lg [&>*]:min-w-[100px] [&>*:last-child]:border-0 [&>*]:border-b-2 [&>*]:border-neutral-100'>
                     {children}
                 </ListboxOptions>
             </Listbox>

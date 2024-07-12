@@ -2,7 +2,7 @@ import {SelectForm, SelectOption} from "./SelectForm.tsx";
 
 export interface CardinalDirectionsSelectForm_t {
     setter: (value: string) => void
-    value: string | undefined;
+    value: string;
 }
 export function CardinalDirectionsSelectForm({value, setter}: CardinalDirectionsSelectForm_t) {
 

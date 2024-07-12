@@ -1,15 +1,15 @@
-import {ButtonProps} from "@headlessui/react";
+import {ButtonProps, Button} from "@headlessui/react";
 import {ReactElement} from "react";
 
 export interface ButtonProps_t extends ButtonProps {
     label: string;
     icon?: ReactElement;
 }
-export function Button({label, icon, ...rest}: ButtonProps_t) {
+export default function({label, icon, ...rest}: ButtonProps_t) {
     return (
-        <Button label={label} {...rest}>
+        <Button {...rest} className='flex flex-row gap-1 items-center bg-neutral-200 text-neutral-400 text-sm font-medium px-2 py-1 rounded-md hover:bg-black hover:text-white transition-colors'>
             { icon && (
-                <span>
+                <span className='[&>*]:size-4'>
                     {icon}
                 </span>
             )}

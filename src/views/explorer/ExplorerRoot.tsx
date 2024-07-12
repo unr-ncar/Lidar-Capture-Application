@@ -16,38 +16,39 @@ import {TextForm} from "../../components/forms/TextForm.tsx";
 import {CardinalDirectionsSelectForm} from "../../components/forms/CardinalDirectionsSelectForm.tsx";
 import {ComboboxForm} from "../../components/forms/ComboboxForm.tsx";
 import useLidarMetadataList from "../../hooks/useLidarMetadataList.tsx";
+import Button from "../../components/Button.tsx";
+import {FunnelIcon, XMarkIcon} from "@heroicons/react/20/solid";
 
 interface DatabaseItemQueryState_t {
-    date: string | undefined; // Input - Date - P - D
-    time: string | undefined; // Input - Time - P - D
-    lidar_id: string | undefined; // Input - Number - NP - D
-    site_id: string | undefined; // Input - Number - NP - D
-    deployment_id: string | undefined; // Input - Number - NP - D
+    date: string; // Input - Date - P - D
+    time: string; // Input - Time - P - D
+    lidar_id: string; // Input - Number - NP - D
+    site_id: string; // Input - Number - NP - D
+    deployment_id: string; // Input - Number - NP - D
     city: string | null; // Combobox - String - NP
     state: string | null; // Combobox - String - NP
     street: string | null; // Combobox - String - NP
     cross_street: string | null; // Combobox - String - NP
-    corner: string | undefined; // Select - String - NP - D
+    corner: string; // Select - String - NP - D
 }
 
 export default function ExplorerRoot() {
 
     const [query, setQuery] = useState<DatabaseItemQueryState_t>({
-        date: undefined,
-        time: undefined,
-        lidar_id: undefined,
-        site_id: undefined,
-        deployment_id: undefined,
+        date: '',
+        time: '',
+        lidar_id: '',
+        site_id: '',
+        deployment_id: '',
         state: null,
         city: null,
         street: null,
         cross_street: null,
-        corner: undefined
+        corner: ''
     });
     const [page, setPage] = useState<number>(3);
     const {
         isPending: lidarMetadataListPending,
-        error: lidarMetadataListError,
         data: lidarMetadataList
     } = useLidarMetadataList(1, 20)
 
@@ -118,16 +119,16 @@ export default function ExplorerRoot() {
 
     const clearQuery = () => {
         setQuery({
-            date: undefined,
-            time: undefined,
-            lidar_id: undefined,
-            site_id: undefined,
-            deployment_id: undefined,
+            date: '',
+            time: '',
+            lidar_id: '',
+            site_id: '',
+            deployment_id: '',
             state: null,
             city: null,
             street: null,
             cross_street: null,
-            corner: undefined
+            corner: ''
         })
     }
 
@@ -162,11 +163,7 @@ export default function ExplorerRoot() {
                             <TextForm label="Deployment ID" value={query.deployment_id}
                                       setter={(event: ChangeEvent<HTMLInputElement>) => handleTextForm(event.target.value, "deployment_id")}
                                       type="number"/>
-                            <CardinalDirectionsSelectForm value={query.corner}
-                                                          setter={(value) => setQuery((prevState) => {
-                                                              return {...prevState, corner: value}
-                                                          })}/>
-                            <ComboboxForm label="State"
+                            <ComboboxForm label="State" optionsLoading={lidarMetadataListPending}
                                           options={geographicSelections.states}
                                           dataSetter={(value) => setQuery((prevState) => {
                                               return {...prevState, state: value}
@@ -175,7 +172,7 @@ export default function ExplorerRoot() {
                                           optionsFilterFunction={(queryState) => filteredGeographicLocations(queryState,"states")}
 
                             />
-                            <ComboboxForm label="City"
+                            <ComboboxForm label="City" optionsLoading={lidarMetadataListPending}
                                           options={geographicSelections.cities}
                                           dataSetter={(value) => setQuery((prevState) => {
                                               return {...prevState, city: value}
@@ -184,7 +181,7 @@ export default function ExplorerRoot() {
                                           optionsFilterFunction={(queryState) => filteredGeographicLocations(queryState,"cities")}
 
                             />
-                            <ComboboxForm label="Street"
+                            <ComboboxForm label="Street" optionsLoading={lidarMetadataListPending}
                                           options={geographicSelections.streets}
                                           dataSetter={(value) => setQuery((prevState) => {
                                               return {...prevState, street: value}
@@ -193,7 +190,7 @@ export default function ExplorerRoot() {
                                           optionsFilterFunction={(queryState) => filteredGeographicLocations(queryState,"streets")}
 
                             />
-                            <ComboboxForm label="Cross Street"
+                            <ComboboxForm label="Cross Street" optionsLoading={lidarMetadataListPending}
                                           options={geographicSelections.cross_streets}
                                           dataSetter={(value) => setQuery((prevState) => {
                                               return {...prevState, cross_street: value}
@@ -202,7 +199,16 @@ export default function ExplorerRoot() {
                                           optionsFilterFunction={(queryState) => filteredGeographicLocations(queryState,"cross_streets")}
 
                             />
+                            <CardinalDirectionsSelectForm value={query.corner}
+                                                          setter={(value) => setQuery((prevState) => {
+                                                              return {...prevState, corner: value}
+                                                          })} />
+
                         </FormGroup>
+                        <div className='flex flex-row gap-4 mt-4'>
+                            <Button label="Query" icon={<FunnelIcon />} />
+                            <Button label="Clear Query" icon={<XMarkIcon />} onClick={() => clearQuery()} />
+                        </div>
                     </PaneSection>
                 </Pane>
                 <Pane stretch>
@@ -228,5 +234,4 @@ export default function ExplorerRoot() {
             </PaneGroup>
         </ViewShell>
     )
-
 }
