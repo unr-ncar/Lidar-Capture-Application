@@ -67,7 +67,7 @@ export default function SensorStatusView() {
                 <MobileDisableWrapper>
                     <PaneSection>
                         <FormGroup label="Map Filtering">
-                            <SelectForm label="Service Selection" description="Select which service status to view for displayed intersections." selected={markerFormat} setSelection={setMarkerFormat}>
+                            <SelectForm label="Service Selection" description="Select which service status to view for displayed intersections." selected={markerFormat} setSelection={(value) => setMarkerFormat(value) }>
                                 <SelectOption label="PCAP" value="pcap" />
                                 <SelectOption label="ROS" value="ros" />
                             </SelectForm>

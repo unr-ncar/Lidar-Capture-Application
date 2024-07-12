@@ -9,11 +9,11 @@ export interface TextFormProps_t {
 }
 export function TextForm({label, type, setter, value}: TextFormProps_t) {
     return (
-        <Field className='flex flex-row gap-2 place-items-center border-2 border-neutral-200 p-2 rounded-md'>
+        <Field className='flex flex-row gap-3 place-items-center border-2 border-neutral-200 p-2 rounded-md'>
             <Label className='font-medium text-sm text-neutral-400'>
                 {label}
             </Label>
-            <Input className='text-neutral-400 outline-0 appearance-none grow' type={type} value={value} onChange={(event) => setter(event)} />
+            <Input className='text-neutral-400 outline-0 appearance-none grow bg-neutral-100 p-1 rounded-md data-[focus]:bg-blue-50' type={type} value={value} onChange={(event) => setter(event)} />
         </Field>
     )
 }

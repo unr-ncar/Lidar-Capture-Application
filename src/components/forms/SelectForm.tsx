@@ -32,7 +32,7 @@ export interface SelectFormProps_t extends ListboxProps {
     label: string;
     description?: string;
     selected: any;
-    setSelection: Dispatch<SetStateAction<any>>;
+    setSelection: (value: string) => void;
 }
 export function SelectForm(props: SelectFormProps_t) {
 
@@ -50,7 +50,7 @@ export function SelectForm(props: SelectFormProps_t) {
                     </Description>
                 )}
             </div>
-            <Listbox {...rest} value={selected} onChange={setSelection}>
+            <Listbox {...rest} value={selected} onChange={(value) => setSelection(value)}>
                 <ListboxButton className='group min-w-[100px] h-min px-2 py-1 flex flex-row justify-between items-center gap-1 bg-black text-white rounded-md data-[open]:rounded-b-none'>
                     <p className='uppercase font-medium'>
                         {selected ? selected : defaultValue}

@@ -12,7 +12,7 @@ export function DatePickerForm({label, setter, value}: DatePickerFormProps_t) {
             <Label className='font-medium text-sm text-neutral-400'>
                 {label}
             </Label>
-            <Input className='text-neutral-400 outline-0 appearance-none grow' type='date' value={value} onChange={(event) => setter(event)} />
+            <Input className='text-neutral-400 outline-0 appearance-none grow bg-neutral-100 p-1 rounded-md' type='date' value={value} onChange={(event) => setter(event)} />
         </Field>
     )
 }
