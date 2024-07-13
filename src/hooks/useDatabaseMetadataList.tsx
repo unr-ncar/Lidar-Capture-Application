@@ -3,19 +3,9 @@ import {useQuery} from "@tanstack/react-query";
 import useGatewayConfiguration from "./useGatewayConfiguration.tsx";
 import axios from "axios";
 import {DatabaseItemQuery_t} from "../views/explorer/ExplorerRoot.tsx";
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 
 /* Incomplete (06/21/2024 at 7:48 p.m.) */
-
-const fetchDatabaseMetadata = async (gatewayIp: string, page: number, size: number): Promise<DatabaseMetadataResponse_t> => {
-    const url: string = `${gatewayIp}/files?page=${page}&size=${size}`
-    return await axios.get(url).then((response) => response.data).then((data: DatabaseMetadataResponse_t) => {
-        return {
-            ...data,
-            items: [...data.items.filter((databaseMetadataItem: DatabaseMetadata_t) => !databaseMetadataItem.filename.includes("test"))]
-        }
-    })
-}
 
 export default function useDatabaseMetadataList(query: DatabaseItemQuery_t | null, page: number, size: number = 10) {
 
@@ -25,9 +15,31 @@ export default function useDatabaseMetadataList(query: DatabaseItemQuery_t | nul
         console.log('useDatabaseMetadataList', query)
     }, [query]);
 
+    const searchParamsUrl = useMemo(() => {
+        if (query === null) return '';
+
+        let url = ''
+
+        Object.entries(query).forEach(([key, value]) => {
+            url += `&${key}=${value}`;
+        })
+
+        console.log(url)
+        return url;
+    }, [query])
+
     return useQuery({
-        queryKey: ['database_metadata_list', page],
-        queryFn: async (): Promise<DatabaseMetadataResponse_t> => fetchDatabaseMetadata(fileServiceUrl, page, size),
+        queryKey: ['database_metadata_list', page, query],
+        queryFn: async (): Promise<DatabaseMetadataResponse_t> => {
+
+            const url: string = `${fileServiceUrl}/files?page=${page}&size=${size}${searchParamsUrl}`
+            return await axios.get(url).then((response) => response.data).then((data: DatabaseMetadataResponse_t) => {
+                return {
+                    ...data,
+                    items: [...data.items.filter((databaseMetadataItem: DatabaseMetadata_t) => !databaseMetadataItem.filename.includes("test"))]
+                }
+            })
+        },
         placeholderData: (previousData) => {
             return previousData
         },
