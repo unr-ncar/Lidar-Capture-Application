@@ -3,7 +3,7 @@ import {PaneGroup} from "../../components/PaneGroup.tsx";
 import {PaneSection} from "../../components/PaneSection.tsx";
 import {Pane} from "../../components/Pane.tsx";
 import useDatabaseMetadataList from "../../hooks/useDatabaseMetadataList.tsx";
-import {ChangeEvent, useEffect, useMemo, useState} from "react";
+import {ChangeEvent, useMemo, useState} from "react";
 import {Pagination} from "../../components/Pagination.tsx";
 import LoadingSpinner from "../../components/utilities/LoadingSpinner/LoadingSpinner.tsx";
 import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
@@ -21,16 +21,28 @@ import {FunnelIcon, XMarkIcon} from "@heroicons/react/20/solid";
 import {useSearchParams} from "react-router-dom";
 
 interface DatabaseItemQueryState_t {
-    date: string; // Input - Date - P - D
-    time: string; // Input - Time - P - D
-    lidar_id: string; // Input - Number - NP - D
-    site_id: string; // Input - Number - NP - D
-    deployment_id: string; // Input - Number - NP - D
-    city: string | null; // Combobox - String - NP
-    state: string | null; // Combobox - String - NP
-    street: string | null; // Combobox - String - NP
-    cross_street: string | null; // Combobox - String - NP
-    corner: string; // Select - String - NP - D
+    date: string;
+    time: string;
+    lidar_id: string;
+    site_id: string;
+    deployment_id: string;
+    city: string | null;
+    state: string | null;
+    street: string | null;
+    cross_street: string | null;
+    corner: string;
+}
+export interface DatabaseItemQuery_t {
+    date?: string;
+    time?: string;
+    lidar_id?: string;
+    site_id?: string;
+    deployment_id?: string;
+    city?: string | null;
+    state?: string | null;
+    street?: string | null;
+    cross_street?: string | null;
+    corner?: string;
 }
 
 export default function ExplorerRoot() {
@@ -89,11 +101,49 @@ export default function ExplorerRoot() {
 
     }, [lidarMetadataList])
 
+    const createQueryRequest = () => {
+
+        const processedKeys = Object.entries(query).filter(([key, value]) => {
+            if (value !== '' && value !== null) return [key, value]
+        })
+        setQueryParams(processedKeys)
+    }
+
+
+    const queryObject = useMemo(() => {
+        if (queryParams.size === 0) return null
+
+        const searchParamsObject = {
+            date: queryParams.get('date'),
+            time: queryParams.get('time'),
+            lidar_id: queryParams.get('lidar_id'),
+            site_id: queryParams.get('site_id'),
+            deployment_id: queryParams.get('deployment_id'),
+            state: queryParams.get('state'),
+            city: queryParams.get('city'),
+            street: queryParams.get('street'),
+            cross_street: queryParams.get('cross_street'),
+            corner: queryParams.get('corner'),
+        }
+
+        const processedSearchParamsObject = Object.entries(searchParamsObject).filter(([key, value]) => {
+            if (value !== '' && value !== null) return [key, value]
+        })
+
+        const processedQuery: DatabaseItemQuery_t = {};
+
+        processedSearchParamsObject.forEach(([key, value]) => {
+            Object.assign(processedQuery, {[key]:value})
+        });
+
+        return processedQuery
+    }, [queryParams])
+
     const {
         isPending: databaseMetadataListPending,
         error: databaseMetadataListError,
         data: databaseMetadataList
-    } = useDatabaseMetadataList(null, page, 20)
+    } = useDatabaseMetadataList(queryObject, page, 20)
 
     const handleTextForm = (value: string, key: keyof DatabaseItemQueryState_t) => {
         setQuery((prevState) => {
@@ -128,20 +178,8 @@ export default function ExplorerRoot() {
             cross_street: null,
             corner: ''
         })
+        setQueryParams(undefined)
     }
-
-    const createQueryRequest = () => {
-
-        const processedKeys = Object.entries(query).filter(([key, value]) => {
-            if (value !== '' && value !== null) return [key, value]
-        })
-
-        setQueryParams(processedKeys)
-    }
-
-    useEffect(() => {
-        console.log(queryParams.values())
-    }, [queryParams]);
 
     const databaseMetadataItems = databaseMetadataList?.items.map((databaseMetadataItem: DatabaseMetadata_t) => {
         return <DatabaseItem
