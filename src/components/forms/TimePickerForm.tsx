@@ -7,7 +7,7 @@ export function TimePickerForm({label, setter, value}: DatePickerFormProps_t) {
             <Label className='font-medium text-sm text-neutral-400'>
                 {label}
             </Label>
-            <Input className='text-neutral-400 outline-0 appearance-none grow bg-neutral-100 p-1 rounded-md' type='time' value={value} onChange={(event) => setter(event)} />
+            <Input className='text-neutral-400 outline-0 appearance-none grow bg-neutral-100 p-1 rounded-md' type='time' step='1' value={value} onChange={(event) => setter(event)} />
         </Field>
     )
 }
