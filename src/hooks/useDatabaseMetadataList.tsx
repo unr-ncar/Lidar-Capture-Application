@@ -3,17 +3,13 @@ import {useQuery} from "@tanstack/react-query";
 import useGatewayConfiguration from "./useGatewayConfiguration.tsx";
 import axios from "axios";
 import {DatabaseItemQuery_t} from "../views/explorer/ExplorerRoot.tsx";
-import {useEffect, useMemo} from "react";
+import {useMemo} from "react";
 
 /* Incomplete (06/21/2024 at 7:48 p.m.) */
 
 export default function useDatabaseMetadataList(query: DatabaseItemQuery_t | null, page: number, size: number = 10) {
 
     const fileServiceUrl = useGatewayConfiguration((state) => state.fileServiceUrl)
-
-    useEffect(() => {
-        console.log('useDatabaseMetadataList', query)
-    }, [query]);
 
     const searchParamsUrl = useMemo(() => {
         if (query === null) return '';
@@ -24,7 +20,6 @@ export default function useDatabaseMetadataList(query: DatabaseItemQuery_t | nul
             url += `&${key}=${value}`;
         })
 
-        console.log(url)
         return url;
     }, [query])
 
@@ -33,6 +28,7 @@ export default function useDatabaseMetadataList(query: DatabaseItemQuery_t | nul
         queryFn: async (): Promise<DatabaseMetadataResponse_t> => {
 
             const url: string = `${fileServiceUrl}/files?page=${page}&size=${size}${searchParamsUrl}`
+            console.log(url)
             return await axios.get(url).then((response) => response.data).then((data: DatabaseMetadataResponse_t) => {
                 return {
                     ...data,

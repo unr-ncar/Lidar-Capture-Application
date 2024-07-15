@@ -36,8 +36,8 @@ export function DatabaseItem({path, lidar_id, site_id, filename, file_size, date
                     {filename}
                 </p>
                 <div className='flex flex-row flex-wrap gap-2'>
-                    <Tag icon={<SignalIcon />} label="LIDAR ID" value={site_id}/>
-                    <Tag icon={<ServerIcon />} label="SITE ID" value={lidar_id}/>
+                    <Tag icon={<SignalIcon />} label="SENSOR ID" value={lidar_id}/>
+                    <Tag icon={<ServerIcon />} label="SITE ID" value={site_id}/>
                     <Tag icon={<DocumentIcon />} label="FILE SIZE" value={`${displayedFileSize} GB`}/>
                     <Tag icon={<VideoCameraIcon />} label="TYPE" value={displayedType}/>
                     <Tag icon={<ClockIcon />} label="TIMESTAMP" value={displayedTimestamp}/>

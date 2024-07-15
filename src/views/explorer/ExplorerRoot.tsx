@@ -106,6 +106,7 @@ export default function ExplorerRoot() {
         const processedKeys = Object.entries(query).filter(([key, value]) => {
             if (value !== '' && value !== null) return [key, value]
         })
+        setPage(1)
         setQueryParams(processedKeys)
     }
 
@@ -113,9 +114,19 @@ export default function ExplorerRoot() {
     const queryObject = useMemo(() => {
         if (queryParams.size === 0) return null
 
+        const convertedDate = (date: string | null) => {
+            if (date === null) return null
+            return date
+        }
+
+        const convertedTime = (time: string | null) => {
+            if (time === null) return null
+            return time
+        }
+
         const searchParamsObject = {
-            date: queryParams.get('date'),
-            time: queryParams.get('time'),
+            date: convertedDate(queryParams.get('date')),
+            time: convertedTime(queryParams.get('time')),
             lidar_id: queryParams.get('lidar_id'),
             site_id: queryParams.get('site_id'),
             deployment_id: queryParams.get('deployment_id'),
@@ -179,6 +190,7 @@ export default function ExplorerRoot() {
             corner: ''
         })
         setQueryParams(undefined)
+        setPage(3)
     }
 
     const databaseMetadataItems = databaseMetadataList?.items.map((databaseMetadataItem: DatabaseMetadata_t) => {
