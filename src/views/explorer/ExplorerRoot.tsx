@@ -136,26 +136,36 @@ export default function ExplorerRoot() {
         const convertedTime = (time: string | null) => {
             if (time === null) return null
 
-            const timeObject = time.split(':')
-            let hours: number | string = Number(timeObject[0])
-            let minutes: number | string = Number(timeObject[1])
-            let seconds: number | string = Number(timeObject[2])
 
-            console.log(timeObject)
+            const parsedTimeObject = time.split(':')
+            let hours: number | string = Number(parsedTimeObject[0])
+            let minutes: number | string = Number(parsedTimeObject[1])
+            let seconds: number | string = Number(parsedTimeObject[2])
 
-            if (hours > 0 && hours < 10) {
+            const datetimeObject = new Date()
+            datetimeObject.setSeconds(seconds)
+            datetimeObject.setMinutes(minutes)
+            datetimeObject.setHours(hours)
+
+            seconds = datetimeObject.getUTCSeconds()
+            minutes = datetimeObject.getUTCMinutes()
+            hours = datetimeObject.getUTCHours()
+
+            if (hours >= 0 && hours < 10) {
                 hours = String('0' + hours )
             }
 
-            if (minutes > 0 && minutes < 10) {
+            if (minutes >= 0 && minutes < 10) {
                 minutes = String('0' + minutes)
             }
 
-            if (seconds > 0 && seconds < 10) {
+            if (seconds >= 0 && seconds < 10) {
                 seconds = String('0' + seconds)
             }
 
-            return `${hours}${minutes}${seconds}`
+            const processedTimeString = `${hours}${minutes}${seconds}`
+
+            return String(processedTimeString)
         }
 
         const searchParamsObject = {
@@ -243,7 +253,7 @@ export default function ExplorerRoot() {
                         <FormGroup label="Query Paramters">
                             <DatePickerForm label='Capture Date' value={query.date}
                                             setter={(event: ChangeEvent<HTMLInputElement>) => handleTextForm(event.target.value, "date")}/>
-                            <TimePickerForm label='Capture Time (GMT)' value={query.time}
+                            <TimePickerForm label='Capture Time' value={query.time}
                                             setter={(event: ChangeEvent<HTMLInputElement>) => handleTextForm(event.target.value, "time")}/>
                             <TextForm label="Site ID" value={query.site_id}
                                       setter={(event: ChangeEvent<HTMLInputElement>) => handleTextForm(event.target.value, "site_id")}
