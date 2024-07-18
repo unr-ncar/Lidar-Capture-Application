@@ -12,6 +12,7 @@ import {
     VideoCameraSlashIcon
 } from "@heroicons/react/20/solid";
 import Loading from "react-loading";
+import {useNavigate} from "react-router-dom";
 
 export interface SensorSelectionItemProps_t {
     selected: () => boolean;
@@ -29,6 +30,7 @@ export function SensorSelectionItem({
                                         lidarMetadata
                                     }: SensorSelectionItemProps_t) {
 
+    const navigate = useNavigate();
     const {lidar_id, site_id, street, cross_street, corner} = lidarMetadata;
     const {isPending: statusPending, data: status} = useStatus(lidar_id, site_id)
     const sensorStatus = useSensorStatusLabel(statusPending ? undefined : format === "ros" ? status!.rosServiceStatus : status!.pcapServiceStatus)
@@ -98,6 +100,10 @@ export function SensorSelectionItem({
 
     }
 
+    const navigateSensorMetadata = () => {
+        navigate(`/metadata/sensor/${lidarMetadata.lidar_id}`)
+    }
+
     return (
         <Checkbox disabled={statusPending || selectionDisabled()}
                   className={`group ${statusPending ? 'hover:data-[disabled]:cursor-wait' : 'hover:data-[disabled]:cursor-not-allowed'} flex flex-row items-center gap-3 bg-neutral-100 rounded p-4`}
@@ -107,7 +113,7 @@ export function SensorSelectionItem({
                 <p className='font-medium line-clamp-2'>
                     {street} &#x2022; {cross_street} ({corner})
                 </p>
-                <Tag label="LIDAR ID" value={String(lidar_id)}/>
+                <Tag label="LIDAR ID" value={String(lidar_id)} onClick={() => navigateSensorMetadata()}/>
             </div>
         </Checkbox>
     )

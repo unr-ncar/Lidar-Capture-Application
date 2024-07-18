@@ -21,7 +21,7 @@ export function Tag(props: TagProps_t) {
 
     if (onClick) {
         return (
-            <button {...rest} className={containerStyling}>
+            <button onClick={onClick} {...rest} className={containerStyling}>
                 {tagIcon}
                 <p className={textStyling}>
                     { label && <span className='font-semibold'>{label}:{' '}</span> }{value}
