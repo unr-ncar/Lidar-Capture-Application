@@ -11,7 +11,7 @@ export function ErrorMessage({error}: ErrorMessageProps_t) {
     }
 
     return (
-        <div className='h-full w-full text-neutral-400 gap-2 flex flex-col items-center justify-center'>
+        <div className='h-full w-full text-neutral-400 gap-2 flex flex-col items-center justify-center py-6'>
             <div>
                 <ExclamationTriangleIcon className='size-16 leading-tight'/>
             </div>

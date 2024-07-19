@@ -10,7 +10,7 @@ import useGatewayConfiguration from "../../hooks/useGatewayConfiguration.tsx";
 import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
 import {Map} from "../../components/map/Map.tsx";
 import useLidarMetadata from "../../hooks/useLidarMetadata.tsx";
-import {FileOriginMarker} from "../../components/map/FileOriginMarker.tsx";
+import {GeographicMarker} from "../../components/map/GeographicMarker.tsx";
 
 export default function FileMetadataView() {
 
@@ -56,7 +56,7 @@ export default function FileMetadataView() {
         <>
             <Pane minimalWidth>
                 <PaneSection label="File Metadata" description="View metadata related to a file query.">
-                    <div className='md:max-w-[300px]'>
+                    <div className='md:max-w-[300px] md:w-[300px]'>
                         <ItemList>
                             <Descriptor label="FILE NAME">
                                 {fileQuery!.filename}
@@ -101,7 +101,7 @@ export default function FileMetadataView() {
             <Pane stretch>
                 <PaneSection fillHeight>
                     <Map mapCenter={[lidarMetadata!.latitude, lidarMetadata!.longitude]} className='min-h-[350px] min-h-auto'>
-                        <FileOriginMarker center={[lidarMetadata!.latitude, lidarMetadata!.longitude]} />
+                        <GeographicMarker center={[lidarMetadata!.latitude, lidarMetadata!.longitude]} />
                     </Map>
                 </PaneSection>
             </Pane>

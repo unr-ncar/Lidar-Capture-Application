@@ -1,7 +1,7 @@
 import {PcapService_t, RosService_t, SensorStatusLabel_t} from "../types.tsx";
 import {useMemo} from "react";
 
-export default function useSensorStatusLabel(props: RosService_t | PcapService_t | undefined): SensorStatusLabel_t {
+export default function useSensorStatusLabel(props: RosService_t | PcapService_t): SensorStatusLabel_t {
 
     return useMemo<SensorStatusLabel_t>(
         () => {

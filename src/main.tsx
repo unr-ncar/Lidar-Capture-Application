@@ -66,7 +66,7 @@ const router = createBrowserRouter([
                     },
                     {
                         element: <SensorMetadataView />,
-                        path: "sensor/:lidar_id"
+                        path: "sensor/:site_id/:lidar_id"
                     },
                     {
                         element: <SiteMetadataView />,

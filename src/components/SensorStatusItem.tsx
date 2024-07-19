@@ -16,14 +16,14 @@ export function SensorStatusItem({ lidarMetadata, statusMetadata }: SensorStatus
     const { isPending: statusPending, error: statusError, data: status} = useStatus(lidar_id, site_id);
 
     const navigateSensorMetadata = () => {
-        navigate(`/metadata/sensor/${lidarMetadata.lidar_id}`)
+        navigate(`/metadata/sensor/${lidarMetadata.site_id}/${lidarMetadata.lidar_id}`)
     }
 
     return (
         <div className='flex flex-col gap-4 bg-neutral-100 rounded p-4'>
             <div className='flex flex-row items-center justify-between'>
                 <p className='font-medium line-clamp-2'>
-                    {street} &#x2022; {cross_street} (${corner})
+                    {street} &#x2022; {cross_street} ({corner})
                 </p>
                 <Tag label="LIDAR ID" value={String(lidar_id)} onClick={() => navigateSensorMetadata()} />
             </div>
