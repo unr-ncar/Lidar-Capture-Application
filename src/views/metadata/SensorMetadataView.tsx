@@ -21,7 +21,10 @@ export default function SensorMetadataView() {
         error: lidarMetadataError,
         data: lidarMetadata
     } = useLidarMetadata(Number(lidar_id))
-    const {isPending: statusPending, error: statusError, data: status} = useStatus(Number(lidar_id), Number(site_id));
+    const {isPending: statusPending, error: statusError, data: status} = useStatus({
+        siteId: Number(site_id),
+        lidarId: Number(lidar_id)
+    });
 
     const statusServiceWidgets = useMemo<ReactElement | Array<ReactElement>>(() => {
         if (statusPending) return <LoadingSpinner />

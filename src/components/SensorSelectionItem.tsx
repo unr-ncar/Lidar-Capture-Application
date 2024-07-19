@@ -32,7 +32,10 @@ export function SensorSelectionItem({
 
     const navigate = useNavigate();
     const {lidar_id, site_id, street, cross_street, corner} = lidarMetadata;
-    const {isPending: statusPending, data: status} = useStatus(lidar_id, site_id)
+    const {isPending: statusPending, data: status} = useStatus({
+        siteId: Number(site_id),
+        lidarId: Number(lidar_id)
+    })
     const sensorStatus = useSensorStatusLabel(statusPending ? undefined : format === "ros" ? status!.rosServiceStatus : status!.pcapServiceStatus)
     const storageStatus = useStorageStatusLabel(statusPending ? undefined : status!.edgeStorageStatus)
 

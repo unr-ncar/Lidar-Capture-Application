@@ -44,6 +44,12 @@ export interface PcapService_t {
     start: number;
     elapsed: number;
     lidarId: number;
+    fileInformation?: Array<{
+        fileName: string;
+        fileSize: string;
+        creationTime: number;
+        lastModified: number;
+    }>;
 }
 export interface RosService_t {
     up: boolean;
@@ -163,3 +169,4 @@ export interface DatabaseMetadataResponse_t {
     size: number;
     pages: number;
 }
+

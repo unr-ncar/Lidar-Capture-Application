@@ -4,6 +4,7 @@ import {StorageServiceWidget} from "./service_widget/StorageServiceWidget.tsx";
 import {RosServiceWidget} from "./service_widget/RosServiceWidget.tsx";
 import {PcapServiceWidget} from "./service_widget/PcapServiceWidget.tsx";
 import {useNavigate} from "react-router-dom";
+import {InformationCircleIcon} from "@heroicons/react/16/solid";
 
 export function SiteStatusItem({street, crossStreet, siteId, edgeStorageStatus, pcapServiceStatus, rosServiceStatus }: StatusMetadataComposite_t) {
 
@@ -24,7 +25,7 @@ export function SiteStatusItem({street, crossStreet, siteId, edgeStorageStatus, 
                 <p className='font-medium'>
                     {street} &#x2022; {crossStreet}
                 </p>
-                <Tag label="SITE ID" value={String(siteId)} onClick={() => navigateSiteMetadata()} />
+                <Tag icon={<InformationCircleIcon />} label="SITE ID" value={String(siteId)} onClick={() => navigateSiteMetadata()} />
             </div>
             <div className='flex flex-col gap-2'>
                 <StorageServiceWidget {...edgeStorageStatus!} />

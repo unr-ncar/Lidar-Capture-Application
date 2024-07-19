@@ -4,6 +4,7 @@ import {Tag} from "./Tag.tsx";
 import {RosServiceWidget} from "./service_widget/RosServiceWidget.tsx";
 import {PcapServiceWidget} from "./service_widget/PcapServiceWidget.tsx";
 import {useNavigate} from "react-router-dom";
+import {InformationCircleIcon} from "@heroicons/react/16/solid";
 
 export interface SensorStatusItemProps_t {
     lidarMetadata: LidarMetadata_t;
@@ -13,7 +14,10 @@ export function SensorStatusItem({ lidarMetadata, statusMetadata }: SensorStatus
 
     const navigate = useNavigate()
     const { lidar_id, site_id, street, cross_street, corner} = lidarMetadata;
-    const { isPending: statusPending, error: statusError, data: status} = useStatus(lidar_id, site_id);
+    const { isPending: statusPending, error: statusError, data: status} = useStatus({
+        siteId: Number(site_id),
+        lidarId: Number(lidar_id),
+    });
 
     const navigateSensorMetadata = () => {
         navigate(`/metadata/sensor/${lidarMetadata.site_id}/${lidarMetadata.lidar_id}`)
@@ -21,11 +25,11 @@ export function SensorStatusItem({ lidarMetadata, statusMetadata }: SensorStatus
 
     return (
         <div className='flex flex-col gap-4 bg-neutral-100 rounded p-4'>
-            <div className='flex flex-row items-center justify-between'>
+             <div className='flex flex-row items-center justify-between'>
                 <p className='font-medium line-clamp-2'>
                     {street} &#x2022; {cross_street} ({corner})
                 </p>
-                <Tag label="LIDAR ID" value={String(lidar_id)} onClick={() => navigateSensorMetadata()} />
+                <Tag icon={<InformationCircleIcon />} label="LIDAR ID" value={String(lidar_id)} onClick={() => navigateSensorMetadata()} />
             </div>
             <div className='flex flex-col gap-2'>
                 <RosServiceWidget up={statusPending || statusError ? statusMetadata.rosServiceStatus.up : status!.rosServiceStatus.up }
