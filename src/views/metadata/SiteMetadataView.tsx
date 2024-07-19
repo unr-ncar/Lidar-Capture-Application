@@ -9,6 +9,9 @@ import {ErrorMessage} from "../../components/utilities/ErrorMessage.tsx";
 import {Descriptor} from "../../components/Descriptor.tsx";
 import ItemList from "../../components/ItemList.tsx";
 import {useStatus} from "../../hooks/useStatus.tsx";
+import {useMemo} from "react";
+import {StatusMetadata_t} from "../../types.tsx";
+import {RosServiceWidget} from "../../components/service_widget/RosServiceWidget.tsx";
 
 export default function SiteMetadataView() {
 
@@ -18,6 +21,34 @@ export default function SiteMetadataView() {
         siteId: Number(site_id),
         fileInformationIncluded: true
     })
+
+    const pcapServicesStatus = useMemo(() => {
+        if (statusPending || statusError) return undefined
+
+        return status?.pcapServiceStatus.map((sensorStatus: StatusMetadata_t) => {
+            return (
+                <RosServiceWidget key={sensorStatus.lidarId} up={sensorStatus!.up }
+                                  isRecording={sensorStatus!.isRecording }
+                                  start={sensorStatus!.start}
+                                  elapsed={sensorStatus!.elapsed}
+                                  lidarId={Number(sensorStatus!.lidarId)} />
+            )
+        })
+    }, [status?.pcapServiceStatus, statusError, statusPending])
+
+    const rosServicesStatus = useMemo(() => {
+        if (statusPending || statusError) return undefined
+
+        return status?.rosServiceStatus.map((sensorStatus: StatusMetadata_t) => {
+            return (
+                <RosServiceWidget key={sensorStatus.lidarId} up={sensorStatus!.up }
+                                  isRecording={sensorStatus!.isRecording }
+                                  start={sensorStatus!.start}
+                                  elapsed={sensorStatus!.elapsed}
+                                  lidarId={Number(sensorStatus!.lidarId)} />
+            )
+        })
+    }, [status?.rosServiceStatus, statusError, statusPending])
 
     const metadataItems = !siteMetadataPending && !siteMetadataError ? Object.entries(data?.siteMetadata).filter(([key, value]) => {
         if (key === "_id") return
@@ -43,13 +74,20 @@ export default function SiteMetadataView() {
                         {metadataItems}
                     </ItemList>
                 </PaneSection>
-                <PaneSection label="Sensors Status">
-                    <ItemList label="PCAP Service">
+                <PaneSection label="Sensors Status" description="View status of sensors attached to site deployment.">
+                    { statusPending ? <LoadingSpinner /> : !statusError ? (
+                        <ItemList>
+                            <ItemList label="PCAP Service">
+                                {pcapServicesStatus}
+                            </ItemList>
+                            <ItemList label="ROS Service">
+                                {rosServicesStatus}
+                            </ItemList>
+                        </ItemList>
+                    ) : <ErrorMessage error={statusError} />}
+                </PaneSection>
+                <PaneSection label="Site Storage Items" description="View recordings awaiting transfer to central cluster's database.">
 
-                    </ItemList>
-                    <ItemList label="ROS Service">
-
-                    </ItemList>
                 </PaneSection>
             </Pane>
             <Pane stretch>
