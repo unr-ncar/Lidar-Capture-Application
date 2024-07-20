@@ -12,6 +12,7 @@ import {useStatus} from "../../hooks/useStatus.tsx";
 import {useMemo} from "react";
 import {StatusMetadata_t} from "../../types.tsx";
 import {RosServiceWidget} from "../../components/service_widget/RosServiceWidget.tsx";
+import useStorageStatusLabel from "../../hooks/useStorageStatusLabel.tsx";
 
 export default function SiteMetadataView() {
 
@@ -21,6 +22,29 @@ export default function SiteMetadataView() {
         siteId: Number(site_id),
         fileInformationIncluded: true
     })
+
+    const storageMetrics = useMemo(() => {
+        if (statusPending || statusError) return undefined
+
+        function makeBytesReadable(bytes: number) {
+            return `${(Number(bytes) / Math.pow(1024, 3)).toFixed(2)} GB (${bytes} bytes)`
+        }
+
+        const totalCapacity = makeBytesReadable(status!.edgeStorageStatus!.totalSpace)
+        const usedCapacity = makeBytesReadable(status!.edgeStorageStatus!.usedSpace)
+        const availableCapacity = makeBytesReadable(status!.edgeStorageStatus!.freeSpace)
+        const usedStoragePercentage = 100 * Number((status!.edgeStorageStatus!.usedSpace / status!.edgeStorageStatus!.totalSpace).toFixed(4))
+
+        return {
+            totalCapacity: totalCapacity,
+            usedCapacity: usedCapacity,
+            availableCapacity: availableCapacity,
+            usedStoragePercentage: usedStoragePercentage
+        }
+
+    }, [status, statusError, statusPending])
+
+    const storageStatusLabel = useStorageStatusLabel(status?.edgeStorageStatus)
 
     const pcapServicesStatus = useMemo(() => {
         if (statusPending || statusError) return undefined
@@ -86,8 +110,32 @@ export default function SiteMetadataView() {
                         </ItemList>
                     ) : <ErrorMessage error={statusError} />}
                 </PaneSection>
-                <PaneSection label="Site Storage Items" description="View recordings awaiting transfer to central cluster's database.">
+                <PaneSection label="Storage Metrics" description="View overall site deployment storage metrics and recordings awaiting transfer to central cluster's database.">
+                    { statusPending ? <LoadingSpinner /> : !statusError ? (
+                        <ItemList>
+                            <ItemList>
+                                <Descriptor label="Total Capacity">
+                                    {storageMetrics!.totalCapacity}
+                                </Descriptor>
+                                <Descriptor label="Used Capacity">
+                                    {storageMetrics!.usedCapacity}
+                                </Descriptor>
+                                <Descriptor label="Available Capacity">
+                                    {storageMetrics!.availableCapacity}
+                                </Descriptor>
+                                <Descriptor label="Capacity Status">
+                                    {storageStatusLabel.toUpperCase()} ({String(storageMetrics!.usedStoragePercentage)}% Used)
+                                </Descriptor>
 
+                            </ItemList>
+                            <ItemList label="PCAP Service">
+                                {pcapServicesStatus}
+                            </ItemList>
+                            <ItemList label="ROS Service">
+                                {rosServicesStatus}
+                            </ItemList>
+                        </ItemList>
+                    ) : <ErrorMessage error={statusError} />}
                 </PaneSection>
             </Pane>
             <Pane stretch>
