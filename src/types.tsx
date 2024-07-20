@@ -111,13 +111,13 @@ export type StatusLabel_t = StorageStatusLabel_t | SensorStatusLabel_t;
 
 /* === GATEWAY CONFIGURATION === */
 export interface GatewayConfiguration_t {
-    gatewayPath: string;
-    metadataServicePort: number;
-    graphqlServicePort: number;
-    rosRecordingServicePort: number;
-    pcapRecordingServicePort: number;
-    fileServicePort: number;
-    clusterWebServerPort: number;
+    gateway_path: string;
+    metadata_service_port: number;
+    graphql_service_port: number;
+    ros_recording_service_port: number;
+    pcap_recording_service_port: number;
+    file_service_port: number;
+    cluster_web_server_port: number;
 }
 
 /* === RECORDING SERVICES - REST === */

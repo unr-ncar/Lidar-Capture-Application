@@ -18,13 +18,13 @@ export interface GatewayConfigurationState_t {
 
 const useGatewayConfiguration: UseBoundStore<StoreApi<GatewayConfigurationState_t>> = create<GatewayConfigurationState_t>()((set) => ({
     configuration: {
-        gatewayPath: import.meta.env.VITE_GATEWAY_PATH,
-        metadataServicePort: Number(import.meta.env.VITE_METADATA_SERVICE_PORT),
-        graphqlServicePort: Number(import.meta.env.VITE_GRAPHQL_SERVICE_PORT),
-        rosRecordingServicePort: Number(import.meta.env.VITE_ROS_RECORDING_SERVICE_PORT),
-        pcapRecordingServicePort: Number(import.meta.env.VITE_PCAP_RECORDING_SERVICE_PORT),
-        fileServicePort: Number(import.meta.env.VITE_FILE_SERVICE_PORT),
-        clusterWebServerPort: Number(import.meta.env.VITE_CLUSTER_WEB_SERVER_PORT)
+        gateway_path: import.meta.env.VITE_GATEWAY_PATH,
+        metadata_service_port: Number(import.meta.env.VITE_METADATA_SERVICE_PORT),
+        graphql_service_port: Number(import.meta.env.VITE_GRAPHQL_SERVICE_PORT),
+        ros_recording_service_port: Number(import.meta.env.VITE_ROS_RECORDING_SERVICE_PORT),
+        pcap_recording_service_port: Number(import.meta.env.VITE_PCAP_RECORDING_SERVICE_PORT),
+        file_service_port: Number(import.meta.env.VITE_FILE_SERVICE_PORT),
+        cluster_web_server_port: Number(import.meta.env.VITE_CLUSTER_WEB_SERVER_PORT)
     },
     clusterWebServerUrl: `${import.meta.env.VITE_GATEWAY_PATH}:${Number(import.meta.env.VITE_CLUSTER_WEB_SERVER_PORT)}`,
     metadataServiceUrl: `${import.meta.env.VITE_GATEWAY_PATH}:${Number(import.meta.env.VITE_METADATA_SERVICE_PORT)}`,
@@ -34,56 +34,56 @@ const useGatewayConfiguration: UseBoundStore<StoreApi<GatewayConfigurationState_
         ...state,
         configuration: {
             ...state.configuration,
-            gatewayPath: path
+            gateway_path: path
         },
 
-        metadataServiceUrl: `${path}:${state.configuration.metadataServicePort}`,
-        graphqlServiceUrl: `${path}:${state.configuration.graphqlServicePort}`,
-        fileServiceUrl: `${path}:${state.configuration.fileServicePort}`,
-        clusterWebServerUrl: `${path}:${state.configuration.clusterWebServerPort}`
+        metadataServiceUrl: `${path}:${state.configuration.metadata_service_port}`,
+        graphqlServiceUrl: `${path}:${state.configuration.graphql_service_port}`,
+        fileServiceUrl: `${path}:${state.configuration.file_service_port}`,
+        clusterWebServerUrl: `${path}:${state.configuration.cluster_web_server_port}`
     })),
     setMetadataServicePort: (port: number) => set((state) => ({
         ...state,
         configuration: {
             ...state.configuration,
-            metadataServicePort: port
+            metadata_service_port: port
         },
-        metadataServiceUrl: `${state.configuration.gatewayPath}:${port}`,
+        metadataServiceUrl: `${state.configuration.gateway_path}:${port}`,
     })),
     setGraphqlServicePort: (port: number) => set((state) => ({
         ...state,
         configuration: {
             ...state.configuration,
-            graphqlServicePort: port
+            graphql_service_port: port
         },
-        graphqlServiceUrl: `${state.configuration.gatewayPath}:${port}`,
+        graphqlServiceUrl: `${state.configuration.gateway_path}:${port}`,
     })),
     setRosRecordingServicePort: (port: number) => set((state) => ({
         ...state,
         configuration: {
             ...state.configuration,
-            rosRecordingServicePort: port
+            ros_recording_service_port: port
         }
     })),
     setPcapRecordingServicePort: (port: number) => set((state) => ({
         ...state,
         configuration: {
             ...state.configuration,
-            pcapRecordingServicePort: port
+            pcap_recording_service_port: port
         }
     })),
     setFileServicePort: (port: number) => set((state) => ({
         ...state,
         configuration: {
             ...state.configuration,
-            fileServicePort: port
+            file_service_port: port
         }
     })),
     setClusterWebServerPort: (port: number) => set((state) => ({
         ...state,
         configuration: {
             ...state.configuration,
-            clusterWebServerPort: port
+            cluster_web_server_port: port
         }
     })),
 }))

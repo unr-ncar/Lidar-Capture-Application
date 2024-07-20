@@ -29,8 +29,8 @@ const callStopRecording = async (siteIp: string, servicePort: number, lidarId: n
 
 export default function useCaptureServices(lidar: LidarMetadata_t, format: RecordingFormat, operation: RecordingOperation) {
 
-    const rosRecordingServicePort = useGatewayConfiguration((state) => state.configuration.rosRecordingServicePort)
-    const pcapRecordingServicePort = useGatewayConfiguration((state) => state.configuration.pcapRecordingServicePort)
+    const rosRecordingServicePort = useGatewayConfiguration((state) => state.configuration.ros_recording_service_port)
+    const pcapRecordingServicePort = useGatewayConfiguration((state) => state.configuration.pcap_recording_service_port)
 
     const startPcapCapture = useMutation({
         mutationKey: ['service_job', lidar.lidar_id, format, operation],

@@ -5,7 +5,7 @@ export interface TextFormProps_t {
     label: string;
     setter: (event: ChangeEvent<HTMLInputElement>) => void
     value: string;
-    type: 'number' | 'email' | 'password';
+    type: 'number' | 'email' | 'password' | 'text';
 }
 export function TextForm({label, type, setter, value}: TextFormProps_t) {
     return (

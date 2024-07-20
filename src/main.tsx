@@ -19,6 +19,7 @@ import MetadataRoot from "./views/metadata/MetadataRoot.tsx";
 import FileMetadataView from "./views/metadata/FileMetadataView.tsx";
 import SensorMetadataView from "./views/metadata/SensorMetadataView.tsx";
 import SiteMetadataView from "./views/metadata/SiteMetadataView.tsx";
+import SettingsView from "./views/SettingsView.tsx";
 
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
@@ -54,7 +55,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "settings",
-                element: <p>Settings</p>
+                element: <SettingsView />
             },
             {
                 path: "metadata",
