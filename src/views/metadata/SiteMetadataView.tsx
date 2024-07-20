@@ -25,6 +25,7 @@ export default function SiteMetadataView() {
 
     const storageMetrics = useMemo(() => {
         if (statusPending || statusError) return undefined
+        if (status?.edgeStorageStatus === undefined) return undefined
 
         function makeBytesReadable(bytes: number) {
             return `${(Number(bytes) / Math.pow(1024, 3)).toFixed(2)} GB (${bytes} bytes)`
@@ -111,7 +112,7 @@ export default function SiteMetadataView() {
                     ) : <ErrorMessage error={statusError} />}
                 </PaneSection>
                 <PaneSection label="Storage Metrics" description="View overall site deployment storage metrics and recordings awaiting transfer to central cluster's database.">
-                    { statusPending ? <LoadingSpinner /> : !statusError ? (
+                    { statusPending ? <LoadingSpinner /> : !statusError ? status?.edgeStorageStatus !== undefined ? (
                         <ItemList>
                             <ItemList>
                                 <Descriptor label="Total Capacity">
@@ -135,7 +136,7 @@ export default function SiteMetadataView() {
                                 {rosServicesStatus}
                             </ItemList>
                         </ItemList>
-                    ) : <ErrorMessage error={statusError} />}
+                    ) : <><ErrorMessage error={new Error("Storage metrics are not responding at this time")} /> </> : <ErrorMessage error={statusError} /> }
                 </PaneSection>
             </Pane>
             <Pane stretch>

@@ -38,18 +38,19 @@ export interface LidarSelection_t {
 }
 
 /* === LIDAR SERVICES STATUS - GRAPHQL === */
+export interface FileMetadata_t {
+    fileName: string;
+    fileSize: string;
+    creationTime: number;
+    lastModified: number;
+}
 export interface PcapService_t {
     up: boolean;
     isRecording: boolean;
     start: number;
     elapsed: number;
     lidarId: number;
-    fileInformation?: Array<{
-        fileName: string;
-        fileSize: string;
-        creationTime: number;
-        lastModified: number;
-    }>;
+    fileInformation?: Array<FileMetadata_t>;
 }
 export interface RosService_t {
     up: boolean;
