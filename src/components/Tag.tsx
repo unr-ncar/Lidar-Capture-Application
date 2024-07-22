@@ -10,7 +10,7 @@ export function Tag(props: TagProps_t) {
 
     const { className, label, value, icon, onClick, ...rest } = props;
 
-    const containerStyling = `${className} ${onClick ? "text-neutral-400 bg-neutral-200 hover:text-white hover:bg-black hover:border-black transition-colors" : " text-neutral-400 border-neutral-300 "} flex flex-row gap-1 items-center text-xs border-2 rounded-md px-1 py-0.5 h-min`
+    const containerStyling = `${className} ${onClick ? "text-neutral-400 bg-neutral-200 hover:text-white hover:bg-black hover:border-black transition-colors" : " text-neutral-400 border-neutral-300 "} flex flex-row gap-1 items-center text-xs border-2 rounded-md px-1 py-0.5 h-min w-fit`
     const textStyling = 'font-semibold text-nowrap uppercase'
 
     const tagIcon = icon ? (

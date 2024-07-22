@@ -58,6 +58,7 @@ export interface RosService_t {
     start: number;
     elapsed: number;
     lidarId: number;
+    fileInformation?: Array<FileMetadata_t>;
 }
 export interface ServicesStatusInformation_t {
     crossStreet: string;

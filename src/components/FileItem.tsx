@@ -1,13 +1,19 @@
 import {FileMetadata_t} from "../types.tsx";
-import {DocumentArrowUpIcon} from "@heroicons/react/20/solid";
 import {useMemo} from "react";
+import {Tag} from "./Tag.tsx";
+import {SignalIcon, DocumentIcon} from "@heroicons/react/16/solid";
 
-export default function FileItem({fileName, fileSize, creationTime, lastModified}: FileMetadata_t) {
+export interface FileItemProps_t extends FileMetadata_t {
+    lidarId: number;
+}
 
-    const {createdTimestamp, lastModifiedTimestamp} = useMemo(() => {
+export default function FileItem({fileName, fileSize, creationTime, lastModified, lidarId}: FileItemProps_t) {
 
-        const createdAtTimestamp = new Date(creationTime * 100).toLocaleString()
-        const lastModifiedAtTimestamp = new Date(lastModified * 100).toLocaleString()
+    const humanFileSize = `${(Number(fileSize) / Math.pow(1024, 3)).toFixed(2)} GB`
+    const {createdTimestamp} = useMemo(() => {
+
+        const createdAtTimestamp = new Date(creationTime * 1000).toLocaleString()
+        const lastModifiedAtTimestamp = new Date(lastModified * 1000).toLocaleString()
 
         return {
             createdTimestamp: createdAtTimestamp,
@@ -15,29 +21,21 @@ export default function FileItem({fileName, fileSize, creationTime, lastModified
         }
     }, [creationTime, lastModified])
 
+
     return (
-        <div>
-            <div>
-                <span>
-                    <DocumentArrowUpIcon className='size-4' />
-                </span>
-                <div>
-                    <p>
-                        {fileName}
-                    </p>
-                    <p>
-                        {fileSize}
-                    </p>
+        <div className="flex flex-col gap-2 bg-neutral-100 p-4 rounded">
+            <div className="flex flex-col gap-2">
+                <p className='font-medium break-all'>
+                    {fileName}
+                </p>
+                <div className='flex flex-row gap-2 flex-wrap'>
+                    <Tag icon={<SignalIcon/>} label="LIDAR ID" value={String(lidarId)}/>
+                    <Tag icon={<DocumentIcon/>} label="FILE SIZE" value={String(humanFileSize)}/>
                 </div>
             </div>
-            <div>
-                <p>
-                    Created at {createdTimestamp}
-                </p>
-                <p>
-                    Last Modified at {lastModifiedTimestamp}
-                </p>
-            </div>
+            <p className='text-sm text-neutral-400 font-medium'>
+                Created at {createdTimestamp}
+            </p>
         </div>
     )
 }
