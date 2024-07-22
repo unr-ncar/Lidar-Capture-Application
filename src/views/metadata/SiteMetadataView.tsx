@@ -176,13 +176,13 @@ export default function SiteMetadataView() {
                                 </ItemList>
                                 <ItemList label="PCAP Service">
                                     {storageItems!.pcapService.length > 0 ? storageItems!.pcapService.map(fileMetadata =>
-                                            <FileItem {...fileMetadata}/>) :
+                                            <FileItem key={fileMetadata.fileName} {...fileMetadata}/>) :
                                         <p className="text-neutral-400 font-medium text-center text-sm">No PCAP files on
                                             Edge Machine.</p>}
                                 </ItemList>
                                 <ItemList label="ROS Service">
                                     {storageItems!.rosService.length > 0 ? storageItems!.rosService.map(fileMetadata =>
-                                            <FileItem {...fileMetadata}/>) :
+                                            <FileItem key={fileMetadata.fileName} {...fileMetadata}/>) :
                                         <p className="text-neutral-400 font-medium text-center text-sm">No ROS files on Edge
                                             Machine.</p>}
                                 </ItemList>

@@ -4,6 +4,7 @@ import {useStatus} from "../hooks/useStatus.tsx";
 import {Tag} from "./Tag.tsx";
 import useSensorStatusLabel from "../hooks/useSensorStatusLabel.tsx";
 import useStorageStatusLabel from "../hooks/useStorageStatusLabel.tsx";
+import {InformationCircleIcon} from "@heroicons/react/16/solid";
 import {
     MinusIcon,
     PlusIcon,
@@ -116,7 +117,7 @@ export function SensorSelectionItem({
                 <p className='font-medium line-clamp-2'>
                     {street} &#x2022; {cross_street} ({corner})
                 </p>
-                <Tag label="LIDAR ID" value={String(lidar_id)} onClick={() => navigateSensorMetadata()}/>
+                <Tag icon={<InformationCircleIcon />} label="LIDAR ID" value={String(lidar_id)} onClick={() => navigateSensorMetadata()}/>
             </div>
         </Checkbox>
     )
