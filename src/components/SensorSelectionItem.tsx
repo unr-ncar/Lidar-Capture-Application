@@ -105,7 +105,7 @@ export function SensorSelectionItem({
     }
 
     const navigateSensorMetadata = () => {
-        navigate(`/metadata/sensor/${lidarMetadata.lidar_id}`)
+        navigate(`/metadata/sensor/${lidarMetadata.site_id}/${lidarMetadata.lidar_id}`)
     }
 
     return (
