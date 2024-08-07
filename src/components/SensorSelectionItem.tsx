@@ -21,6 +21,7 @@ export interface SensorSelectionItemProps_t {
     toggleFunction: () => void;
     lidarMetadata: LidarMetadata_t;
     operation: RecordingOperation;
+    statusOverride?: boolean;
 }
 
 export function SensorSelectionItem({
@@ -28,7 +29,8 @@ export function SensorSelectionItem({
                                         toggleFunction,
                                         format,
                                         operation,
-                                        lidarMetadata
+                                        lidarMetadata,
+                                        statusOverride
                                     }: SensorSelectionItemProps_t) {
 
     const navigate = useNavigate();
@@ -42,10 +44,18 @@ export function SensorSelectionItem({
 
     const selectionDisabled = () => {
 
-        if (operation === 'start') {
-            return !((sensorStatus === 'ready') && (storageStatus === 'stable' || storageStatus === 'critical'));
+        if (statusOverride) {
+            if (operation === 'start') {
+                return !(storageStatus === 'critical')
+            } else {
+                !(sensorStatus === "recording")
+            }
         } else {
-            return !(sensorStatus === "recording")
+            if (operation === 'start') {
+                return !((sensorStatus === 'ready') && (storageStatus === 'stable'));
+            } else {
+                return !(sensorStatus === "recording")
+            }
         }
     }
 

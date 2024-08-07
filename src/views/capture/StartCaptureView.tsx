@@ -112,7 +112,11 @@ export default function StartCaptureView() {
           description="View a summary of sensor selections and respective outputs for a new capture job submission."
         >
           <ItemList>
-            <ActionItem />
+            {
+              selections.map((selection) => {
+                return <ActionItem {...selection} />
+              })
+            }
           </ItemList>
         </PaneSection>
       </Pane>

@@ -1,28 +1,36 @@
 import {InformationCircleIcon} from "@heroicons/react/16/solid";
 import {Tag} from "./Tag.tsx";
 import {XMarkIcon} from "@heroicons/react/20/solid";
+import {LidarSelection_t} from "../types.tsx";
+import {ReactElement, useMemo} from "react";
+import useSensorSelections from "../hooks/useSensorSelections.tsx";
+export function ActionItem(selection: LidarSelection_t) {
 
-export interface ActionItemProps_t {}
-export function ActionItem() {
+    const toggleSelection = useSensorSelections((state) => state.toggleSelection);
+
+    const shownTags = useMemo<undefined | ReactElement>(() => {
+        return (
+            <>
+                {
+                    selection.selectedFormats.map((format) => {
+                        return <Tag value={format.toUpperCase()} icon={<XMarkIcon/>} onClick={() => toggleSelection(selection.item.lidar_id, format)} />
+                    })
+                }
+            </>
+        )
+    }, [selection.item.lidar_id, selection.selectedFormats, toggleSelection]);
+
+    if (selection.selectedFormats.length === 0) return undefined;
+
   return (
-    <div className="flex flex-col bg-neutral-100 gap-1.5 rounded p-4">
-        <div className="flex flex-row gap-4 justify-between items-center w-full">
+    <div className="flex flex-row-reverse items-center bg-neutral-100 gap-1.5 rounded p-4">
+        <Tag icon={<InformationCircleIcon />} label="LIDAR ID" value="4" onClick={() => console.log("LIDAR ID")} />
+        <div className="flex flex-col gap-1.5 w-full">
             <p className="font-medium line-clamp-2">
-                Virginia St. &#x2022; Artemesia St. (NE)
+                {selection.item.street} &#x2022; {selection.item.cross_street} <span className='uppercase'>({selection.item.corner})</span>
             </p>
             <div className="flex flex-row gap-1.5 items-center">
-                <button className='flex flex-row items-center gap-0.5 bg-neutral-200 text-neutral-400 leading-none text-sm px-2 py-1 rounded-md font-medium'>
-                    <span className='*:size-4'>
-                        <XMarkIcon />
-                    </span>
-                    PCAP
-                </button>
-                <button className='hidden flex flex-row items-center gap-0.5 bg-neutral-200 text-neutral-400 leading-none px-2 text-sm py-1 rounded-md font-medium'>
-                                        <span className='*:size-4'>
-                        <XMarkIcon/>
-                    </span>
-                    ROS
-                </button>
+                {shownTags}
             </div>
         </div>
     </div>
