@@ -4,24 +4,23 @@ import {useStatus} from "../hooks/useStatus.tsx";
 import {Tag} from "./Tag.tsx";
 import useSensorStatusLabel from "../hooks/useSensorStatusLabel.tsx";
 import useStorageStatusLabel from "../hooks/useStorageStatusLabel.tsx";
-import {InformationCircleIcon} from "@heroicons/react/16/solid";
-import {
-    MinusIcon,
-    PlusIcon,
-    VideoCameraIcon,
-    ExclamationTriangleIcon,
-    VideoCameraSlashIcon
-} from "@heroicons/react/20/solid";
-import Loading from "react-loading";
-import {useNavigate} from "react-router-dom";
+import {ExclamationCircleIcon, InformationCircleIcon} from "@heroicons/react/16/solid";
+import {NavLink, useNavigate} from "react-router-dom";
+import {ReactElement, useMemo} from "react";
+import SensorStatusLoadingFlag from "./flag/SensorStatusLoadingFlag.tsx";
+import Toast from "./Toast.tsx";
+import AddSensorSelectionFlag from "./flag/AddSensorSelectionFlag.tsx";
+import RemoveSensorSelectionFlag from "./flag/RemoveSensorSelectionFlag.tsx";
+import SensorDisabledFlag from "./flag/SensorDisabledFlag.tsx";
 
 export interface SensorSelectionItemProps_t {
-    selected: () => boolean;
+    selected: boolean;
     format: RecordingFormat;
     toggleFunction: () => void;
     lidarMetadata: LidarMetadata_t;
     operation: RecordingOperation;
-    statusOverride?: boolean;
+    storageStatusOverride?: boolean;
+    sensorStatusOverride?: boolean;
 }
 
 export function SensorSelectionItem({
@@ -30,7 +29,8 @@ export function SensorSelectionItem({
                                         format,
                                         operation,
                                         lidarMetadata,
-                                        statusOverride
+                                        storageStatusOverride,
+                                        sensorStatusOverride
                                     }: SensorSelectionItemProps_t) {
 
     const navigate = useNavigate();
@@ -42,92 +42,93 @@ export function SensorSelectionItem({
     const sensorStatus = useSensorStatusLabel(statusPending ? undefined : format === "ros" ? status!.rosServiceStatus : status!.pcapServiceStatus)
     const storageStatus = useStorageStatusLabel(statusPending ? undefined : status!.edgeStorageStatus)
 
-    const selectionDisabled = () => {
+    const sensorStatusSelectionDisable = useMemo<boolean>(() => {
 
-        if (statusOverride) {
-            if (operation === 'start') {
-                return !(storageStatus === 'critical')
-            } else {
-                !(sensorStatus === "recording")
-            }
+        if (sensorStatusOverride) return false
+        if (operation === 'start' && sensorStatus === 'ready') return false
+        if (operation === 'stop' && sensorStatus === 'recording') return false
+
+        return true
+
+    }, [operation, sensorStatus, sensorStatusOverride])
+
+    const storageStatusSelectionDisable = useMemo<boolean>(() => {
+
+        if (storageStatusOverride) return false
+        if (operation === 'start' && storageStatus === 'stable') return false
+        if (operation === 'start' && storageStatus === 'critical') return false
+        if (operation === 'stop') return false
+
+        return true;
+
+    }, [operation, storageStatus, storageStatusOverride])
+
+
+    const selectionStatusFlag: ReactElement = useMemo<ReactElement>(() => {
+
+        if (!sensorStatusSelectionDisable && !storageStatusSelectionDisable) {
+            if (selected) return <RemoveSensorSelectionFlag />
+            else return <AddSensorSelectionFlag />
         } else {
-            if (operation === 'start') {
-                return !((sensorStatus === 'ready') && (storageStatus === 'stable'));
+            if (statusPending) return <SensorStatusLoadingFlag />
+            else if (sensorStatusSelectionDisable || storageStatusSelectionDisable) {
+                return <SensorDisabledFlag />
             } else {
-                return !(sensorStatus === "recording")
-            }
-        }
-    }
-
-    const selectionFlag = () => {
-
-        let backgroundColor = null;
-        let textColor = null;
-        let flagIcon = null;
-
-        if (operation === 'start') {
-            if (sensorStatus === 'recording') {
-                textColor = 'text-white'
-                backgroundColor = 'bg-red-400'
-                flagIcon = <VideoCameraIcon className='size-4'/>
-            } else if ((sensorStatus === 'unavailable') || (sensorStatus === 'error') || (storageStatus === 'error') || (storageStatus === 'unstable')) {
-                textColor = 'text-white'
-                backgroundColor = 'bg-yellow-500'
-                flagIcon = <ExclamationTriangleIcon className='size-4'/>
-            } else if (selected()) {
-                textColor = 'text-white'
-                backgroundColor = 'bg-green-600'
-                flagIcon = <MinusIcon className='size-4'/>
-            } else {
-                textColor = 'text-neutral-500'
-                backgroundColor = 'bg-neutral-300'
-                flagIcon = <PlusIcon className='size-4'/>
-            }
-        } else {
-            if (sensorStatus === 'recording' && selected()) {
-                textColor = 'text-white'
-                backgroundColor = 'bg-green-600'
-                flagIcon = <MinusIcon className='size-4'/>
-            } else if (sensorStatus === 'recording' && !selected()) {
-                textColor = 'text-neutral-500'
-                backgroundColor = 'bg-neutral-300'
-                flagIcon = <PlusIcon className='size-4'/>
-            } else {
-                textColor = 'text-neutral-500'
-                backgroundColor = 'bg-neutral-300'
-                flagIcon = <VideoCameraSlashIcon className='size-4'/>
+                if (selected) return <RemoveSensorSelectionFlag />
+                else return <AddSensorSelectionFlag />
             }
         }
 
-        if (statusPending) {
-            textColor = 'text-white'
-            backgroundColor = 'bg-slate-600'
-            flagIcon = <Loading type='spin' width={15} height={15}/>;
-        }
-
-        const containerStyling = `${backgroundColor} ${textColor} transition-colors flex justify-center items-center min-h-[30px] max-h-[30px] min-w-[30px] max-w-[30px] rounded-md`
-        return (
-            <div className={containerStyling}>
-                {flagIcon}
-            </div>
-        )
-
-    }
+    }, [selected, sensorStatusSelectionDisable, statusPending, storageStatusSelectionDisable])
 
     const navigateSensorMetadata = () => {
         navigate(`/metadata/sensor/${lidarMetadata.site_id}/${lidarMetadata.lidar_id}`)
     }
 
     return (
-        <Checkbox disabled={statusPending || selectionDisabled()}
+        <Checkbox disabled={sensorStatusSelectionDisable || storageStatusSelectionDisable}
                   className={`group ${statusPending ? 'hover:data-[disabled]:cursor-wait' : 'hover:data-[disabled]:cursor-not-allowed'} flex flex-row items-center gap-3 bg-neutral-100 rounded p-4`}
-                  checked={selected()} onChange={toggleFunction}>
-            {selectionFlag()}
+                  checked={selected} onChange={toggleFunction}>
             <div className='flex flex-row gap-4 justify-between items-center w-full'>
-                <p className='font-medium line-clamp-2'>
-                    {street} &#x2022; {cross_street} ({corner})
-                </p>
-                <Tag icon={<InformationCircleIcon />} label="LIDAR ID" value={String(lidar_id)} onClick={() => navigateSensorMetadata()}/>
+                <div className='flex flex-col gap-1'>
+                    <div className='flex flex-row items-center gap-2'>
+                        <>
+                            {selectionStatusFlag}
+                        </>
+                        <p className='font-medium line-clamp-2 leading-tight'>
+                            {street} &#x2022; {cross_street} ({corner})
+                        </p>
+                    </div>
+                    {
+                        (sensorStatusSelectionDisable || storageStatusSelectionDisable) && (
+                            <div className='flex flex-col gap-1'>
+                                {
+                                    sensorStatusSelectionDisable && sensorStatus === 'recording' ? (
+                                        <Toast type='info'
+                                               hyperlink={`/metadata/sensor/${lidarMetadata.site_id}/${lidarMetadata.lidar_id}`}>
+                                            Sensor is currently recording.
+                                        </Toast>
+                                    ) : (
+                                        <Toast type='warning'
+                                               label='Storage'
+                                               hyperlink={`/metadata/sensor/${lidarMetadata.site_id}/${lidarMetadata.lidar_id}`}>
+                                            Sensor is experiencing issues. Recording is disabled.
+                                        </Toast>
+                                    )
+                                }
+                                {
+                                    storageStatusSelectionDisable && (
+                                        <Toast label='Sensor' hyperlink={`/metadata/site/${lidarMetadata.site_id}`} type='warning'>
+                                            Site computer is currently experiencing issues. Recording is disabled.
+                                        </Toast>
+                                    )
+                                }
+                            </div>
+                        )
+                    }
+                </div>
+                <Tag icon={<InformationCircleIcon/>} label="LIDAR ID" value={String(lidar_id)}
+                     onClick={() => navigateSensorMetadata()}/>
             </div>
         </Checkbox>
     )

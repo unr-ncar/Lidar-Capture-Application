@@ -70,6 +70,10 @@ export interface ServicesStatusInformation_t {
 export interface LidarServicesStatusResponse_t {
     getStatus: Array<ServicesStatusInformation_t>
 }
+export interface RecordingServiceActionResponse_t {
+    message: string;
+    success: boolean;
+}
 
 /* === SITE STORAGE STATUS - GRAPHQL === */
 export interface StorageInformation_t {

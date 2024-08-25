@@ -13,7 +13,7 @@ export function ActionItem(selection: LidarSelection_t) {
             <>
                 {
                     selection.selectedFormats.map((format) => {
-                        return <Tag value={format.toUpperCase()} icon={<XMarkIcon/>} onClick={() => toggleSelection(selection.item.lidar_id, format)} />
+                        return <Tag key={format} value={format.toUpperCase()} icon={<XMarkIcon/>} onClick={() => toggleSelection(selection.item.lidar_id, format)} />
                     })
                 }
             </>
@@ -23,8 +23,7 @@ export function ActionItem(selection: LidarSelection_t) {
     if (selection.selectedFormats.length === 0) return undefined;
 
   return (
-    <div className="flex flex-row-reverse items-center bg-neutral-100 gap-1.5 rounded p-4">
-        <Tag icon={<InformationCircleIcon />} label="LIDAR ID" value="4" onClick={() => console.log("LIDAR ID")} />
+    <div className="flex flex-row items-center bg-neutral-100 gap-1.5 rounded p-4">
         <div className="flex flex-col gap-1.5 w-full">
             <p className="font-medium line-clamp-2">
                 {selection.item.street} &#x2022; {selection.item.cross_street} <span className='uppercase'>({selection.item.corner})</span>
@@ -33,6 +32,7 @@ export function ActionItem(selection: LidarSelection_t) {
                 {shownTags}
             </div>
         </div>
+        <Tag icon={<InformationCircleIcon />} label="LIDAR ID" value="4" onClick={() => console.log("LIDAR ID")} />
     </div>
   );
 }
