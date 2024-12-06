@@ -1,0 +1,33 @@
+export interface IEnvironmentVariables {
+    GATEWAY_PATH: string;
+    METADATA_SERVICE_PORT: number;
+    METADATA_SERVICE_PATH: string;
+    GRAPHQL_SERVICE_PORT: number;
+    GRAPHQL_SERVICE_PATH: string;
+    EDGE_ROS_RECORDING_SERVICE_PORT: number;
+    EDGE_ROS_RECORDING_SERVICE_PATH: string;
+    EDGE_PCAP_RECORDING_SERVICE_PORT: number;
+    EDGE_PCAP_RECORDING_SERVICE_PATH: string;
+    FILE_SERVICE_PORT: number;
+    FILE_SERVICE_PATH: string;
+    CLUSTER_WEB_SERVER_PORT: number;
+    CLUSTER_WEB_SERVER_PATH: string;
+}
+
+export default function useEnvironmentVariables(): IEnvironmentVariables {
+    return {
+        GATEWAY_PATH: import.meta.env.VITE_GATEWAY_PATH,
+        METADATA_SERVICE_PORT: Number(import.meta.env.VITE_METADATA_SERVICE_PORT),
+        METADATA_SERVICE_PATH: import.meta.env.VITE_METADATA_SERVICE_PATH,
+        GRAPHQL_SERVICE_PATH: import.meta.env.VITE_GRAPHQL_SERVICE_PATH,
+        GRAPHQL_SERVICE_PORT: Number(import.meta.env.VITE_GRAPHQL_SERVICE_PORT),
+        CLUSTER_WEB_SERVER_PATH: import.meta.env.VITE_CLUSTER_WEB_SERVER_PATH,
+        CLUSTER_WEB_SERVER_PORT: Number(import.meta.env.VITE_CLUSTER_WEB_SERVER_PORT),
+        FILE_SERVICE_PATH: import.meta.env.VITE_FILE_SERVICE_PATH,
+        FILE_SERVICE_PORT: Number(import.meta.env.VITE_FILE_SERVICE_PORT),
+        EDGE_PCAP_RECORDING_SERVICE_PORT: Number(import.meta.env.VITE_EDGE_PCAP_RECORDING_SERVICE_PORT),
+        EDGE_PCAP_RECORDING_SERVICE_PATH: import.meta.env.VITE_EDGE_PCAP_RECORDING_SERVICE_PATH,
+        EDGE_ROS_RECORDING_SERVICE_PORT: Number(import.meta.env.VITE_EDGE_ROS_RECORDING_SERVICE_PORT),
+        EDGE_ROS_RECORDING_SERVICE_PATH: import.meta.env.VITE_EDGE_ROS_RECORDING_SERVICE_PATH,
+    }
+}
