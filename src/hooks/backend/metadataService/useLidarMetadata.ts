@@ -1,9 +1,10 @@
 import useMetadataServicePath from "./useMetadataServicePath.ts";
 import useQueryStringCreator from "../../useQueryStringCreator.ts";
-import {useEffect, useMemo} from "react";
+import {useCallback, useEffect, useMemo} from "react";
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
-import useCache from "../../cache/useCache.ts";
+import useCache from "../../useCache.ts";
+import {hash} from "ohash";
 
 export interface IIntersectionCenter {
     latitude: number;
@@ -16,7 +17,7 @@ export interface ILidarMetadata {
     size: number;
     total: number;
 }
-export interface ILidarMetadataItem extends Record<string, string | number | IIntersectionCenter | undefined>, Readonly<{page?: number, size?: number}> {
+export interface ILidarMetadataItem extends Readonly<{page?: number, size?: number}> {
     lidar_id?: string;
     site_id?: string;
     deployment_id?: string;
@@ -39,36 +40,38 @@ export interface ILidarMetadataItem extends Record<string, string | number | IIn
 export type TLidarMetadataQuery = Omit<ILidarMetadataItem, "page" | "size">
 
 export default function useLidarMetadata(requestedPage: number, requestedSize: number, queryParameters?: TLidarMetadataQuery) {
+
     const servicePath = useMetadataServicePath();
-    const { queryString, queryHash } = useQueryStringCreator<ILidarMetadataItem>({
+    const queryString = useQueryStringCreator<ILidarMetadataItem>({
         page: requestedPage,
         size: requestedSize,
         ...queryParameters
     });
-
-    const { cacheEntry, updateCacheEntry } = useCache("metadataService", queryHash, JSON.stringify);
-
     const requestURL = useMemo<string>(() => {
         return `${servicePath}?${queryString}`;
     }, [servicePath, queryString]);
+    const queryHash = useMemo(() => hash(requestURL), [requestURL]);
 
-    const getMetadata = useMemo(() => async (): Promise<ILidarMetadata> => {
+    const { queryCacheEntry, mutateCacheEntry } = useCache<ILidarMetadata>(queryHash, JSON.stringify);
+
+    const getMetadata = useCallback(async () => {
         const response = await axios.get(requestURL);
         return response.data;
     }, [requestURL]);
 
     const query = useQuery({
-        queryKey: ["lidar_metadata", queryHash],
+        queryKey: ["lidar_metadata", queryString],
         queryFn: getMetadata,
         placeholderData: () => {
-            if (!cacheEntry) return undefined;
-            return cacheEntry.data as ILidarMetadata;
+            const entry = queryCacheEntry()
+            if (!entry) return undefined;
+            return entry;
         }
     });
 
     useEffect(() => {
-        if (query.isSuccess && !query.isFetching) updateCacheEntry(query.data);
-    }, [query.data, query.isFetching, query.isSuccess, updateCacheEntry, queryHash]);
+        if (query.isSuccess && !query.isFetching) mutateCacheEntry(query.data);
+    }, [query.data, query.isFetching, query.isSuccess, mutateCacheEntry]);
 
     return query;
 }

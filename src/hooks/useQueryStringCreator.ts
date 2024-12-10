@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
-import {hash} from "ohash";
 
-export default function useQueryStringCreator<T extends Record<string, unknown>>(query: T | undefined) {
+export default function useQueryStringCreator<T extends Object>(query: T | undefined) {
 
-    const queryString = useMemo(() => {
+    return useMemo(() => {
 
         if (!query) return ""
 
@@ -14,11 +13,5 @@ export default function useQueryStringCreator<T extends Record<string, unknown>>
         });
         return queryParts.join('&');
     }, [query]);
-
-    const queryHash = useMemo<string>(() => {
-        return hash(query)
-    }, [query])
-
-    return {queryString, queryHash}
 
 }

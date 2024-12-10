@@ -28,30 +28,30 @@ export interface IGatewayConfigurationAction {
 
 
 const useGatewayConfiguration = create<IGatewayConfigurationState & IGatewayConfigurationAction>((set) => ({
-    gatewayPath: useEnvironmentVariables().GATEWAY_PATH,
+    gatewayPath: "",
     metadataService: {
-        port: useEnvironmentVariables().METADATA_SERVICE_PORT,
-        path: useEnvironmentVariables().METADATA_SERVICE_PATH
+        port: 0,
+        path: ""
     },
     graphqlService: {
-        port: useEnvironmentVariables().GRAPHQL_SERVICE_PORT,
-        path: useEnvironmentVariables().GRAPHQL_SERVICE_PATH,
+        port: 0,
+        path: "",
     },
     clusterWebServer: {
-        port: useEnvironmentVariables().CLUSTER_WEB_SERVER_PORT,
-        path: useEnvironmentVariables().CLUSTER_WEB_SERVER_PATH
+        port: 0,
+        path: "",
     },
     edgeRosRecordingService: {
-        port: useEnvironmentVariables().EDGE_ROS_RECORDING_SERVICE_PORT,
-        path: useEnvironmentVariables().EDGE_ROS_RECORDING_SERVICE_PATH
+        port: 0,
+        path: ""
     },
     edgePcapRecordingService: {
         port: useEnvironmentVariables().EDGE_PCAP_RECORDING_SERVICE_PORT,
         path: useEnvironmentVariables().EDGE_PCAP_RECORDING_SERVICE_PATH
     },
     edgeFileService: {
-        port: useEnvironmentVariables().FILE_SERVICE_PORT,
-        path: useEnvironmentVariables().FILE_SERVICE_PATH
+        port: 0,
+        path: ""
     },
     setGatewayPath: (path: string) => set(() => ({gatewayPath: path})),
     setMetadataServiceLocation: (location: IServiceLocation) => set(() => ({metadataService: location})),
