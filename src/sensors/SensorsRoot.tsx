@@ -1,9 +1,10 @@
 import { Outlet } from "react-router";
+import ViewLayout from "../components/ViewLayout";
 
 export default function SensorsRoot() {
     return (
-        <div className="block w-full h-full">
+        <ViewLayout>
             <Outlet />
-        </div>
+        </ViewLayout>
     )
 }
