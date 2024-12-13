@@ -1,10 +1,10 @@
 import { gql } from "graphql-request";
 import useGraphqlService from "./useGraphqlService.ts";
 
-export default function useRecordingStatus(siteIds: Array<number>) {
+export default function useRecordingStatus(lidarIds: Array<number>, isEnabled: boolean = true) {
 
     const query = gql`query {
-        getStatus(siteIds: [${siteIds}]) {
+        getStatus(lidarIds: [${lidarIds}]) {
             siteId
             rosService {
                 isRecording
@@ -25,7 +25,9 @@ export default function useRecordingStatus(siteIds: Array<number>) {
         }
     }`
 
-    return useGraphqlService("getRecordingStatus", query)
+    return useGraphqlService("getRecordingStatus", query, 1, {
+        enabled: isEnabled
+    })
 
 
 }

@@ -46,8 +46,8 @@ const useGatewayConfiguration = create<IGatewayConfigurationState & IGatewayConf
         path: ""
     },
     edgePcapRecordingService: {
-        port: useEnvironmentVariables().EDGE_PCAP_RECORDING_SERVICE_PORT,
-        path: useEnvironmentVariables().EDGE_PCAP_RECORDING_SERVICE_PATH
+        port: 0,
+        path: ""
     },
     edgeFileService: {
         port: 0,

@@ -26,6 +26,7 @@ export default function useCache<DataType>(queryHash: string, dataSerializer: (p
         const newDataHash = computeDataHash(newData);
 
         if (cacheEntry === undefined) {
+            console.log("Data is not present, adding to cache");
             db.backendCache.add({
                 queryHash,
                 dataHash: newDataHash,
@@ -34,6 +35,7 @@ export default function useCache<DataType>(queryHash: string, dataSerializer: (p
             });
             return;
         } else if (cacheEntry.dataHash !== newDataHash) {
+            console.log("Data is changed, updating cache");
             db.backendCache.update(queryHash, {
                 dataHash: newDataHash,
                 lastUpdated: new Date().toISOString(),

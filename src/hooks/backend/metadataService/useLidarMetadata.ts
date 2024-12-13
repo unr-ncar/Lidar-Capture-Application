@@ -33,6 +33,7 @@ export interface ILidarMetadataItem extends Readonly<{page?: number, size?: numb
     lidar_ip?: string;
     ip?: string;
     model?: string;
+    corner?: string;
     intersection_center?: IIntersectionCenter;
     page?: number;
     size?: number;
@@ -59,8 +60,8 @@ export default function useLidarMetadata(requestedPage: number, requestedSize: n
         return response.data;
     }, [requestURL]);
 
-    const query = useQuery({
-        queryKey: ["lidar_metadata", queryString],
+    const query = useQuery<ILidarMetadata>({
+        queryKey: ["lidar_metadata", requestURL],
         queryFn: getMetadata,
         placeholderData: () => {
             const entry = queryCacheEntry()
