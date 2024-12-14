@@ -7,13 +7,13 @@ export interface IServiceLocation {
 }
 
 export interface IGatewayConfigurationState {
-    gatewayPath: string;
-    metadataService: IServiceLocation;
-    graphqlService: IServiceLocation;
-    clusterWebServer: IServiceLocation;
-    edgeRosRecordingService: IServiceLocation;
-    edgePcapRecordingService: IServiceLocation;
-    edgeFileService: IServiceLocation;
+    gatewayPath: string | null;
+    metadataService: IServiceLocation | null;
+    graphqlService: IServiceLocation | null;
+    clusterWebServer: IServiceLocation | null;
+    edgeRosRecordingService: IServiceLocation | null;
+    edgePcapRecordingService: IServiceLocation | null;
+    edgeFileService: IServiceLocation | null;
 }
 
 export interface IGatewayConfigurationAction {
@@ -29,37 +29,19 @@ export interface IGatewayConfigurationAction {
 
 const useGatewayConfiguration = create<IGatewayConfigurationState & IGatewayConfigurationAction>((set) => ({
     gatewayPath: "",
-    metadataService: {
-        port: 0,
-        path: ""
-    },
-    graphqlService: {
-        port: 0,
-        path: "",
-    },
-    clusterWebServer: {
-        port: 0,
-        path: "",
-    },
-    edgeRosRecordingService: {
-        port: 0,
-        path: ""
-    },
-    edgePcapRecordingService: {
-        port: 0,
-        path: ""
-    },
-    edgeFileService: {
-        port: 0,
-        path: ""
-    },
-    setGatewayPath: (path: string) => set(() => ({gatewayPath: path})),
-    setMetadataServiceLocation: (location: IServiceLocation) => set(() => ({metadataService: location})),
-    setGraphqlServiceLocation: (location: IServiceLocation) => set(() => ({graphqlService: location})),
-    setClusterWebServerLocation: (location: IServiceLocation) => set(() => ({clusterWebServer: location})),
-    setRosRecordingServiceLocation: (location: IServiceLocation) => set(() => ({edgeRosRecordingService: location})),
-    setPcapRecordingServiceLocation: (location: IServiceLocation) => set(() => ({edgePcapRecordingService: location})),
-    setEdgeFileServiceLocation: (location: IServiceLocation) => set(() => ({edgeFileService: location}))
+    metadataService: null,
+    graphqlService: null,
+    clusterWebServer: null,
+    edgeRosRecordingService: null,
+    edgePcapRecordingService: null,
+    edgeFileService: null,
+    setGatewayPath: (path: string | null) => set(() => ({gatewayPath: path})),
+    setMetadataServiceLocation: (location: IServiceLocation | null) => set(() => ({metadataService: location})),
+    setGraphqlServiceLocation: (location: IServiceLocation | null) => set(() => ({graphqlService: location})),
+    setClusterWebServerLocation: (location: IServiceLocation | null) => set(() => ({clusterWebServer: location})),
+    setRosRecordingServiceLocation: (location: IServiceLocation | null) => set(() => ({edgeRosRecordingService: location})),
+    setPcapRecordingServiceLocation: (location: IServiceLocation | null) => set(() => ({edgePcapRecordingService: location})),
+    setEdgeFileServiceLocation: (location: IServiceLocation | null) => set(() => ({edgeFileService: location}))
 }))
 
 export {useGatewayConfiguration}

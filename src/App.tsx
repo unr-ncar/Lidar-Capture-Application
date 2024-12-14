@@ -4,15 +4,17 @@ import useBootstraper from './hooks/configuration/useBootstraper'
 
 function App() {
 
-  useBootstraper()
+  const isBootstrapped = useBootstraper()
 
   return (
     <>
       <div className='flex flex-col-reverse min-h-dvh h-dvh max-h-screen lg:flex-row'>
         <PrimaryNavigation />
-        <div className='grow bg-neutral-100'>
-          <Outlet />
-        </div>
+        {isBootstrapped && (
+          <div className='grow bg-neutral-100'>
+            <Outlet />
+          </div>
+        )}
       </div>
     </>
   )

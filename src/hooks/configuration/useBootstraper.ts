@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useEnvironmentVariables, { IEnvironmentVariables } from "./useEnvironmentVariables";
 import { useGatewayConfiguration } from "./useGatewayConfiguration";
 
 export default function useBootstraper() {
+
+    const [isBootstrapped, setIsBootstrapped] = useState<boolean>(false);
 
     const {
         GATEWAY_PATH,
@@ -53,11 +55,14 @@ export default function useBootstraper() {
             port: FILE_SERVICE_PORT,
             path: FILE_SERVICE_PATH
         })
+
+        setIsBootstrapped(true)
     }
 
     useEffect(() => {
         bootstrapGatewayConfiguration();
     }, [])
 
+    return isBootstrapped;
 
 }

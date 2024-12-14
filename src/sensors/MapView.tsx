@@ -1,25 +1,27 @@
 import { MapContainer, TileLayer } from "react-leaflet";
-import MapSummary from "../components/MapSummary";
-import useLidarMetadata, { ILidarMetadata, ILidarMetadataItem } from "../hooks/backend/metadataService/useLidarMetadata";
-import { useEffect } from "react";
-import { useSearchParams } from "react-router";
-import FrostedPagination from "../components/FrostedPagination";
+import SensorSelection from "../components/SensorSelection.tsx";
+import useLidarMetadata, {
+  ILidarMetadata,
+  ILidarMetadataItem,
+} from "../hooks/backend/metadataService/useLidarMetadata";
+import { useEffect, useState } from "react";
+import FrostedPagination from "../components/FrostedPagination.tsx";
+import Loader from "../components/Loader.tsx";
+import FormatSelector from "../components/FormatSelector.tsx";
 
 export default function MapView() {
-
-  let [searchParams, setSearchParams] = useSearchParams({
-    page: String(1),
-    size: String(10)
-  })
-  const {isPending, data, error} = useLidarMetadata(Number(searchParams.get("page")), Number(searchParams.get("size")))
-
-  const setPage = (page: number) => {
-    setSearchParams({page: String(page)})
-  }
+  const formatOptions = ["ros", "pcap"];
+  const [page, setPage] = useState<number>(1);
+  const [format, setFormat] = useState<string>("ros");
+  const { isPending, data, error } = useLidarMetadata(page, 10);
 
   useEffect(() => {
-    if (data) console.log(data)
-  }, [data])
+    if (data) console.log(data);
+  }, [data]);
+
+  useEffect(() => {
+    console.log(format);
+  }, [format]);
 
   return (
     <div className="relative flex flex-col w-full max-h-full h-full">
@@ -34,18 +36,31 @@ export default function MapView() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       </MapContainer>
-      <div className="absolute bottom-0 left-0 p-4 bg-white/70 backdrop-blur w-full gap-2 flex flex-col">
-      <div className="flex justify-between">
-      <p className="uppercase font-semibold text-xs text-neutral-400">
-          Page {data?.page} of {data?.pages}
-        </p>
-        <FrostedPagination setValue={(pageNumber) => setPage(pageNumber)} value={Number(searchParams)} windowSize={3} totalItems={data?.size || 0} />
-      </div>
-        <div className="inline-flex flex-row overflow-x-auto gap-4 max-w-full">
-          {data?.items.map((sensor: ILidarMetadataItem) => (
-            <MapSummary key={sensor.lidar_id} sensor={sensor} />
-          ))}
-        </div>
+      <div className="absolute bottom-0 left-0 p-4 bg-white/70 backdrop-blur w-full gap-3 flex flex-col lg:left-0 lg:top-0 lg:w-[3/4] lg:max-w-[350px]">
+        <Loader isLoading={isPending}>
+          <>
+            <div>
+              <FormatSelector
+                formats={formatOptions}
+                selectedFormat={format}
+                setFormat={(format) => setFormat(format)}
+              />
+            </div>
+            <div className="inline-flex flex-row overflow-x-auto gap-4 max-w-full lg:grow lg:flex-col">
+              {data?.items.map((sensor: ILidarMetadataItem) => (
+                <SensorSelection key={sensor.lidar_id} sensor={sensor} />
+              ))}
+            </div>
+            <FrostedPagination
+              setPage={(pageNumber) => setPage(pageNumber)}
+              currentPage={page}
+              selectionWindowSize={3}
+              pageSize={data?.size || 0}
+              totalPageCount={data?.pages || 0}
+              totalItemCount={data?.total || 0}
+            />
+          </>
+        </Loader>
       </div>
     </div>
   );
