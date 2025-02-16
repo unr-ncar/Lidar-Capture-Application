@@ -20,6 +20,7 @@ import FileMetadataView from "./views/metadata/FileMetadataView.tsx";
 import SensorMetadataView from "./views/metadata/SensorMetadataView.tsx";
 import SiteMetadataView from "./views/metadata/SiteMetadataView.tsx";
 import SettingsView from "./views/SettingsView.tsx";
+import LandingView from './views/LandingView.tsx';
 
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <App/>,
         children: [
+            {
+                index: true,
+                element: <LandingView />
+            },
             {
                 path: "explorer",
                 element: <ExplorerRoot />
